@@ -1,7 +1,7 @@
 <?php
 
-http_response_code(200);
-/*
+
+
 require_once('common/database.php');
 require_once('controller/controllers.php');
 require_once('rooter.php');
@@ -57,4 +57,3 @@ $router->addRoute(ProgReg, new ProgramRegistrationController($db));
 $response = $router->dispatch($data);
 echo json_encode($response);
 $db = null;
-*/

@@ -1,3 +1,9 @@
-# .htaccess file content
 RewriteEngine On
-RewriteRule ^read-histories$ read_histories.php [QSA,L]
+
+# リクエストURIが '/v1' で始まる場合、index.phpにリライト
+RewriteCond %{REQUEST_URI} ^/v1 [NC]
+RewriteRule ^.*$ index.php [L,QSA]
+
+# それ以外のアクセスをブロックする（index.phpを除く）
+RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
+RewriteRule ^.*$ - [F,L]
