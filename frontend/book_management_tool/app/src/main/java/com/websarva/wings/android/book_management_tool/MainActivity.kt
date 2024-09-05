@@ -1,33 +1,30 @@
 package com.websarva.wings.android.book_management_tool
 
+//import com.webserva.wings.android.sending_json_over_http_sample.ui.theme.SendingJSONOverHTTP_SampleTheme
+
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-//import com.webserva.wings.android.sending_json_over_http_sample.ui.theme.SendingJSONOverHTTP_SampleTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+
 
 class MainActivity : AppCompatActivity() {
 
 	// デフォルトのURLを定数として定義
 	companion object {
-		const val DEFAULT_SERVER_URL = "https://192.168.1.51:80/v1/read-histories?format-json&isbn=9784863544109" // 任意のデフォルトURLを設定
+		const val DEFAULT_SERVER_URL = "http://192.168.1.51/v1/read-histories" // 任意のデフォルトURLを設定
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 		val customerIdEditText = findViewById<EditText>(R.id.customerIdEditText)
 		val customerNameEditText = findViewById<EditText>(R.id.customerNameEditText)
 		val sendButton = findViewById<Button>(R.id.sendButton)
+		val accessButton = findViewById<Button>(R.id.accessButton)
 
 		sendButton.setOnClickListener {
 			val userUrl = urlEditText.text.toString().ifEmpty { DEFAULT_SERVER_URL }
@@ -62,6 +60,11 @@ class MainActivity : AppCompatActivity() {
 			} else {
 				Toast.makeText(this, "すべてのフィールドを入力してください", Toast.LENGTH_SHORT).show()
 			}
+		}
+
+		accessButton.setOnClickListener{
+			val userUrl = urlEditText.text.toString().ifEmpty { DEFAULT_SERVER_URL }
+			accessUrl(userUrl)
 		}
 	}
 
@@ -95,9 +98,56 @@ class MainActivity : AppCompatActivity() {
 			} catch (e: Exception) {
 				// エラーが発生した場合もトーストを表示
 				runOnUiThread {
+					Toast.makeText(this@MainActivity, "Error: ${e.message} ~~~", Toast.LENGTH_LONG).show()
+				}
+			}
+		}
+	}
+
+	private fun accessUrl(urlString: String) {
+		CoroutineScope(Dispatchers.IO).launch {
+			try {
+				val url = URL(urlString)
+				val connection = url.openConnection() as HttpURLConnection
+				connection.doOutput = false
+				connection.doInput = true
+				connection.readTimeout = 0
+				connection.connectTimeout = 0
+				connection.requestMethod = "GET"
+
+				//connection.connect()
+
+				val responseCode = connection.responseCode
+				val responseMessage = connection.responseMessage
+
+				// レスポンスデータの読み込み
+				//val str = connection.inputStream.bufferedReader(Charsets.UTF_8).use { br ->
+				//	br.readLines().joinToString("")
+				//}
+
+				val response = BufferedReader(InputStreamReader(connection.inputStream)).use {
+					it.readText()
+				}
+
+				// UIスレッドでレスポンスをトーストで表示
+				runOnUiThread {
+					Toast.makeText(
+						this@MainActivity,
+						"GET Response: $responseCode - $responseMessage\n$response",
+						//"GET Response: $str",
+						Toast.LENGTH_LONG
+					).show()
+				}
+
+				connection.disconnect()
+
+			} catch (e: Exception) {
+				// エラーが発生した場合もトーストを表示
+				runOnUiThread {
 					Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
 				}
 			}
 		}
 	}
+
 }
