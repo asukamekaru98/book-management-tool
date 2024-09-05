@@ -1,0 +1,3 @@
+# .htaccess file content
+RewriteEngine On
+RewriteRule ^read-histories$ read_histories.php [QSA,L]
