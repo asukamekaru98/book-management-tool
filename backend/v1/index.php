@@ -5,13 +5,8 @@
 // require_once('constant.php');
 
 
-$method = $_SERVER['REQUEST_METHOD'];
-$request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
 
-$resource = array_shift($request);
-$id = array_shift($request);
-
-$data = json_decode(file_get_contents('php://input'), true);
+$httpRequestParser = new HttpRequestParser($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO']);
 
 switch ($resource) {
     case 'read-histories':
@@ -19,6 +14,12 @@ switch ($resource) {
         break;
     case 'books':
         handleBooks($method, $id, $data);
+        break;
+    case 'wish-list':
+        handleReadHistories($method, $id, $data);
+        break;
+    case 'book-shelf':
+        handleReadHistories($method, $id, $data);
         break;
     default:
         http_response_code(404);
