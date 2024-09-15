@@ -6,7 +6,7 @@
 
 
 
-$httpRequestParser = new HttpRequestParser($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO']);
+$httpRequestManager = new HttpRequestManager($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO']);
 
 switch ($resource) {
     case 'read-histories':
