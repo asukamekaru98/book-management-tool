@@ -12,6 +12,7 @@ class HttpRequestManager
     private $data;      // データ
     private $httpRequestParser;
     private $httpResourceParser;
+    private $httpQueryParser;
 
 
     function __construct($method, $pathInfo)
@@ -21,9 +22,9 @@ class HttpRequestManager
 
         $httpRequestParser = new HttpRequestParser($pathInfo);
         $httpResourceParser = new HttpResourceParser($httpRequestParser->getRequest());
-
+        $httpQueryParser = new HttpQueryParser($httpRequestParser->getRequest());
         //$this->resource = array_shift($this->request);
-        $this->bookId = array_shift($this->request);
+
         $this->data = json_decode(file_get_contents('php://input'), true);
     }
 
