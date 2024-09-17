@@ -1,6 +1,7 @@
 <?php
 require_once('HttpRequestParser.php');
 require_once('HttpResourceParser.php');
+require_once('HttpQueryParser.php');
 
 class HttpRequestManager
 {

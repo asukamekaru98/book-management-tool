@@ -1,5 +1,5 @@
 <?php
-require_once('HttpRequestManager.php');
+require_once(__DIR__ . '/http/HttpRequestManager.php');
 require_once(__DIR__ . '/controller/bookshelfController.php');
 
 try {
