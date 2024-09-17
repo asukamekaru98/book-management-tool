@@ -3,7 +3,7 @@ class HttpResourceParser
 {
     private $resource;
 
-    function __constant($request)
+    function __construct($request)
     {
         $this->resourceParse($request);
     }

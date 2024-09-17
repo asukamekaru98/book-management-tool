@@ -12,8 +12,8 @@ class Router
     public function dispatch($resource, $method, $isbn, $data)
     {
 
-        if (isset($routes[$resource])) {
-            return $routes[$resource]->handle($method, $isbn, $data);
+        if (isset($this->routes[$resource])) {
+            return $this->routes[$resource]->handle($method, $isbn, $data);
         }
 
         return $this->handleNotFound();

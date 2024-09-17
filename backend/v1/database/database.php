@@ -5,8 +5,11 @@ require_once(__DIR__ . '/../constant.php');
 
 class DataBaseMySQL extends PDO
 {
-    private $db;
+    private $dbConfig;
     private $configFile;
+    private $settings;
+    private static $instance = null;
+
 
     // コンストラクタ
     function __construct($config = 'database.ini')
@@ -15,10 +18,12 @@ class DataBaseMySQL extends PDO
         $this->initConnection();
     }
 
-    // スタティックファクトリメソッド
     public static function connect2Database($config = 'database.ini')
     {
-        return new self($config);
+        if (self::$instance === null) {
+            self::$instance = new self($config);
+        }
+        return self::$instance;
     }
 
     private function initConnection()
@@ -33,13 +38,13 @@ class DataBaseMySQL extends PDO
         }
 
         # Database接続
-        $this->db = $settings['database'];
-        $port =  $this->db['port'] ?? 3306;
-        $driver = $this->db['driver'] ?? 'mysql';
-        $host = $this->db['host'] ?? '';
-        $schema = $this->db['schema'] ?? '';
-        $username = $this->db['username'] ?? NULL;
-        $password = $this->db['password'] ?? NULL;
+        $this->dbConfig = $settings['database'];
+        $port =  $this->dbConfig['port'] ?? 3306;
+        $driver = $this->dbConfig['driver'] ?? 'mysql';
+        $host = $this->dbConfig['host'] ?? '';
+        $schema = $this->dbConfig['schema'] ?? '';
+        $username = $this->dbConfig['username'] ?? NULL;
+        $password = $this->dbConfig['password'] ?? NULL;
 
         $port = empty($port) ? '' : ";port={$port}";
         $dsn = "{$driver}:host={$host}{$port};dbname={$schema}";
@@ -51,7 +56,7 @@ class DataBaseMySQL extends PDO
             //              throw new RuntimeException("Not connected to database");
             //       }
         } catch (Exception $e) {
-            throw new RuntimeException("Database Connection Error");
+            throw new RuntimeException("Database Connection Error: " . $e->getMessage(), 0, $e);
         }
     }
 
@@ -62,8 +67,7 @@ class DataBaseMySQL extends PDO
             $result = $this->query("SELECT 1");
             return $result !== false;
         } catch (Exception $e) {
-            throw new RuntimeException("Database Connection Test Error");
-            return false;
+            throw new RuntimeException("Database Connection Test Error: " . $e->getMessage(), 0, $e);
         }
     }
 
@@ -82,19 +86,17 @@ class DataBaseMySQL extends PDO
     }
 
     # トランザクションの開始
-    function executeTransaction(callable $operation): string
+    function executeTransaction(callable $operation)
     {
         try {
-            $this->db->beginTransaction();
+            $this->beginTransaction();
             $result = $operation();
-            $this->db->commit();
+            $this->commit();
             return $result;
         } catch (Exception $e) {
-            $this->db->rollBack();
+            $this->rollBack();
             error_log($e->getMessage());
             return ERR_DB_EXECUTION;
         }
-
-        return $result;
     }
 }

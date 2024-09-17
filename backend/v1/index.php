@@ -2,13 +2,23 @@
 require_once('HttpRequestManager.php');
 require_once(__DIR__ . '/controller/bookshelfController.php');
 
+try {
+    $db = DataBaseMySQL::connect2Database();
+} catch (Exception $e) {
+
+    http_response_code(500);
+    echo json_encode(["message" => $e->getMessage()]);
+    return;
+}
+
+
 $router = new Router();
-$router->addRoute(URI_BOOK_SHELF, new bookShelfController());
-$router->addRoute(URI_WISH_LIST, new wishListController());
-$router->addRoute(URI_READ_HIST, new readHistoriesController());
+$router->addRoute(URI_BOOK_SHELF, new bookShelfController($db));
+$router->addRoute(URI_WISH_LIST, new wishListController($db));
+$router->addRoute(URI_READ_HIST, new readHistoriesController($db));
 
 
-$httpRequestManager = new HttpRequestManager($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO']);
+$httpRequestManager = new HttpRequestManager($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 
 $resource = $httpRequestManager->getResource();
 $method = $httpRequestManager->getMethod();

@@ -6,10 +6,10 @@ class HttpQueryParser
     private $bookISBN;    // 本のID
 
 
-    function __construct($request)
+    function __construct($query)
     {
 
-        $this->bookISBN = array_shift($request);
+        $this->bookISBN = isset($query) ? $query : null;
     }
 
     function getBookISBN()

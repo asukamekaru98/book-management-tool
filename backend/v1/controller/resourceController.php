@@ -3,13 +3,13 @@ require_once(__DIR__ . '/../database/database.php');
 
 class resourceController
 {
-    /* protected $db;
+    protected $db;
 
     public function __construct(DataBaseMySQL $db)
     {
         $this->db = $db;
     }
-*/
+
     public function handle($method, $isbn, $data)
     {
         switch ($method) {
