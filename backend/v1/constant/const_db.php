@@ -24,45 +24,6 @@ define('TOOL_AUTH_MANAGER', 2); //
 define('TOOL_AUTH_EDITOR', 3); // 
 define('TOOL_AUTH_VIERER', 4); // 
 
-/************************ I/F ************************/
-# ログイン情報
-// json リクエスト
-define('UserSignIn', 'user_sign_in');
-// json レスポンス
-define('UserSignIn_Resp', 'user_sign_in_resp');
-// list
-define('UserSignInUser', 'user_sign_in_user');
-define('UserSignInPw', 'user_sign_in_pw');
-
-# アカウント作成
-// json req
-define('UserSignUp', 'user_sign_up');
-// json resp
-define('UserSignUp_Resp', 'user_sign_up_resp');
-// list
-define('UserSignUpUser', 'user_sign_up_user');
-define('UserSignUpPw', 'cuser_sign_up_pw');
-define('UserSignUpDep', 'user_sign_up_dep');
-
-# 出荷先情報登録
-// json req
-define('CustReg', 'reg_customer');
-// json resp
-define('CustReg_Resp', 'reg_customer_resp');
-// list
-define('CustRegId', 'reg_customer_id');
-define('CustRegName', 'reg_customer_name');
-
-# 本体プログラム登録
-// json req
-define('ProgReg', 'programs_reg');
-// json resp
-define('ProgReg_Resp', 'programs_reg_resp');
-// list
-define('ProgRegPgVer', 'programs_reg_pg_ver');
-define('ProgRegFileName', 'programs_reg_file_name');
-define('ProgRegPgData', 'programs_reg_pg_data');
-
 /************************ データベース ************************/
 # usersテーブル
 define('DB_Users', 'users');

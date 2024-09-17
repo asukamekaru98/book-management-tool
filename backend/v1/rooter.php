@@ -4,17 +4,16 @@ class Router
 {
     private $routes = [];
 
-    public function addRoute($key, $controller)
+    public function addRoute($resource, $controller)
     {
-        $this->routes[$key] = $controller;
+        $this->routes[$resource] = $controller;
     }
 
-    public function dispatch($data)
+    public function dispatch($resource, $method, $isbn, $data)
     {
-        foreach ($this->routes as $key => $controller) {
-            if (isset($data[$key])) {
-                return $controller->handle($data[$key]);
-            }
+
+        if (isset($routes[$resource])) {
+            return $routes[$resource]->handle($method, $isbn, $data);
         }
 
         return $this->handleNotFound();

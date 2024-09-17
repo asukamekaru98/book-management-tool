@@ -1,54 +1,59 @@
 <?php
-// require_once('database/database.php');
-// require_once('controller/controllers.php');
-// require_once('rooter.php');
-// require_once('constant.php');
+require_once('HttpRequestManager.php');
+require_once(__DIR__ . '/controller/bookshelfController.php');
 
+$router = new Router();
+$router->addRoute(URI_BOOK_SHELF, new bookShelfController());
+$router->addRoute(URI_WISH_LIST, new wishListController());
+$router->addRoute(URI_READ_HIST, new readHistoriesController());
 
 
 $httpRequestManager = new HttpRequestManager($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO']);
 
-switch ($resource) {
+$resource = $httpRequestManager->getResource();
+$method = $httpRequestManager->getMethod();
+$bookISBN = $httpRequestManager->getBookISBN();
+$data = $httpRequestManager->getData();
+
+$router->dispatch($resource, $method, $bookISBN, $data);
+
+/*
+switch ($httpRequestManager->getResource()) {
     case 'read-histories':
-        handleReadHistories($method, $id, $data);
+        handleReadHistories($httpRequestManager->getMethod(), $httpRequestManager->getBookISBN(), $httpRequestManager->getData());
         break;
     case 'books':
-        handleBooks($method, $id, $data);
-        break;
-    case 'wish-list':
-        handleReadHistories($method, $id, $data);
-        break;
-    case 'book-shelf':
-        handleReadHistories($method, $id, $data);
+        handleBooks($httpRequestManager->getMethod(), $id, $data);
         break;
     default:
         http_response_code(404);
         echo json_encode(["message" => "Resource not found"]);
         break;
 }
-
-function handleReadHistories($method, $id, $data)
+        */
+/*
+function handleReadHistories($method, $isbn, $data)
 {
     switch ($method) {
         case 'GET':
-            if ($id) {
+            if ($isbn) {
                 // IDを指定した履歴の取得
-                getReadHistory($id);
+                getReadHistory($isbn);
             } else {
                 // 全履歴の取得
                 getAllReadHistories();
             }
             break;
         case 'PUT':
-            if ($id && $data) {
+            if ($isbn && $data) {
                 // 指定した履歴の修正
-                updateReadHistory($id, $data);
+                updateReadHistory($isbn, $data);
             }
             break;
         case 'DELETE':
-            if ($id) {
+            if ($isbn) {
                 // 指定した履歴の削除
-                deleteReadHistory($id);
+                deleteReadHistory($isbn);
             }
             break;
         default:
@@ -125,7 +130,7 @@ function addBook($data)
     echo json_encode(["message" => "Adding new book", "data" => $data]);
 }
 
-
+*/
 
 /*
 if (json_last_error() !== JSON_ERROR_NONE) {

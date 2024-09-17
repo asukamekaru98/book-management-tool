@@ -5,25 +5,33 @@ require_once('HttpResourceParser.php');
 class HttpRequestManager
 {
     private $method;    // リクエストメソッド
-    private $bookId;    // 本のID
+    private $bookISBN;  // 本のISBN
     private $request;   // リクエスト
     private $pathInfo;  // パス情報
     private $resource;  // リソース
     private $data;      // データ
-    private $httpRequestParser;
-    private $httpResourceParser;
-    private $httpQueryParser;
+
 
 
     function __construct($method, $pathInfo)
     {
+
         $this->method = $method;
         $this->pathInfo = $pathInfo;
 
         $httpRequestParser = new HttpRequestParser($pathInfo);
-        $httpResourceParser = new HttpResourceParser($httpRequestParser->getRequest());
-        $httpQueryParser = new HttpQueryParser($httpRequestParser->getRequest());
+        $this->request = $httpRequestParser->getRequest();
+
+
+        $httpResourceParser = new HttpResourceParser($this->request);
+        $this->resource = $httpResourceParser->getResource();
+
+        $httpQueryParser = new HttpQueryParser($this->request);
+        $this->bookISBN = $httpQueryParser->getBookISBN();
+
         //$this->resource = array_shift($this->request);
+
+
 
         $this->data = json_decode(file_get_contents('php://input'), true);
     }
@@ -32,7 +40,7 @@ class HttpRequestManager
      * リクエストメソッドを取得
      * @return string リクエストメソッド
      */
-    function getMethood()
+    function getMethod()
     {
         return $this->method;
     }
@@ -68,9 +76,9 @@ class HttpRequestManager
      * IDを取得
      * @return string ID
      */
-    function getId()
+    function getBookISBN()
     {
-        return $this->bookId;
+        return $this->bookISBN;
     }
 
     /**
