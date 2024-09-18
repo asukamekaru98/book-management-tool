@@ -24,7 +24,7 @@ $router->addRoute(URI_READ_HIST, new readHistoriesController($db));
 
 $httpMngr = new httpManager();
 
-$resource = $httpMngr->getArrayUriResource();
+$resource = $httpMngr->getUriResource(1);
 $method = $httpMngr->getHTTPMethod();
 $bookISBN = $httpMngr->getBookISBN();
 $data = $httpMngr->getData();
@@ -36,7 +36,7 @@ echo "{$bookISBN}<br>";
 echo "{$data}<br>";
 
 try {
-    $router->dispatch($resource[1], $method, $bookISBN, $data);
+    $router->dispatch($resource, $method, $bookISBN, $data);
 } catch (Exception $e) {
     echo json_encode(["message" => $e->getMessage()]);
     exit;

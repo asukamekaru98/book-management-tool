@@ -2,18 +2,18 @@
 
 class Router
 {
-    private $routes = [];
+    private resourceController $resourceCtrlers = [];
 
-    public function addRoute($resource, $controller)
+    public function addRoute(string $resource, resourceController $resourceCtrler)
     {
-        $this->routes[$resource] = $controller;
+        $this->resourceCtrlers[$resource] = $resourceCtrler;
     }
 
     public function dispatch($resource, $method, $isbn, $data)
     {
 
-        if (isset($this->routes[$resource])) {
-            return $this->routes[$resource]->handle($method, $isbn, $data);
+        if (isset($this->resourceCtrlers[$resource])) {
+            return $this->resourceCtrlers[$resource]->handle($method, $isbn, $data);
         }
 
         return $this->handleNotFound();

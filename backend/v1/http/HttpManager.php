@@ -87,13 +87,23 @@ class httpManager
     }
 
     /**
-     * リソースを取得
+     * すべてのリソースを配列で取得
      * @return string リソース
      */
-    function getArrayUriResource()
+    function getArrayUriResources()
     {
         return $this->aUriResource;
     }
+
+    /**
+     * リソースを取得
+     * @return string リソース
+     */
+    function getUriResource(int $idx)
+    {
+        return $this->aUriResource[$idx];
+    }
+
 
     /**
      * IDを取得
