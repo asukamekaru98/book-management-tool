@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../database/database.php');
+require_once(__DIR__ . '/../constant/const_statusCode.php');
 
 class resourceController
 {
@@ -39,31 +40,31 @@ class resourceController
 
     public function methodGET($isbn, $data)
     {
-        http_response_code(405);
+        http_response_code(METHOD_NOT_ALLOWED_405);
         echo json_encode(["message" => "Method not allowed"]);
     }
 
     public function methodPOST($isbn, $data)
     {
-        http_response_code(405);
+        http_response_code(METHOD_NOT_ALLOWED_405);
         echo json_encode(["message" => "Method not allowed"]);
     }
 
     public function methodPUT($isbn, $data)
     {
-        http_response_code(405);
+        http_response_code(METHOD_NOT_ALLOWED_405);
         echo json_encode(["message" => "Method not allowed"]);
     }
 
     public function methodDELETE($isbn, $data)
     {
-        http_response_code(405);
+        http_response_code(METHOD_NOT_ALLOWED_405);
         echo json_encode(["message" => "Method not allowed"]);
     }
 
     public function methodPATCH($isbn, $data)
     {
-        http_response_code(405);
+        http_response_code(METHOD_NOT_ALLOWED_405);
         echo json_encode(["message" => "Method not allowed"]);
     }
 }

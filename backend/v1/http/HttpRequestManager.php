@@ -27,9 +27,12 @@ class HttpRequestManager
         $httpResourceParser = new HttpResourceParser($this->request);
         $this->resource = $httpResourceParser->getResource();
 
-        $httpQueryParser = new HttpQueryParser($_GET['isbn']);
-        $this->bookISBN = $httpQueryParser->getBookISBN();
-
+        if (isset($_GET['isbn'])) {
+            $httpQueryParser = new HttpQueryParser($_GET['isbn']);
+            $this->bookISBN = $httpQueryParser->getBookISBN();
+        } else {
+            $this->bookISBN = 0;
+        }
         //$this->resource = array_shift($this->request);
 
 

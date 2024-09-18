@@ -1,6 +1,6 @@
 <?php
-require_once(__DIR__ . '/../loader/loaders.php');
-require_once(__DIR__ . '/../constant.php');
+require_once(__DIR__ . '/../loader/configLoader.php');
+require_once(__DIR__ . '/../constant/const_db.php');
 
 
 class DataBaseMySQL extends PDO
