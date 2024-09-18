@@ -1,19 +1,39 @@
 <?php
+require_once(__DIR__ . '/../constant/const_uri.php');
 
 class HttpQueryParser
 {
-
-    private $bookISBN;    // 本のID
-
+    private $queries = [];
 
     function __construct($query)
     {
 
-        $this->bookISBN = isset($query) ? $query : null;
+        $this->queries[URI_QUERY_ISBN] = $query[URI_QUERY_ISBN] ?? INIT_URI_QUERY_ISBN;
+        $this->queries[URI_QUERY_DATA_FORMAT] = $query[URI_QUERY_DATA_FORMAT] ?? INIT_URI_QUERY_DATA_FORMAT;
     }
 
-    function getBookISBN()
+    /**
+     * ISBNを取得する
+     */
+    function getQueryISBN()
     {
-        return $this->bookISBN;
+        return $this->queries[URI_QUERY_ISBN];
+    }
+
+    /**
+     * フォーマット(JSON or XML)を取得する
+     */
+    function getQueryFormat()
+    {
+        return $this->queries[URI_QUERY_DATA_FORMAT];
+    }
+
+
+    /**
+     * 全クエリを取得する
+     */
+    function getQueries()
+    {
+        return $this->queries;
     }
 }

@@ -21,7 +21,7 @@ class Router
 
     private function handleNotFound()
     {
-        http_response_code(404);
-        return "Not Found";
+        http_response_code(NOT_FOUND_404);
+        throw new RuntimeException("Not Found");
     }
 }

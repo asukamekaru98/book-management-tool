@@ -1,6 +1,6 @@
 <?php
 require_once(__DIR__ . '/constant/const_uri.php');
-require_once(__DIR__ . '/http/HttpRequestManager.php');
+require_once(__DIR__ . '/http/httpManager.php');
 require_once(__DIR__ . '/controller/bookshelfController.php');
 require_once(__DIR__ . '/controller/wishListController.php');
 require_once(__DIR__ . '/controller/readHistoriesController.php');
@@ -12,6 +12,7 @@ try {
 
     http_response_code(INTERNAL_SERVER_ERROR_500);
     echo json_encode(["message" => $e->getMessage()]);
+    exit;
 }
 
 
@@ -21,14 +22,26 @@ $router->addRoute(URI_WISH_LIST, new wishListController($db));
 $router->addRoute(URI_READ_HIST, new readHistoriesController($db));
 
 
-$httpRequestManager = new HttpRequestManager($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+$httpMngr = new httpManager();
 
-$resource = $httpRequestManager->getResource();
-$method = $httpRequestManager->getMethod();
-$bookISBN = $httpRequestManager->getBookISBN();
-$data = $httpRequestManager->getData();
+$resource = $httpMngr->getArrayUriResource();
+$method = $httpMngr->getHTTPMethod();
+$bookISBN = $httpMngr->getBookISBN();
+$data = $httpMngr->getData();
 
-$router->dispatch($resource, $method, $bookISBN, $data);
+print_r($resource);
+echo "<br>";
+echo "{$method}<br>";
+echo "{$bookISBN}<br>";
+echo "{$data}<br>";
+
+try {
+    $router->dispatch($resource[1], $method, $bookISBN, $data);
+} catch (Exception $e) {
+    echo json_encode(["message" => $e->getMessage()]);
+    exit;
+}
+
 
 http_response_code(OK_200);
 echo 'OK';

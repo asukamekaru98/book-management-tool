@@ -8,8 +8,11 @@ class HttpResourceParser
         $this->resourceParse($request);
     }
 
+
+
     function resourceParse($request)
     {
+
         $this->resource = array_shift($request);
     }
 
