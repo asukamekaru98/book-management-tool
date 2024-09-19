@@ -2,7 +2,7 @@
 
 class Router
 {
-    private resourceController $resourceCtrlers = [];
+    private $resourceCtrlers = [];
 
     public function addRoute(string $resource, resourceController $resourceCtrler)
     {

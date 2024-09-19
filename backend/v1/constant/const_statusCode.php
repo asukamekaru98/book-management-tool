@@ -59,7 +59,7 @@ define('UPGRADE_REQUIRED_426', 426); // プロトコルのアップグレード�
 define('PRECONDITION_REQUIRED_428', 428); // 前提条件が必要
 define('TOO_MANY_REQUESTS_429', 429); // リクエストが多すぎる
 define('REQUEST_HEADER_FIELDS_TOO_LARGE_431', 431); // ヘッダーフィールドが大きすぎる
-define('UNAVAILABLE_FOR_LEGAL_REASONS_451', 451); // 法的理由により利用不可
+define('UNAVAILABLE_FOR_LEGAL_REASONS_451', 451);  // 法的理由により利用不可
 
 # サーバーエラーレスポンス
 define('INTERNAL_SERVER_ERROR_500', 500); // サーバー内部エラー
