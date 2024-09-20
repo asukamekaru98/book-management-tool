@@ -43,7 +43,7 @@ try {
 
 
 http_response_code(OK_200);
-echo 'OK';
+//echo json_encode;
 
 //$data['user_sign_up'] = [];
 //$data['user_sign_up']['user_sign_up_user'] = '田中';

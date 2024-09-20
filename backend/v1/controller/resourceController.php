@@ -2,7 +2,7 @@
 require_once(__DIR__ . '/../database/database.php');
 require_once(__DIR__ . '/../constant/const_statusCode.php');
 
-class resourceController
+abstract class resourceController
 {
     protected $db;
 

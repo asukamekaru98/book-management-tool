@@ -78,6 +78,7 @@ class bookShelfController extends resourceController
             http_response_code(VARIANT_ALSO_NEGOTIATES_506);
         }
 
-        json_encode($result);
+
+        echo json_encode($result);
     }
 }
