@@ -15,27 +15,21 @@ class resourceController
     {
         switch ($method) {
             case 'GET':
-                $this->methodGET($isbn, $data);
-                break;
-
+                return $this->methodGET($isbn, $data);
             case 'POST':
-                $this->methodPOST($isbn, $data);
-                break;
-
+                return $this->methodPOST($isbn, $data);
             case 'PUT':
-                $this->methodPUT($isbn, $data);
-                break;
-
+                return $this->methodPUT($isbn, $data);
             case 'DELETE':
-                $this->methodDELETE($isbn, $data);
-                break;
-
+                return $this->methodDELETE($isbn, $data);
             case 'PATCH':
-                $this->methodPATCH($isbn, $data);
-                break;
+                return $this->methodPATCH($isbn, $data);
         }
+
+        throw new BadMethodCallException("Bad Method");
         // データベース接続を利用したアカウント作成処理
         //return $this->customerReg($data, $this->db);
+
     }
 
     public function methodGET($isbn, $data)

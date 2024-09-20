@@ -5,11 +5,15 @@ class HttpQueryParser
 {
     private $queries = [];
 
-    function __construct($query)
+    function __construct()
     {
+        //echo $query;
 
-        $this->queries[URI_QUERY_ISBN] = $query[URI_QUERY_ISBN] ?? INIT_URI_QUERY_ISBN;
-        $this->queries[URI_QUERY_DATA_FORMAT] = $query[URI_QUERY_DATA_FORMAT] ?? INIT_URI_QUERY_DATA_FORMAT;
+        //$this->queries[URI_QUERY_ISBN] = $query[URI_QUERY_ISBN] ?? INIT_URI_QUERY_ISBN;
+        //$this->queries[URI_QUERY_DATA_FORMAT] = $query[URI_QUERY_DATA_FORMAT] ?? INIT_URI_QUERY_DATA_FORMAT;
+
+        $this->queries[URI_QUERY_ISBN] = $_GET[URI_QUERY_ISBN] ?? INIT_URI_QUERY_ISBN;
+        $this->queries[URI_QUERY_DATA_FORMAT] = $_GET[URI_QUERY_DATA_FORMAT] ?? INIT_URI_QUERY_DATA_FORMAT;
     }
 
     /**
