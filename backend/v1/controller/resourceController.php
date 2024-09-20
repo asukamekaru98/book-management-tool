@@ -36,29 +36,34 @@ abstract class resourceController
     {
         http_response_code(METHOD_NOT_ALLOWED_405);
         echo json_encode(["message" => "Method not allowed"]);
+        throw new RuntimeException("Methods not supported by this function");
     }
 
     public function methodPOST($isbn, $data)
     {
         http_response_code(METHOD_NOT_ALLOWED_405);
         echo json_encode(["message" => "Method not allowed"]);
+        throw new RuntimeException("Methods not supported by this function");
     }
 
     public function methodPUT($isbn, $data)
     {
         http_response_code(METHOD_NOT_ALLOWED_405);
         echo json_encode(["message" => "Method not allowed"]);
+        throw new RuntimeException("Methods not supported by this function");
     }
 
     public function methodDELETE($isbn, $data)
     {
         http_response_code(METHOD_NOT_ALLOWED_405);
         echo json_encode(["message" => "Method not allowed"]);
+        throw new RuntimeException("Methods not supported by this function");
     }
 
     public function methodPATCH($isbn, $data)
     {
         http_response_code(METHOD_NOT_ALLOWED_405);
         echo json_encode(["message" => "Method not allowed"]);
+        throw new RuntimeException("Methods not supported by this function");
     }
 }
