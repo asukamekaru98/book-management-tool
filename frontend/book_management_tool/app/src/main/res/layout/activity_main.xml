@@ -5,46 +5,43 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/urlEditText"
+    <Spinner
+        android:id="@+id/httpMethodSpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter Server URL (leave blank for default)" />
+        android:layout_height="wrap_content"/>
 
     <EditText
-        android:id="@+id/loginIdEditText"
+        android:id="@+id/ipAddressET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Login ID" />
+        android:hint="Enter IP Address" />
 
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/apiVersionET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Password"
-        android:inputType="textPassword" />
+        android:hint="Enter API Version" />
 
     <EditText
-        android:id="@+id/customerIdEditText"
+        android:id="@+id/apiFunctionET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Customer ID" />
+        android:hint="Enter API Function" />
 
     <EditText
-        android:id="@+id/customerNameEditText"
+        android:id="@+id/isbnCodeET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Customer Name" />
-
-    <Button
-        android:id="@+id/sendButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send JSON" />
+        android:hint="Enter ISBN Code" />
 
     <Button
         android:id="@+id/accessButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Access URL" />
+
+    <TextView
+        android:id="@+id/jsonTV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>
