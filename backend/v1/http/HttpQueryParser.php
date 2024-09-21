@@ -16,6 +16,7 @@ class HttpQueryParser
         $this->queries[URI_QUERY_DATA_FORMAT] = $_GET[URI_QUERY_DATA_FORMAT] ?? INIT_URI_QUERY_DATA_FORMAT;
     }
 
+
     /**
      * ISBNを取得する
      */

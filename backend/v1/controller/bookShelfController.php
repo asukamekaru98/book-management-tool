@@ -15,7 +15,11 @@ class bookShelfController extends resourceController
 
         if ($isbn) {
             // IDを指定した履歴の取得
-            $this->getBookInfo($isbn);
+            $book = $this->getBookInfo($isbn);
+
+            if ($book) {
+            } else {
+            }
         } else {
             // 全履歴の取得
             // getAllBooksInfo();
@@ -78,6 +82,28 @@ class bookShelfController extends resourceController
             http_response_code(VARIANT_ALSO_NEGOTIATES_506);
         }
 
+        http_response_code(OK_200);
+
+        $responseJSON = [
+            'bookinfo' => [
+                'isbn' => $result['isbn'],
+                'title' => $result['title'],
+                'sub_title' => $result['sub_title'],
+                'author' => $result['author'],
+                'description' => $result['description'],
+                'image_url' => $result['image_url'],
+                'published_date' => $result['published_date'],
+                'content' => $result['content'],
+            ],
+            'userinfo' => [
+                'industry_important' => $result['industry_important'],
+                'work_important' => $result['work_important'],
+                'user_important' => $result['user_important'],
+                'priority' => $result['priority'],
+                'purchased_flag' => $result['purchased_flag'],
+                'viewed_flag' => $result['viewed_flag'],
+            ],
+        ];
 
         echo json_encode($result);
     }

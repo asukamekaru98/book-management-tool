@@ -22,7 +22,13 @@ $router->addRoute(URI_WISH_LIST, new wishListController($db));
 $router->addRoute(URI_READ_HIST, new readHistoriesController($db));
 
 
-$httpMngr = new httpManager();
+try {
+    $httpMngr = new httpManager();
+} catch (Exception $e) {
+}
+
+
+
 $resource = $httpMngr->getUriResource(1);
 $method = $httpMngr->getHTTPMethod();
 $bookISBN = $httpMngr->getBookISBN();
@@ -42,7 +48,7 @@ try {
 }
 
 
-http_response_code(OK_200);
+//http_response_code(OK_200);
 //echo json_encode;
 
 //$data['user_sign_up'] = [];
