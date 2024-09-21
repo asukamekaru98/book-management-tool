@@ -25,6 +25,8 @@ $router->addRoute(URI_READ_HIST, new readHistoriesController($db));
 try {
     $httpMngr = new httpManager();
 } catch (Exception $e) {
+    echo json_encode(["message" => $e->getMessage()]);
+    exit();
 }
 
 

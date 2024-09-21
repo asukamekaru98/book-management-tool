@@ -7,6 +7,9 @@ class isbnParser
     {
 
         if ($this->isValidIsbn($isbn)) {
+            http_response_code(NOT_ACCEPTABLE_406);
+            echo json_encode(['message' => '無効なISBNコードです']);
+            throw new RuntimeException("無効なISBNコードです");
         }
     }
 
