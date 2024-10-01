@@ -23,28 +23,12 @@ class httpManager
     {
 
         $this->httpMethod = $_SERVER['REQUEST_METHOD'];
-        //$requestURI = $_SERVER['REQUEST_URI'];
-        //$uriScript = $_SERVER['SCRIPT_NAME'];
-
-        //$this->pathInfo = $pathInfo;
-
-        //echo "{$this->pathInfo}<br>";
 
         $httpUriScriptParser = new HttpURIPerser($_SERVER['REQUEST_URI']);
         $this->aUriResource = $httpUriScriptParser->getUriResource();
 
-        //   print_r($this->aUriResource);
-        //   echo "<br>";
-
-        //$httpResourceParser = new HttpResourceParser($this->request);
-        //$this->resource = $httpResourceParser->getResource();
-
         $httpQueryParser = new HttpQueryParser($_SERVER['QUERY_STRING']);
         $this->aQueries = $httpQueryParser->getQueries();
-        //$this->resource = array_shift($this->request);
-
-        //   print_r($this->aQueries);
-        //   echo "<br>";
 
         switch ($this->aQueries[URI_QUERY_DATA_FORMAT]) {
             case URI_QUERY_DATA_FORMAT_JSON:
