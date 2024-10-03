@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/../database/database.php');
 require_once(__DIR__ . '/../constant/const_statusCode.php');
-require_once(__DIR__ . '/../database/sqlController.php');
+require_once(__DIR__ . '/../database/SqlController.php');
 
 abstract class resourceController
 {

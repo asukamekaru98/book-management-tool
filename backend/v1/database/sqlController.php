@@ -1,13 +1,14 @@
 <?php
+require_once(__DIR__ . '/../database/SqlController.php');
 
-abstract class sqlController
+class SqlController
 {
+
 	private string $HttpResponse;
 	private string $responseJSON;
 
 	public function __construct(
-		private $sql,
-		protected DataBaseMySQL $db
+		private SqlManager $sqlManager,
 	) {
 		$this->ExecuteSQLInDb();
 	}
@@ -15,14 +16,14 @@ abstract class sqlController
 	public function ExecuteSQLInDb()
 	{
 		try {
-			$stm = $this->db->prepare($this->sql);
+			$stm = $this->sqlManager->GetDatabaseInstance()->prepare($this->sqlManager->GetSQLQuery());
 			$stm->execute();
 			$result = $stm->fetchAll(PDO::FETCH_ASSOC);
 		} catch (Exception $e) {
-			$HttpResponse = VARIANT_ALSO_NEGOTIATES_506;
+			$this->HttpResponse = VARIANT_ALSO_NEGOTIATES_506;
 		}
 
-		$HttpResponse = OK_200;
+		$this->HttpResponse = OK_200;
 
 		$this->responseJSON = [
 			'bookinfo' => [
