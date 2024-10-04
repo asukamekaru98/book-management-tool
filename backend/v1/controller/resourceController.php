@@ -5,12 +5,8 @@ require_once(__DIR__ . '/../database/SqlController.php');
 
 abstract class resourceController
 {
-    protected $db;
 
-    public function __construct(DataBaseMySQL $db)
-    {
-        $this->db = $db;
-    }
+    public function __construct(protected DataBaseMySQL $db) {}
 
     public function handle($method, $isbn, $data)
     {

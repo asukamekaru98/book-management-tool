@@ -64,9 +64,6 @@ class bookShelfController extends resourceController
 
     function getBookInfo($isbn)
     {
-
-
-
         $sqlQuery = <<< "EOD"
                     SELECT books.isbn,books.title,books.sub_title,books.author,books.description,books.page,books.image_url,books.published_date,books.content,books.industry_important,books.work_important,books.user_important,books.priority,books.purchased_flag,books.viewed_flag
                     FROM books_shelf
@@ -75,9 +72,10 @@ class bookShelfController extends resourceController
                     WHERE books.isbn = '$isbn'
                     EOD;
 
-        $sqlManager = new SqlGetBookInfo($sqlQuery, $this->db);
+        $sqlManager = new SqlManager($sqlQuery, $this->db);
 
-        $sqlController = new sqlController($sqlManager);
+        echo $sqlManager->GetresponseBody();
+
 
         //$sqlController->ShowResponse();
     }
