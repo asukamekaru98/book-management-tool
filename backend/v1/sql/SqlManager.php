@@ -58,19 +58,30 @@ class SQLManager implements ISQLManager
 
 	public function ExecuteQuery()
 	{
-		try {
-			$stm = $this->db->prepare($this->sqlQuery);
-			$stm->execute();
-			$this->arraySqlResult = $stm->fetchAll(PDO::FETCH_ASSOC);
-			$this->CreateHttpResponse();
-		} catch (Exception $e) {
-			$this->httpResponseCode = VARIANT_ALSO_NEGOTIATES_506;
+		$this->arraySqlResult = [];
+
+		foreach ($this->arraySqlQuery as $sqlQuery) {
+			try {
+				$stm = $this->db->prepare($sqlQuery);
+				$stm->execute();
+				$this->arraySqlResult = array_merge($this->arraySqlResult, $stm->fetchAll(PDO::FETCH_ASSOC));
+			} catch (Exception $e) {
+				$this->httpResponseCode = VARIANT_ALSO_NEGOTIATES_506;
+				return;
+			}
 		}
+		$this->CreateHttpResponseJSON();
 	}
 
-	public function GetHttpesponseCode() {}
+	public function GetHttpesponseCode()
+	{
+		return $this->httpResponseCode;
+	}
 
-	public function GetresponseBody() {}
+	public function GetresponseBody()
+	{
+		return $this->responseBody;
+	}
 
 	private function CreateHttpResponseJSON()
 	{
@@ -96,7 +107,7 @@ class SQLManager implements ISQLManager
 			$this->arraySqlResult
 		);
 
-		$this->responseArray = json_encode($responseArray);
+		$this->responseBody = json_encode($responseArray);
 		$this->httpResponseCode = OK_200;
 	}
 }
