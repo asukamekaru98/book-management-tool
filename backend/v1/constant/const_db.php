@@ -24,40 +24,42 @@ const TOOL_AUTH_EDITOR = 3; //
 const TOOL_AUTH_VIERER = 4; // 
 
 /************************ データベース ************************/
-# usersテーブル
-const DB_Users = 'users';
-const DB_Users_Id = 'id';
-const DB_Users_Name = 'name';
-const DB_Users_Pw = 'password';
-const DB_Users_Dep = 'department';
-const DB_Users_CreateTime = 'created_time';
-const DB_Users_UpdateTime = 'updated_time';
+# booksテーブル
+const DB_BOOKS_TB_NAME				= 'books';
+const DB_BOOKS_ISBN					= 'isbn';
+const DB_BOOKS_TITLE				= 'title';
+const DB_BOOKS_SUB_TITLE			= 'sub_title';
+const DB_BOOKS_AUTHOR				= 'author';
+const DB_BOOKS_DESCRIPTION			= 'description';
+const DB_BOOKS_IMAGE_URL			= 'image_url';
+const DB_BOOKS_PUBLISHED_DATE		= 'published_date';
+const DB_BOOKS_CONTENT				= 'content';
+const DB_BOOKS_INDUSTORY_IMPORTANT	= 'industry_important';
+const DB_BOOKS_WORK_IMPORTANT		= 'work_important';
+const DB_BOOKS_USER_IMPORTANT		= 'user_important';
+const DB_BOOKS_PRIORITY				= 'priority';
+const DB_BOOKS_PURCHASED_FLAG		= 'purchased_flag';
+const DB_BOOKS_VIEWED_FLAG			= 'viewed_flag';
+const DB_BOOKS_CREATE_TIME			= 'created_time';
 
-# authoritiesテーブル
-const DB_Authorities_Id = 'id';
-const DB_Authorities_Type = 'type';
-const DB_Authorities_CreateTime = 'created_time';
-const DB_Authorities_UpdateTime = 'updated_time';
+# books_shelfテーブル
+const DB_BOOKS_SHELF_TB_NAME		= 'books_shelf';
+const DB_BOOKS_SHELF_ID				= 'book_id';
+const DB_BOOKS_SHELF_ISBN			= 'isbn';
+const DB_BOOKS_SHELF_PURCHASED		= 'purchased';
+const DB_BOOKS_SHELF_MEMO			= 'memo';
 
-# departmentsテーブル
-const DB_Departments_Id = 'id';
-const DB_Departments_Name = 'users';
-const DB_Departments_Pw = 'authority';
-const DB_Departments_CreateTime = 'created_time';
-const DB_Departments_UpdateTime = 'updated_time';
+# read_historiesテーブル
+const DB_READ_HISTORIES_TB_NAME			= 'read_histories';
+const DB_READ_HISTORIES_ID				= 'id';
+const DB_READ_HISTORIES_ISBN			= 'isbn';
+const DB_READ_HISTORIES_VIEW_START		= 'view_start';
+const DB_READ_HISTORIES_VIEW_END		= 'view_end';
+const DB_READ_HISTORIES_MEMO			= 'memo';
+const DB_READ_HISTORIES_UNDERSTANDING	= 'understanding';
 
-# customersテーブル
-const DB_Customers = 'customers';
-const DB_Customers_Id = 'id';
-const DB_Customers_Name = 'name';
-const DB_Customers_CreateTime = 'created_time';
-const DB_Customers_UpdateTime = 'updated_time';
-
-# programsテーブル
-const DB_Programs = 'programs';
-const DB_Programs_Id = 'id';
-const DB_Programs_PgVer = 'program_ver';
-const DB_Programs_FileName = 'file_name';
-const DB_Programs_PgData = 'program_data';
-const DB_Programs_CreateTime = 'created_time';
-const DB_Programs_UpdateTime = 'updated_time';
+# wish_listsテーブル
+const DB_WISH_LISTS_TB_NAME			= 'wish_lists';
+const DB_WISH_LISTS_ID				= 'id';
+const DB_WISH_LISTS_ISBN			= 'isbn';
+const DB_WISH_LISTS_MEMO			= 'memo';

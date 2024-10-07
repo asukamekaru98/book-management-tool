@@ -10,6 +10,8 @@ abstract class resourceController
 
     public function handle($method, $isbn, $data)
     {
+
+
         switch ($method) {
             case 'GET':
                 return $this->methodGET($isbn, $data);
