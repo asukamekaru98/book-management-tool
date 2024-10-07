@@ -27,13 +27,13 @@ abstract class resourceController
             case 'GET':
                 return $this->methodGET();
             case 'POST':
-                return $this->methodPOST($isbn, $format, $data);
+                return $this->methodPOST();
             case 'PUT':
-                return $this->methodPUT($isbn, $format, $data);
+                return $this->methodPUT();
             case 'DELETE':
-                return $this->methodDELETE($isbn, $format, $data);
+                return $this->methodDELETE();
             case 'PATCH':
-                return $this->methodPATCH($isbn, $format, $data);
+                return $this->methodPATCH();
         }
 
         throw new BadMethodCallException("Bad Method");

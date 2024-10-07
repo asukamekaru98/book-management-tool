@@ -32,7 +32,7 @@ interface I_ResponseBodyCreator
 		],
 	];
 
-	private array $responseBody = [];
+	protected array $responseBody = [];
 
 	public function __construct(
 		protected String $httpResponseFormat,
@@ -44,7 +44,7 @@ interface I_ResponseBodyCreator
 	public function GetResponseBody(): array;
 }
 
-class GetMethodResponseBodyCreator implements I_ResponseBodyCreator
+class ResponseBodyGenerator implements I_ResponseBodyCreator
 {
 	public function __construct(protected string $httpResponseFormat)
 	{
@@ -57,6 +57,52 @@ class GetMethodResponseBodyCreator implements I_ResponseBodyCreator
 		if ($this->httpResponseFormat === URI_QUERY_DATA_FORMAT_JSON) {
 			$responseBody = $this->CreateResponseBody_JSON($arraySqlResult);
 		} else {
+			$responseBody = $this->CreateResponseBody_XML($arraySqlResult);
+		}
+
+		if ($responseBody === false || $responseBody === null) {
+			throw new Exception('Failed to create response body', INTERNAL_SERVER_ERROR_500);
+			return;
+		}
+
+		$this->responseBody = $responseBody;
+	}
+
+	public function CreateResponseBody_JSON(array $arraySqlResult): string
+	{
+		$responseJSON = self::CORRECT_RESPONSE_BODY_TEMPLATE;
+		$responseJSON['message'] = 'Correct';
+		return json_encode($responseJSON);
+	}
+
+	public function CreateResponseBody_XML(array $arraySqlResult)
+	{
+		$responseXML = self::ERROR_RESPONSE_BODY_TEMPLATE;
+		$responseXML['message'] = 'Correct';
+
+		return xmlrpc_encode($responseXML);
+	}
+
+	public function GetResponseBody(): array
+	{
+		return $this->responseBody;
+	}
+}
+
+class GetResponseBodyGenerator extends ResponseBodyGenerator
+{
+	public function __construct(protected string $httpResponseFormat)
+	{
+		$this->responseBody = [];
+	}
+
+	public function CreateResponseBody(array $arraySqlResult)
+	{
+
+		if ($this->httpResponseFormat === URI_QUERY_DATA_FORMAT_JSON) {
+			$responseBody = $this->CreateResponseBody_JSON($arraySqlResult);
+		} else {
+			$responseBody = $this->CreateResponseBody_XML($arraySqlResult);
 			throw new Exception('Not supported format', UNSUPPORTED_MEDIA_TYPE_415);
 			return;
 		}

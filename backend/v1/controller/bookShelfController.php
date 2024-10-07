@@ -4,10 +4,7 @@ require_once(__DIR__ . '/resourceController.php');
 class bookShelfController extends resourceController
 {
 
-    /**
-     * override
-     * 
-     */
+    // override
     function methodGET()
     {
 
@@ -21,7 +18,7 @@ class bookShelfController extends resourceController
 
         $sqlManager = new SqlManager(
             $this->db,
-            new GetMethodResponseBodyCreator($this->format)
+            new GetResponseBodyGenerator($this->format)
         );
 
         $sqlManager->SetSqlQuery($sqlQuery);
@@ -29,42 +26,6 @@ class bookShelfController extends resourceController
 
         http_response_code($sqlManager->GetHttpResponseCode());
         echo $sqlManager->GetresponseBody();
-    }
-
-    /**
-     * override
-     * 
-     */
-    function methodPOST()
-    {
-        if ($data) {
-            // 新しい本の情報を追加
-            // addBook($data);
-        }
-    }
-
-    /**
-     * override
-     * 
-     */
-    function methodPUT()
-    {
-        if ($isbn && $data) {
-            // 指定した履歴の修正
-            //   updateBookInfo($isbn, $data);
-        }
-    }
-
-    /**
-     * override
-     * 
-     */
-    function methodDELETE()
-    {
-        if ($isbn) {
-            // 指定した履歴の削除
-            // deletBook($isbn);
-        }
     }
 
     private function getBookInfoSqlQuery(): string
@@ -92,5 +53,55 @@ class bookShelfController extends resourceController
                     EOD;
 
         return $sqlQuery;
+    }
+
+    // override
+    function methodPOST()
+    {
+        $sqlQuery = $this->postBookInfoSqlQuery();
+
+        $sqlManager = new SqlManager(
+            $this->db,
+            new GetResponseBodyGenerator($this->format)
+        );
+
+        $sqlManager->SetSqlQuery($sqlQuery);
+        $sqlManager->ExecuteSqlQuery();
+
+        http_response_code($sqlManager->GetHttpResponseCode());
+        echo $sqlManager->GetresponseBody();
+    }
+
+    private function postBookInfoSqlQuery(): string
+    {
+        $isbn = $this->isbn;
+
+        $sqlQuery = <<< "EOD"
+                    SELECT books.isbn,books.title,books.sub_title,books.author,books.description,books.page,books.image_url,books.published_date,books.content,books.industry_important,books.work_important,books.user_important,books.priority,books.purchased_flag,books.viewed_flag
+                    FROM books_shelf
+                    LEFT JOIN books
+                    ON books.id = books_shelf.book_id
+                    WHERE books.isbn = '$isbn'
+                    EOD;
+
+        return $sqlQuery;
+    }
+
+    // override
+    function methodPUT()
+    {
+        if ($isbn && $data) {
+            // 指定した履歴の修正
+            //   updateBookInfo($isbn, $data);
+        }
+    }
+
+    // override
+    function methodDELETE()
+    {
+        if ($isbn) {
+            // 指定した履歴の削除
+            // deletBook($isbn);
+        }
     }
 }
