@@ -40,18 +40,18 @@ interface I_SQLManager
 	private array $arraySqlQuery;		// SQLクエリの配列
 
 	public function __construct(
-		protected String $HttpResponseFormat,
-		protected DataBaseMySQL $db
+		protected DataBaseMySQL $db,
+		protected I_ResponseBodyCreator $responseBodyCreator
 	);
 
 	// SQLクエリの設定
 	public function SetSqlQuery(string $sqlQuery);
 
 	// クエリの実行
-	public function ExecuteQuery();
+	public function ExecuteSqlQuery();
 
 	// HTTPレスポンスコードの取得
-	public function GetHttpesponseCode();
+	public function GetHttpResponseCode();
 
 	// HTTPレスポンスボディの取得
 	public function GetresponseBody();
@@ -61,7 +61,6 @@ class SQLManager implements I_SQLManager
 {
 
 	public function __construct(
-		protected String $HttpResponseFormat,
 		protected DataBaseMySQL $db,
 		protected I_ResponseBodyCreator $responseBodyCreator
 	) {}
@@ -71,7 +70,7 @@ class SQLManager implements I_SQLManager
 		$this->arraySqlQuery[] = $sqlQuery;
 	}
 
-	public function ExecuteQuery()
+	public function ExecuteSqlQuery()
 	{
 		if ($this->arraySqlQuery === null || empty($this->arraySqlQuery)) {
 			$this->httpResponseCode = VARIANT_ALSO_NEGOTIATES_506;
@@ -89,66 +88,30 @@ class SQLManager implements I_SQLManager
 				$this->httpResponseCode = VARIANT_ALSO_NEGOTIATES_506;
 				return;
 			}
+
+			if (empty($this->arraySqlResult)) {
+				$this->httpResponseCode = NOT_FOUND_404;
+				return;
+			}
+
+			try {
+				$this->responseBodyCreator->CreateResponseBody($this->arraySqlResult);
+			} catch (Exception $e) {
+				$this->httpResponseCode = $e->getCode();
+				return;
+			}
 		}
-
-		if (empty($this->arraySqlResult)) {
-			$this->httpResponseCode = NOT_FOUND_404;
-			return;
-		}
-
-		if ($this->HttpResponseFormat === URI_QUERY_DATA_FORMAT_JSON) {
-			$this->CreateHttpResponseJSON();
-		} else {
-			$this->httpResponseCode = NOT_ACCEPTABLE_406;
-		}
-
-		$this->CreateHttpResponseJSON();
-	}
-
-	private function CreateHttpResponseJSON()
-	{
-		$responseArray = array_map(
-			function ($row) {
-				$responseBody = self::GET_RESPONSE_BODY_TEMPLATE;
-				$responseBody['bookinfo'][DB_BOOKS_ISBN]				= $row[DB_BOOKS_ISBN];
-				$responseBody['bookinfo'][DB_BOOKS_TITLE]				= $row[DB_BOOKS_TITLE];
-				$responseBody['bookinfo'][DB_BOOKS_SUB_TITLE]			= $row[DB_BOOKS_SUB_TITLE];
-				$responseBody['bookinfo'][DB_BOOKS_AUTHOR]				= $row[DB_BOOKS_AUTHOR];
-				$responseBody['bookinfo'][DB_BOOKS_DESCRIPTION]			= $row[DB_BOOKS_DESCRIPTION];
-				$responseBody['bookinfo'][DB_BOOKS_IMAGE_URL]			= $row[DB_BOOKS_IMAGE_URL];
-				$responseBody['bookinfo'][DB_BOOKS_PUBLISHED_DATE]		= $row[DB_BOOKS_PUBLISHED_DATE];
-				$responseBody['bookinfo'][DB_BOOKS_CONTENT]				= $row[DB_BOOKS_CONTENT];
-				$responseBody['userinfo'][DB_BOOKS_INDUSTORY_IMPORTANT]	= $row[DB_BOOKS_INDUSTORY_IMPORTANT];
-				$responseBody['userinfo'][DB_BOOKS_WORK_IMPORTANT]		= $row[DB_BOOKS_WORK_IMPORTANT];
-				$responseBody['userinfo'][DB_BOOKS_USER_IMPORTANT]		= $row[DB_BOOKS_USER_IMPORTANT];
-				$responseBody['userinfo'][DB_BOOKS_PRIORITY]			= $row[DB_BOOKS_PRIORITY];
-				$responseBody['userinfo'][DB_BOOKS_PURCHASED_FLAG]		= $row[DB_BOOKS_PURCHASED_FLAG];
-				$responseBody['userinfo'][DB_BOOKS_VIEWED_FLAG]			= $row[DB_BOOKS_VIEWED_FLAG];
-				return $responseBody;
-			},
-			$this->arraySqlResult
-		);
-
-
-		$responseBody = json_encode($responseArray);
-		if ($responseBody === false || $responseBody === null) {
-			$this->httpResponseCode = INTERNAL_SERVER_ERROR_500;
-			return;
-		}
-
-		$this->responseBody = $responseBody;
-		$this->httpResponseCode = OK_200;
 	}
 
 
 
-	public function GetHttpesponseCode()
+	public function GetHttpResponseCode()
 	{
 		return $this->httpResponseCode;
 	}
 
 	public function GetresponseBody()
 	{
-		return $this->responseBody;
+		return $this->responseBodyCreator->GetResponseBody();
 	}
 }

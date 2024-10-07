@@ -98,6 +98,11 @@ class httpManager
         return $this->aQueries[URI_QUERY_ISBN];
     }
 
+    function getFormat()
+    {
+        return $this->aQueries[URI_QUERY_DATA_FORMAT];
+    }
+
     /**
      * データを取得
      * @return array データ

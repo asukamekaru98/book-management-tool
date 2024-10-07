@@ -8,29 +8,34 @@ class bookShelfController extends resourceController
      * override
      * 
      */
-    function methodGET($isbn, $data)
+    function methodGET()
     {
-        echo $isbn;
 
-
-        if ($isbn) {
+        if ($this->isbn) {
             // IDを指定した履歴の取得
-            $book = $this->getBookInfo($isbn);
-
-            if ($book) {
-            } else {
-            }
+            $sqlQuery = $this->getBookInfoSqlQuery();
         } else {
             // 全履歴の取得
-            $book = $this->getAllBooksInfo();
+            $sqlQuery = $this->getAllBooksInfo();
         }
+
+        $sqlManager = new SqlManager(
+            $this->db,
+            new GetMethodResponseBodyCreator($this->format)
+        );
+
+        $sqlManager->SetSqlQuery($sqlQuery);
+        $sqlManager->ExecuteSqlQuery();
+
+        http_response_code($sqlManager->GetHttpResponseCode());
+        echo $sqlManager->GetresponseBody();
     }
 
     /**
      * override
      * 
      */
-    function methodPOST($isbn, $data)
+    function methodPOST()
     {
         if ($data) {
             // 新しい本の情報を追加
@@ -42,7 +47,7 @@ class bookShelfController extends resourceController
      * override
      * 
      */
-    function methodPUT($isbn, $data)
+    function methodPUT()
     {
         if ($isbn && $data) {
             // 指定した履歴の修正
@@ -54,7 +59,7 @@ class bookShelfController extends resourceController
      * override
      * 
      */
-    function methodDELETE($isbn, $data)
+    function methodDELETE()
     {
         if ($isbn) {
             // 指定した履歴の削除
@@ -62,8 +67,10 @@ class bookShelfController extends resourceController
         }
     }
 
-    function getBookInfo($isbn)
+    private function getBookInfoSqlQuery(): string
     {
+        $isbn = $this->isbn;
+
         $sqlQuery = <<< "EOD"
                     SELECT books.isbn,books.title,books.sub_title,books.author,books.description,books.page,books.image_url,books.published_date,books.content,books.industry_important,books.work_important,books.user_important,books.priority,books.purchased_flag,books.viewed_flag
                     FROM books_shelf
@@ -72,25 +79,18 @@ class bookShelfController extends resourceController
                     WHERE books.isbn = '$isbn'
                     EOD;
 
-        $sqlManager = new SqlManager($sqlQuery, $this->db);
-
-        echo $sqlManager->GetresponseBody();
-
-
-        //$sqlController->ShowResponse();
+        return $sqlQuery;
     }
 
-    function getAllBooksInfo()
+    private function getAllBooksInfo(): string
     {
-        $sql = <<< "EOD"
+        $sqlQuery = <<< "EOD"
                     SELECT books.isbn,books.title,books.sub_title,books.author,books.description,books.page,books.image_url,books.published_date,books.content,books.industry_important,books.work_important,books.user_important,books.priority,books.purchased_flag,books.viewed_flag
                     FROM books_shelf
                     LEFT JOIN books
                     ON books.id = books_shelf.book_id
                     EOD;
 
-        $sqlController = new sqlController($sql, $this->db);
-
-        $sqlController->ShowResponse();
+        return $sqlQuery;
     }
 }
