@@ -105,13 +105,23 @@ class SQLManager implements I_SQLManager
 
 
 
-	public function GetHttpResponseCode()
+	public final function GetHttpResponseCode()
 	{
 		return $this->httpResponseCode;
 	}
 
-	public function GetresponseBody()
+	public final function GetresponseBody()
 	{
 		return $this->responseBodyCreator->GetResponseBody();
+	}
+
+	public final function GetResponseBodyTemplate()
+	{
+		return self::GET_RESPONSE_BODY_TEMPLATE;
+	}
+
+	public function __destruct()
+	{
+		$this->db = null;
 	}
 }

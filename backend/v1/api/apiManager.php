@@ -1,13 +1,14 @@
 <?php
 interface I_APIMAnager
 {
-	const URI = 'https://www.googleapis.com/books/v1/volumes';
+	const URI = 'https://example.com/';
 	private array $optionQueries = [
 		'query' => '',
 		'value' => ''
 	];
 
 	public function SetOptionQueries(string $query, string $format);
+	public function AccessAPI();
 
 	public function __construct(
 		protected I_URIParser $uriParser
@@ -28,7 +29,7 @@ class APIManager implements I_APIMAnager
 		];
 	}
 
-	public final function AccessAPI(string $uri, string $query, string $format)
+	public final function AccessAPI()
 	{
 		if ($this->uriParser === null) {
 			throw new Exception('Failed to access URI', INTERNAL_SERVER_ERROR_500);
