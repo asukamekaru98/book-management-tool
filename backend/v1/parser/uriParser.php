@@ -6,7 +6,6 @@ interface I_URIParser
 {
 	protected $apiResponse;
 
-	public function __construct(protected $bodyTemplate);
 
 	// APIレスポンスをセットする
 	public function SetAPIResponse($apiResponse);
@@ -18,7 +17,6 @@ interface I_URIParser
 class URIParser implements I_URIParser
 {
 
-	public final function __construct(protected $bodyTemplate) {}
 
 	public final function SetAPIResponse($apiResponse)
 	{
