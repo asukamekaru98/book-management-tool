@@ -29,14 +29,6 @@ try {
     exit();
 }
 
-
-
-$resource = $httpMngr->getUriResource(1);
-$method = $httpMngr->getHTTPMethod();
-$bookISBN = $httpMngr->getBookISBN();
-$format = $httpMngr->getFormat();
-$data = $httpMngr->getData();
-
 print_r($resource);
 echo "<br>";
 echo "{$method}<br>";
@@ -44,7 +36,7 @@ echo "{$bookISBN}<br>";
 echo "{$data}<br>";
 
 try {
-    $router->dispatch($resource, $method, $bookISBN, $format, $data);
+    $router->dispatch($httpMngr);
 } catch (Exception $e) {
     echo json_encode(["message" => $e->getMessage()]);
     exit();

@@ -1,5 +1,7 @@
 <?php
 
+
+
 class Router
 {
     private $resourceCtrlers = [];
@@ -9,8 +11,12 @@ class Router
         $this->resourceCtrlers[$resource] = $resourceCtrler;
     }
 
-    public function dispatch($resource, $method, $isbn, $data)
+    public function dispatch(httpManager $httpMngr)
     {
+        $resource = $httpMngr->getUriResource(1);
+        $method = $httpMngr->getHTTPMethod();
+        $isbn = $httpMngr->getBookISBN();
+        $data = $httpMngr->getData();
 
         if (isset($this->resourceCtrlers[$resource])) {
             return $this->resourceCtrlers[$resource]->handle($method, $isbn, $data);

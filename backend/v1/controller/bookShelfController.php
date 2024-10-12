@@ -60,6 +60,12 @@ class bookShelfController extends resourceController
     {
         require_once(__DIR__ . '../api/openDBAPIManager.php');
 
+        if ($this->isbn == null) {
+            http_response_code(400);
+            echo json_encode(['error' => ['code' => '400', 'message' => 'Bad Request']]);
+            return;
+        }
+
         $sqlManager = new SqlManager(
             $this->db,
             new GetResponseBodyGenerator($this->format)
@@ -85,11 +91,11 @@ class bookShelfController extends resourceController
                         '{$data['published_date']}', 
                         '{$data['content']}', 
                         '{$data['industry_important']}', 
-                        1, 
-                        1, 
-                        1, 
-                        0, 
-                        0)
+                        '{$this->industry_important}', 
+                        '{$this->work_important}', 
+                        '{$this->user_important}', 
+                        '{$this->priority}', 
+                        '{$this->purchased_flag}',)
                     EOD;
 
 
@@ -103,7 +109,31 @@ class bookShelfController extends resourceController
 
 
     // override
-    function methodPUT() {}
+    function methodPUT()
+    {
+        if ($this->isbn == null) {
+            http_response_code(400);
+            echo json_encode(['error' => ['code' => '400', 'message' => 'Bad Request']]);
+            return;
+        }
+
+        $sqlQuery = <<< "EOD"
+                    UPDATE books_shelf
+                    SET industry_important = '{$this->industry_important}', work_important = '{$this->work_important}', user_important = '{$this->user_important}', priority = '{$this->priority}', purchased_flag = '{$this->purchased_flag}', viewed_flag = '{$this->viewed_flag}'
+                    WHERE isbn = '{$this->isbn}'
+                    EOD;
+
+        $sqlManager = new SqlManager(
+            $this->db,
+            new GetResponseBodyGenerator($this->format)
+        );
+
+        $sqlManager->SetSqlQuery($sqlQuery);
+        $sqlManager->ExecuteSqlQuery();
+
+        http_response_code($sqlManager->GetHttpResponseCode());
+        echo $sqlManager->GetresponseBody();
+    }
 
     // override
     function methodDELETE()

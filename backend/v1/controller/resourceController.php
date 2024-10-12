@@ -10,6 +10,12 @@ abstract class resourceController
     protected $isbn;
     protected $format;
     protected $data;
+    protected $industry_important;
+    protected $work_important;
+    protected $user_important;
+    protected $priority;
+    protected $purchased_flag;
+    protected $viewed_flag;
 
     public function __construct(
         protected DataBaseMySQL $db
@@ -22,6 +28,12 @@ abstract class resourceController
         $this->isbn = $isbn;
         $this->format = $format;
         $this->data = $data;
+        $this->industry_important = $data['industry_important'] ?? 0;
+        $this->work_important = $data['work_important'] ?? 0;
+        $this->user_important = $data['user_important'] ?? 0;
+        $this->priority = $data['priority'] ?? 0;
+        $this->purchased_flag = $data['purchased_flag'] ?? 0;
+        $this->viewed_flag = $data['viewed_flag'] ?? 0;
 
         switch ($method) {
             case 'GET':
