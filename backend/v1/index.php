@@ -10,9 +10,7 @@ try {
     $db = DataBaseMySQL::connect2Database();
 } catch (Exception $e) {
 
-    http_response_code(INTERNAL_SERVER_ERROR_500);
-    echo json_encode(["message" => $e->getMessage()]);
-    exit;
+    ExitOfError($e->getMessage());
 }
 
 
@@ -25,19 +23,28 @@ $router->addRoute(URI_READ_HIST, new readHistoriesController($db));
 try {
     $httpMngr = new httpManager();
 } catch (Exception $e) {
-    echo json_encode(["message" => $e->getMessage()]);
-    exit();
+    ExitOfError($e->getMessage());
 }
-
-print_r($resource);
-echo "<br>";
-echo "{$method}<br>";
-echo "{$bookISBN}<br>";
-echo "{$data}<br>";
 
 try {
     $router->dispatch($httpMngr);
 } catch (Exception $e) {
-    echo json_encode(["message" => $e->getMessage()]);
-    exit();
+    ExitOfError($e->getMessage());
+}
+
+$db = null; // DB接続を切断
+
+function ExitOfError($message)
+{
+    http_response_code(INTERNAL_SERVER_ERROR_500);
+
+    if (empty($message)) {
+        $message = "Internal Server Error";
+    }
+
+    echo json_encode(["message" => $message]);
+
+    $db = null;
+
+    exit;
 }

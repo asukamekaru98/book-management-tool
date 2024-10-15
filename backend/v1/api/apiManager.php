@@ -1,22 +1,21 @@
 <?php
+require_once(__DIR__ . '/accessURI.php');
+
 interface I_APIMAnager
 {
 	const URI = 'https://example.com/';
+
+	public function SetOptionQueries(string $query, string $format);
+	public function AccessAPI();
+}
+
+class APIManager implements I_APIMAnager
+{
 	private array $optionQueries = [
 		'query' => '',
 		'value' => ''
 	];
 
-	public function SetOptionQueries(string $query, string $format);
-	public function AccessAPI();
-
-	public function __construct(
-		protected I_URIParser $uriParser
-	);
-}
-
-class APIManager implements I_APIMAnager
-{
 	public function __construct(
 		protected I_URIParser $uriParser
 	) {}
@@ -35,6 +34,7 @@ class APIManager implements I_APIMAnager
 			throw new Exception('Failed to access URI', INTERNAL_SERVER_ERROR_500);
 		}
 
+
 		$uri = $this->CreateURI();
 
 		$accessURI = new AccessURI($uri);
@@ -42,7 +42,7 @@ class APIManager implements I_APIMAnager
 		$this->uriParser->SetAPIResponse($accessURI->GetApiResponse());
 	}
 
-	private final function CreateURI()
+	private function CreateURI()
 	{
 		$uri = self::URI;
 

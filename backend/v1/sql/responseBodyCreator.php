@@ -32,12 +32,6 @@ interface I_ResponseBodyCreator
 		],
 	];
 
-	protected array $responseBody = [];
-
-	public function __construct(
-		protected String $httpResponseFormat,
-	);
-
 	public function CreateResponseBody(array $arraySqlResult);
 	public function CreateResponseBody_JSON(array $arraySqlResult);
 	public function CreateResponseBody_XML(array $arraySqlResult);
@@ -46,10 +40,9 @@ interface I_ResponseBodyCreator
 
 class ResponseBodyGenerator implements I_ResponseBodyCreator
 {
-	public function __construct(protected string $httpResponseFormat)
-	{
-		$this->responseBody = [];
-	}
+	protected array $responseBody = [];
+
+	public function __construct(protected string $httpResponseFormat) {}
 
 	public function CreateResponseBody(array $arraySqlResult)
 	{

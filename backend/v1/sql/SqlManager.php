@@ -34,16 +34,6 @@ interface I_SQLManager
 		],
 	];
 
-	private string $httpResponseCode;	// HTTPレスポンスコード
-	private array $responseBody;		// HTTPレスポンスボディ
-	private array $arraySqlResult;		// SQLクエリの結果
-	private array $arraySqlQuery;		// SQLクエリの配列
-
-	public function __construct(
-		protected DataBaseMySQL $db,
-		protected I_ResponseBodyCreator $responseBodyCreator
-	);
-
 	// SQLクエリの設定
 	public function SetSqlQuery(string $sqlQuery);
 
@@ -54,11 +44,15 @@ interface I_SQLManager
 	public function GetHttpResponseCode();
 
 	// HTTPレスポンスボディの取得
-	public function GetresponseBody();
+	public function GetResponseBody(): array;
 }
 
 class SQLManager implements I_SQLManager
 {
+	private string $httpResponseCode;	// HTTPレスポンスコード
+	private array $responseBody;		// HTTPレスポンスボディ
+	private array $arraySqlResult;		// SQLクエリの結果
+	private array $arraySqlQuery;		// SQLクエリの配列
 
 	public function __construct(
 		protected DataBaseMySQL $db,
@@ -110,7 +104,7 @@ class SQLManager implements I_SQLManager
 		return $this->httpResponseCode;
 	}
 
-	public final function GetresponseBody()
+	public final function GetResponseBody(): array
 	{
 		return $this->responseBodyCreator->GetResponseBody();
 	}
@@ -118,10 +112,5 @@ class SQLManager implements I_SQLManager
 	public final function GetResponseBodyTemplate()
 	{
 		return self::GET_RESPONSE_BODY_TEMPLATE;
-	}
-
-	public function __destruct()
-	{
-		$this->db = null;
 	}
 }

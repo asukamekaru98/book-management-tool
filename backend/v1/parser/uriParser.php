@@ -4,9 +4,6 @@
  */
 interface I_URIParser
 {
-	protected $apiResponse;
-
-
 	// APIレスポンスをセットする
 	public function SetAPIResponse($apiResponse);
 
@@ -16,7 +13,7 @@ interface I_URIParser
 
 class URIParser implements I_URIParser
 {
-
+	protected $apiResponse;
 
 	public final function SetAPIResponse($apiResponse)
 	{

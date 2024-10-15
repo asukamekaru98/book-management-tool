@@ -1,5 +1,7 @@
 <?php
 require_once(__DIR__ . '/resourceController.php');
+require_once(__DIR__ . '/../sql/responseBodyCreator.php');
+require_once(__DIR__ . '/../parser/openDBUriParser.php');
 
 class bookShelfController extends resourceController
 {
@@ -25,7 +27,7 @@ class bookShelfController extends resourceController
         $sqlManager->ExecuteSqlQuery();
 
         http_response_code($sqlManager->GetHttpResponseCode());
-        echo $sqlManager->GetresponseBody();
+        print_r($sqlManager->GetresponseBody());
     }
 
     private function getBookInfoSqlQuery(): string
@@ -58,7 +60,7 @@ class bookShelfController extends resourceController
     // override
     function methodPOST()
     {
-        require_once(__DIR__ . '../api/openDBAPIManager.php');
+        require_once(__DIR__ . '/../api/openDBAPIManager.php');
 
         if ($this->isbn == null) {
             http_response_code(400);
@@ -71,26 +73,35 @@ class bookShelfController extends resourceController
             new GetResponseBodyGenerator($this->format)
         );
 
-        $uriParser = new openDBUriParser($sqlManager->GetResponseBodyTemplate());
+        $openDBUriParser = new openDBUriParser($sqlManager->GetResponseBodyTemplate());
 
-        $openDBAPIManager = new OpenDBApiManager($uriParser);
+        $openDBAPIManager = new OpenDBApiManager($openDBUriParser);
         $openDBAPIManager->SetOptionQueries('isbn', $this->isbn);
         $openDBAPIManager->AccessAPI();
 
-        $data = $uriParser->GetData();
+        $isbn = $openDBUriParser->GetDataISBN();
+        $title = $openDBUriParser->GetDataTitle();
+        $sub_title = $openDBUriParser->GetDataSubTitle();
+        $author = $openDBUriParser->GetDataAuthor();
+        $description = $openDBUriParser->GetDataDescription();
+        $page = $openDBUriParser->GetDataPage();
+        $image_url = $openDBUriParser->GetDataImageURL();
+        $published_date = $openDBUriParser->GetDataPublishedDate();
+        $content = $openDBUriParser->GetDataContent();
+
+
         $sqlQuery = <<< "EOD"
                     INSERT INTO books (isbn, title, sub_title, author, description, page, image_url, published_date, content, industry_important, work_important, user_important, priority, purchased_flag, viewed_flag)
                     VALUES (
-                        '{$data['isbn']}', 
-                        '{$data['title']}', 
-                        '{$data['sub_title']}', 
-                        '{$data['author']}', 
-                        '{$data['description']}', 
-                        '{$data['page']}', 
-                        '{$data['image_url']}', 
-                        '{$data['published_date']}', 
-                        '{$data['content']}', 
-                        '{$data['industry_important']}', 
+                        '{$isbn}',
+                        '{$title}',
+                        '{$sub_title}',
+                        '{$author}',
+                        '{$description}',
+                        '{$page}',
+                        '{$image_url}',
+                        '{$published_date}',
+                        '{$content}',
                         '{$this->industry_important}', 
                         '{$this->work_important}', 
                         '{$this->user_important}', 
@@ -103,10 +114,8 @@ class bookShelfController extends resourceController
         $sqlManager->ExecuteSqlQuery();
 
         http_response_code($sqlManager->GetHttpResponseCode());
-        echo $sqlManager->GetresponseBody();
+        print_r($sqlManager->GetresponseBody());
     }
-
-
 
     // override
     function methodPUT()
@@ -132,7 +141,7 @@ class bookShelfController extends resourceController
         $sqlManager->ExecuteSqlQuery();
 
         http_response_code($sqlManager->GetHttpResponseCode());
-        echo $sqlManager->GetresponseBody();
+        print_r($sqlManager->GetresponseBody());
     }
 
     // override
@@ -152,6 +161,6 @@ class bookShelfController extends resourceController
         $sqlManager->ExecuteSqlQuery();
 
         http_response_code($sqlManager->GetHttpResponseCode());
-        echo $sqlManager->GetresponseBody();
+        print_r($sqlManager->GetresponseBody());
     }
 }

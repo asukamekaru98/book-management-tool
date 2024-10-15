@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . 'apiManager.php');
+require_once(__DIR__ . '/apiManager.php');
 
 final class OpenDBApiManager extends APIManager
 {

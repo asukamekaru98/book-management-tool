@@ -19,7 +19,7 @@ class Router
         $data = $httpMngr->getData();
 
         if (isset($this->resourceCtrlers[$resource])) {
-            return $this->resourceCtrlers[$resource]->handle($method, $isbn, $data);
+            return $this->resourceCtrlers[$resource]->handle($method, $isbn, $method, $data);
         }
 
         return $this->handleNotFound();

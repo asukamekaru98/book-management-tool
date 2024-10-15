@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/../database/database.php');
 require_once(__DIR__ . '/../constant/const_statusCode.php');
-require_once(__DIR__ . '/../database/SqlController.php');
+require_once(__DIR__ . '/../sql/SqlManager.php');
 
 abstract class resourceController
 {
@@ -34,10 +34,24 @@ abstract class resourceController
         $this->priority = $data['priority'] ?? 0;
         $this->purchased_flag = $data['purchased_flag'] ?? 0;
         $this->viewed_flag = $data['viewed_flag'] ?? 0;
-
+        /*
         switch ($method) {
             case 'GET':
                 return $this->methodGET();
+            case 'POST':
+                return $this->methodPOST();
+            case 'PUT':
+                return $this->methodPUT();
+            case 'DELETE':
+                return $this->methodDELETE();
+            case 'PATCH':
+                return $this->methodPATCH();
+        }
+*/
+        // デバッグ用
+        switch ($method) {
+            case 'GET':
+                //return $this->methodGET();
             case 'POST':
                 return $this->methodPOST();
             case 'PUT':

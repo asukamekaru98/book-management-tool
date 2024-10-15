@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/resourceController.php');
+require_once(__DIR__ . '/../sql/responseBodyCreator.php');
 
 class readHistoriesController extends resourceController
 {
@@ -25,7 +26,7 @@ class readHistoriesController extends resourceController
         $sqlManager->ExecuteSqlQuery();
 
         http_response_code($sqlManager->GetHttpResponseCode());
-        echo $sqlManager->GetresponseBody();
+        print_r($sqlManager->GetResponseBody());
     }
 
     private function getBookInfoSqlQuery(): string
@@ -103,7 +104,7 @@ class readHistoriesController extends resourceController
         $sqlManager->ExecuteSqlQuery();
 
         http_response_code($sqlManager->GetHttpResponseCode());
-        echo $sqlManager->GetresponseBody();
+        print_r($sqlManager->GetresponseBody());
     }
 
 
@@ -132,7 +133,7 @@ class readHistoriesController extends resourceController
         $sqlManager->ExecuteSqlQuery();
 
         http_response_code($sqlManager->GetHttpResponseCode());
-        echo $sqlManager->GetresponseBody();
+        print_r($sqlManager->GetresponseBody());
     }
 
     // override
@@ -152,8 +153,6 @@ class readHistoriesController extends resourceController
         $sqlManager->ExecuteSqlQuery();
 
         http_response_code($sqlManager->GetHttpResponseCode());
-        echo $sqlManager->GetresponseBody();
+        print_r($sqlManager->GetresponseBody());
     }
-}
-
 }
