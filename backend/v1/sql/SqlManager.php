@@ -2,38 +2,6 @@
 interface I_SQLManager
 {
 
-	const GET_RESPONSE_BODY_TEMPLATE = [
-		'bookinfo' => [
-			DB_BOOKS_ISBN => '',
-			DB_BOOKS_TITLE => '',
-			DB_BOOKS_SUB_TITLE => '',
-			DB_BOOKS_AUTHOR => '',
-			DB_BOOKS_DESCRIPTION => '',
-			DB_BOOKS_IMAGE_URL => '',
-			DB_BOOKS_PUBLISHED_DATE => '',
-			DB_BOOKS_CONTENT => '',
-		],
-		'userinfo' => [
-			DB_BOOKS_INDUSTORY_IMPORTANT => '',
-			DB_BOOKS_WORK_IMPORTANT => '',
-			DB_BOOKS_USER_IMPORTANT => '',
-			DB_BOOKS_PRIORITY => '',
-			DB_BOOKS_PURCHASED_FLAG => '',
-			DB_BOOKS_VIEWED_FLAG => '',
-		],
-	];
-
-	const SET_RESPONSE_BODY_TEMPLATE = [
-		'message' => '',
-	];
-
-	const ERROR_RESPONSE_BODY_TEMPLATE = [
-		'error' => [
-			'code' => '',
-			'message' => '',
-		],
-	];
-
 	// SQLクエリの設定
 	public function SetSqlQuery(string $sqlQuery);
 
@@ -44,7 +12,7 @@ interface I_SQLManager
 	public function GetHttpResponseCode();
 
 	// HTTPレスポンスボディの取得
-	public function GetResponseBody(): array;
+	//public function GetResponseBody(): array;
 }
 
 class SQLManager implements I_SQLManager
@@ -87,13 +55,6 @@ class SQLManager implements I_SQLManager
 				$this->httpResponseCode = NOT_FOUND_404;
 				return;
 			}
-
-			try {
-				$this->responseBodyCreator->CreateResponseBody($this->arraySqlResult);
-			} catch (Exception $e) {
-				$this->httpResponseCode = $e->getCode();
-				return;
-			}
 		}
 	}
 
@@ -104,13 +65,13 @@ class SQLManager implements I_SQLManager
 		return $this->httpResponseCode;
 	}
 
-	public final function GetResponseBody(): array
-	{
-		return $this->responseBodyCreator->GetResponseBody();
-	}
+	//public final function GetResponseBody(): array
+	//{
+	//return $this->responseBodyCreator->GetResponseBody();
+	//}
 
 	public final function GetResponseBodyTemplate()
 	{
-		return self::GET_RESPONSE_BODY_TEMPLATE;
+		//return self::GET_RESPONSE_BODY_TEMPLATE;
 	}
 }

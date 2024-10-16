@@ -60,7 +60,7 @@ class bookShelfController extends resourceController
     // override
     function methodPOST()
     {
-        require_once(__DIR__ . '/../api/openDBAPIManager.php');
+        require_once(__DIR__ . '/../api/accessOpenDBAPI.php');
 
         if ($this->isbn == null) {
             http_response_code(400);
@@ -75,10 +75,12 @@ class bookShelfController extends resourceController
 
         $openDBUriParser = new openDBUriParser($sqlManager->GetResponseBodyTemplate());
 
-        $openDBAPIManager = new OpenDBApiManager($openDBUriParser);
-        $openDBAPIManager->SetOptionQueries('isbn', $this->isbn);
-        $openDBAPIManager->AccessAPI();
+        $accessOpenDBAPI = new AccessOpenDBAPI();
+        $accessOpenDBAPI->SetOptionQueries("isbn={$this->isbn}");
+        $accessOpenDBAPI->AccessAPI();
+        print_r($accessOpenDBAPI->GetApiResponseBody());
 
+        /*
         $isbn = $openDBUriParser->GetDataISBN();
         $title = $openDBUriParser->GetDataTitle();
         $sub_title = $openDBUriParser->GetDataSubTitle();
@@ -88,6 +90,10 @@ class bookShelfController extends resourceController
         $image_url = $openDBUriParser->GetDataImageURL();
         $published_date = $openDBUriParser->GetDataPublishedDate();
         $content = $openDBUriParser->GetDataContent();
+
+        echo "{$isbn}";
+        echo "a";
+        echo $sub_title;
 
 
         $sqlQuery = <<< "EOD"
@@ -114,7 +120,7 @@ class bookShelfController extends resourceController
         $sqlManager->ExecuteSqlQuery();
 
         http_response_code($sqlManager->GetHttpResponseCode());
-        print_r($sqlManager->GetresponseBody());
+        print_r($sqlManager->GetresponseBody());*/
     }
 
     // override

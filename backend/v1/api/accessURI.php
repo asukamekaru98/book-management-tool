@@ -1,15 +1,21 @@
 <?php
 
+/*
+* URIにアクセスし、レスポンスを取得するクラス
+*/
 class AccessURI
 {
 	private string $apiResponse;
 
+	function __construct(private string $sendURI) {}
 
-	function __construct(
-		private string $sendURI,
-	) {}
+	public function SetURI(string $sendURI): self
+	{
+		$this->sendURI = $sendURI;
+		return $this;
+	}
 
-	public function AccessURI()
+	public function AccessURI(): void
 	{
 		$sendURI = $this->sendURI;
 
@@ -25,13 +31,12 @@ class AccessURI
 
 		if ($apiResponse === false) {
 			throw new Exception('Failed to access URI', INTERNAL_SERVER_ERROR_500);
-			return;
 		}
 
 		$this->apiResponse = $apiResponse;
 	}
 
-	public function GetApiResponse()
+	public function GetApiResponse(): string
 	{
 		return $this->apiResponse;
 	}

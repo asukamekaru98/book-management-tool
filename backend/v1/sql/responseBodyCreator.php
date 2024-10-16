@@ -33,9 +33,25 @@ interface I_ResponseBodyCreator
 	];
 
 	public function CreateResponseBody(array $arraySqlResult);
-	public function CreateResponseBody_JSON(array $arraySqlResult);
-	public function CreateResponseBody_XML(array $arraySqlResult);
-	public function GetResponseBody(): array;
+}
+
+class JSONResponseBodyCreator implements I_ResponseBodyCreator
+{
+	public function CreateResponseBody(array $data): string
+	{
+		return json_encode($data);
+	}
+}
+
+class XMLResponseBodyCreator implements I_ResponseBodyCreator
+{
+	public function CreateResponseBody(array $data): string
+	{
+		// XML形式に変換するロジックをここに記述します
+		$xml = new SimpleXMLElement('<root/>');
+		array_walk_recursive($data, array($xml, 'addChild'));
+		return $xml->asXML();
+	}
 }
 
 class ResponseBodyGenerator implements I_ResponseBodyCreator
