@@ -1,5 +1,8 @@
 <?php
+
 require_once(__DIR__ . '/accessURI.php');
+
+
 
 interface I_AccessAPIManager
 {
@@ -20,7 +23,7 @@ interface I_AccessAPIManager
 class AccessExampleAPIManager implements I_AccessAPIManager
 {
 	protected string $apiURI = 'https://example.com/'; // 仮のURI
-	private $apiResponse;
+	protected $apiResponse;
 
 	private array $optionQueries = [
 		'query' => ''
@@ -39,8 +42,6 @@ class AccessExampleAPIManager implements I_AccessAPIManager
 	public function AccessAPI()
 	{
 		$uri = $this->CreateURI();
-
-		echo $uri;
 
 		$accessURI = new AccessURI($uri);
 		$accessURI->AccessURI();

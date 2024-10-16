@@ -1,59 +1,30 @@
 <?php
-interface I_ResponseBodyCreator
+
+namespace ResponseBodyCreator;
+
+use Interfaces\I_ResponseBodyCreator;
+
+// XML形式のレスポンスボディを生成するクラス
+class ResponseBodyCreator_XML implements I_ResponseBodyCreator
 {
-	const GET_RESPONSE_BODY_TEMPLATE = [
-		'bookinfo' => [
-			DB_BOOKS_ISBN => '',
-			DB_BOOKS_TITLE => '',
-			DB_BOOKS_SUB_TITLE => '',
-			DB_BOOKS_AUTHOR => '',
-			DB_BOOKS_DESCRIPTION => '',
-			DB_BOOKS_IMAGE_URL => '',
-			DB_BOOKS_PUBLISHED_DATE => '',
-			DB_BOOKS_CONTENT => '',
-		],
-		'userinfo' => [
-			DB_BOOKS_INDUSTORY_IMPORTANT => '',
-			DB_BOOKS_WORK_IMPORTANT => '',
-			DB_BOOKS_USER_IMPORTANT => '',
-			DB_BOOKS_PRIORITY => '',
-			DB_BOOKS_PURCHASED_FLAG => '',
-			DB_BOOKS_VIEWED_FLAG => '',
-		],
-	];
-
-	const CORRECT_RESPONSE_BODY_TEMPLATE = [
-		'message' => '',
-	];
-
-	const ERROR_RESPONSE_BODY_TEMPLATE = [
-		'error' => [
-			'message' => '',
-		],
-	];
-
-	public function CreateResponseBody(array $arraySqlResult);
-}
-
-class JSONResponseBodyCreator implements I_ResponseBodyCreator
-{
-	public function CreateResponseBody(array $data): string
+	public function CreateSuccessResponseBody(array $data): string
 	{
-		return json_encode($data);
+		$responseXML = self::COMMON_RESPONSE_BODY_TEMPLATE;
+		$responseXML['message'] = 'Correct';
+
+		return xmlrpc_encode($responseXML);
+	}
+
+	public function CreateErrorResponseBody(array $data): string
+	{
+		$responseXML = self::COMMON_RESPONSE_BODY_TEMPLATE;
+		$responseXML['message'] = 'Error';
+
+		return xmlrpc_encode($responseXML);
 	}
 }
 
-class XMLResponseBodyCreator implements I_ResponseBodyCreator
-{
-	public function CreateResponseBody(array $data): string
-	{
-		// XML形式に変換するロジックをここに記述します
-		$xml = new SimpleXMLElement('<root/>');
-		array_walk_recursive($data, array($xml, 'addChild'));
-		return $xml->asXML();
-	}
-}
-
+/*
 class ResponseBodyGenerator implements I_ResponseBodyCreator
 {
 	protected array $responseBody = [];
@@ -76,7 +47,7 @@ class ResponseBodyGenerator implements I_ResponseBodyCreator
 
 		$this->responseBody = $responseBody;
 	}
-
+	
 	public function CreateResponseBody_JSON(array $arraySqlResult): string
 	{
 		$responseJSON = self::CORRECT_RESPONSE_BODY_TEMPLATE;
@@ -157,4 +128,6 @@ class GetResponseBodyGenerator extends ResponseBodyGenerator
 	{
 		return $this->responseBody;
 	}
+		
 }
+*/

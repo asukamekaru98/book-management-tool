@@ -1,4 +1,7 @@
 <?php
+
+use SqlQueryBuilder\SqlBuilder_BookInfo;
+
 require_once(__DIR__ . '/resourceController.php');
 require_once(__DIR__ . '/../sql/responseBodyCreator.php');
 require_once(__DIR__ . '/../parser/openDBUriParser.php');
@@ -27,7 +30,7 @@ class bookShelfController extends resourceController
         $sqlManager->ExecuteSqlQuery();
 
         http_response_code($sqlManager->GetHttpResponseCode());
-        print_r($sqlManager->GetresponseBody());
+        //  print_r($sqlManager->GetresponseBody());
     }
 
     private function getBookInfoSqlQuery(): string
@@ -60,6 +63,7 @@ class bookShelfController extends resourceController
     // override
     function methodPOST()
     {
+
         require_once(__DIR__ . '/../api/accessOpenDBAPI.php');
 
         if ($this->isbn == null) {
@@ -68,32 +72,41 @@ class bookShelfController extends resourceController
             return;
         }
 
-        $sqlManager = new SqlManager(
-            $this->db,
-            new GetResponseBodyGenerator($this->format)
+        $sqlManager = new SqlManager($this->db);
+
+        $sqlBuilder = new sqlQueryBuilder_BookInfo(
+            $this->isbn,
+            $this->industry_important,
+            $this->work_important,
+            $this->user_important,
+            $this->priority,
+            $this->purchased_flag,
+            $this->viewed_flag
         );
 
+        $sqlManager->ExecuteSqlQuery($sqlBuilder);
+
+
+        // Todo: openDBへのアクセスは、別クラスに切り出す。
+        // DELETE以外は必ずopenDBにアクセスし、DBに登録する。
+        // 重複の場合は、DBに登録しない。
         $openDBUriParser = new openDBUriParser($sqlManager->GetResponseBodyTemplate());
 
-        $accessOpenDBAPI = new AccessOpenDBAPI();
+        // OpenBD APIにアクセス
+        /*       $accessOpenDBAPI = new AccessOpenDBAPI();
         $accessOpenDBAPI->SetOptionQueries("isbn={$this->isbn}");
         $accessOpenDBAPI->AccessAPI();
-        print_r($accessOpenDBAPI->GetApiResponseBody());
+        $openDBApiResponse = $accessOpenDBAPI->GetApiResponseBody();
 
-        /*
-        $isbn = $openDBUriParser->GetDataISBN();
-        $title = $openDBUriParser->GetDataTitle();
-        $sub_title = $openDBUriParser->GetDataSubTitle();
-        $author = $openDBUriParser->GetDataAuthor();
-        $description = $openDBUriParser->GetDataDescription();
-        $page = $openDBUriParser->GetDataPage();
-        $image_url = $openDBUriParser->GetDataImageURL();
-        $published_date = $openDBUriParser->GetDataPublishedDate();
-        $content = $openDBUriParser->GetDataContent();
-
-        echo "{$isbn}";
-        echo "a";
-        echo $sub_title;
+        $isbn = $openDBApiResponse['isbn'] ?? '';
+        $title = $openDBApiResponse['title'] ?? '';
+        $sub_title = $openDBApiResponse['sub_title'] ?? '';
+        $author = $openDBApiResponse['author'] ?? '';
+        $description = $openDBApiResponse['description'] ?? '';
+        $page = $openDBApiResponse['page'] ?? '';
+        $image_url = $openDBApiResponse['image_url'] ?? '';
+        $published_date = $openDBApiResponse['published_date'] ?? '';
+        $content = $openDBApiResponse['content'] ?? '';
 
 
         $sqlQuery = <<< "EOD"
@@ -112,15 +125,19 @@ class bookShelfController extends resourceController
                         '{$this->work_important}', 
                         '{$this->user_important}', 
                         '{$this->priority}', 
-                        '{$this->purchased_flag}',)
+                        '{$this->purchased_flag}',
+                        '{$this->viewed_flag}')
                     EOD;
 
+*/
 
-        $sqlManager->SetSqlQuery($sqlQuery);
-        $sqlManager->ExecuteSqlQuery();
+        //$sqlManager->SetSqlQuery($sqlQuery);
+        $sqlManager->ExecuteSqlQuery($sqlQuery);
 
-        http_response_code($sqlManager->GetHttpResponseCode());
-        print_r($sqlManager->GetresponseBody());*/
+        print($sqlManager->GetHttpResponseCode());
+
+        //http_response_code($sqlManager->GetHttpResponseCode());
+        //print_r($sqlManager->GetresponseBody());
     }
 
     // override
@@ -147,7 +164,7 @@ class bookShelfController extends resourceController
         $sqlManager->ExecuteSqlQuery();
 
         http_response_code($sqlManager->GetHttpResponseCode());
-        print_r($sqlManager->GetresponseBody());
+        // print_r($sqlManager->GetresponseBody());
     }
 
     // override
@@ -167,6 +184,21 @@ class bookShelfController extends resourceController
         $sqlManager->ExecuteSqlQuery();
 
         http_response_code($sqlManager->GetHttpResponseCode());
-        print_r($sqlManager->GetresponseBody());
+        //print_r($sqlManager->GetresponseBody());
+    }
+
+    private function ResponseBody($message)
+    {
+        http_response_code(INTERNAL_SERVER_ERROR_500);
+
+        if (empty($message)) {
+            $message = "Internal Server Error";
+        }
+
+        echo json_encode(["message" => $message]);
+
+        $db = null;
+
+        exit;
     }
 }
