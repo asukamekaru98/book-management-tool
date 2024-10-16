@@ -1,6 +1,8 @@
 <?php
-require_once(__DIR__ . '/accessAPIManager.php');
 
+namespace API;
+
+use API\AccessExampleAPIManager;
 
 /**
  * OpenBD APIにアクセスするためのクラス

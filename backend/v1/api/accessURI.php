@@ -1,8 +1,11 @@
 <?php
 
+namespace API;
+
 /*
 * URIにアクセスし、レスポンスを取得するクラス
 */
+
 class AccessURI
 {
 	private string $apiResponse;
@@ -20,7 +23,7 @@ class AccessURI
 		$sendURI = $this->sendURI;
 
 		if ($sendURI === null) {
-			throw new Exception('Failed to access URI', INTERNAL_SERVER_ERROR_500);
+			throw new \Exception('Failed to access URI', INTERNAL_SERVER_ERROR_500);
 		}
 
 		$ch = curl_init();
@@ -30,7 +33,7 @@ class AccessURI
 		curl_close($ch);
 
 		if ($apiResponse === false) {
-			throw new Exception('Failed to access URI', INTERNAL_SERVER_ERROR_500);
+			throw new \Exception('Failed to access URI', INTERNAL_SERVER_ERROR_500);
 		}
 
 		$this->apiResponse = $apiResponse;

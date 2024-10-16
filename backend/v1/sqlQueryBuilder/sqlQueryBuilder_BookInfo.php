@@ -3,32 +3,29 @@
 namespace SqlQueryBuilder;
 
 use Interfaces\I_SqlQueryBuilder;
+use API\AccessOpenDBAPI;
 
 /**
  * 書籍情報の登録を行うクラス
  */
-class SqlBuilder_BookInfo implements I_SqlQueryBuilder
+class SqlQueryBuilder_BookInfo implements I_SqlQueryBuilder
 {
 	private string $sqlQuery = '';
 
 	public function __construct(
 		private string $isbn,
-		private string $industry_important,
-		private string $work_important,
-		private string $user_important,
-		private string $priority,
-		private string $purchased_flag,
-		private string $viewed_flag
+		private array $data
 	) {
-		$this->BuildSQL();
+		$this->BuildSQLQuery();
 	}
 
-
-	public function BuildSQL()
+	public function BuildSQLQuery()
 	{
 		if (empty($this->isbn)) {
 			return;
 		}
+
+
 
 		// OpenBD APIにアクセス
 		$accessOpenDBAPI = new AccessOpenDBAPI();

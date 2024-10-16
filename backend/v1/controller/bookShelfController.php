@@ -72,25 +72,8 @@ class bookShelfController extends resourceController
             return;
         }
 
-        $sqlManager = new SqlManager($this->db);
-
-        $sqlBuilder = new sqlQueryBuilder_BookInfo(
-            $this->isbn,
-            $this->industry_important,
-            $this->work_important,
-            $this->user_important,
-            $this->priority,
-            $this->purchased_flag,
-            $this->viewed_flag
-        );
-
-        $sqlManager->ExecuteSqlQuery($sqlBuilder);
 
 
-        // Todo: openDBへのアクセスは、別クラスに切り出す。
-        // DELETE以外は必ずopenDBにアクセスし、DBに登録する。
-        // 重複の場合は、DBに登録しない。
-        $openDBUriParser = new openDBUriParser($sqlManager->GetResponseBodyTemplate());
 
         // OpenBD APIにアクセス
         /*       $accessOpenDBAPI = new AccessOpenDBAPI();
