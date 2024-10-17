@@ -4,6 +4,9 @@ namespace API;
 
 use Interfaces\I_AccessAPIManager;
 
+require_once('accessURI.php');
+require_once __DIR__ . '/../interfaces/i_accessAPIManager.php';
+
 /**
  * APIにアクセスするためのクラス
  * 仮のクラス

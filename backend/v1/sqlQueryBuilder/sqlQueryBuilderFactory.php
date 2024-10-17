@@ -4,6 +4,9 @@ namespace SqlQueryBuilder;
 
 use Interfaces\I_SqlQueryBuilder;
 
+require_once('sqlQueryBuilder_Insert_BookInfo.php');
+require_once('sqlQueryBuilder_Insert_BookShelf.php');
+
 class SqlQueryBuilderFactory
 {
     public static function CreateBookInfoBuilder(string $isbn, array $data): SqlQueryBuilder_Insert_BookInfo

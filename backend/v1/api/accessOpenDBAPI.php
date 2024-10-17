@@ -4,6 +4,8 @@ namespace API;
 
 use API\AccessExampleAPIManager;
 
+require_once('AccessAPIManager.php');
+
 /**
  * OpenBD APIにアクセスするためのクラス
  */

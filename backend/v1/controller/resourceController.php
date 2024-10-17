@@ -13,7 +13,7 @@ abstract class resourceController
     protected $method;
     protected $isbn;
     protected $format;
-    protected $data;
+    protected array $data;
     /*
     protected $industry_important;
     protected $work_important;
@@ -28,7 +28,7 @@ abstract class resourceController
         protected DataBaseMySQL $db
     ) {}
 
-    public function handle($method, $isbn, $format, $data)
+    public function handle($method, $isbn, $format, array $data)
     {
 
         $this->method = $method;
@@ -40,7 +40,7 @@ abstract class resourceController
 
         $bookInfoSQLQuery = SqlQueryBuilderFactory::CreateBookInfoBuilder(
             $this->isbn,
-            $data
+            $this->data
         );
 
         $this->sqlManager->ExecuteSqlQuery($bookInfoSQLQuery->GetSQLQuery());

@@ -4,6 +4,9 @@ namespace SqlQueryBuilder;
 
 use API\AccessOpenDBAPI;
 
+require_once('SqlQueryBuilder.php');
+require_once __DIR__ . '/../api/AccessOpenDBAPI.php';
+
 /**
  * 書籍情報の登録を行うクラス
  */

@@ -2,6 +2,10 @@
 
 namespace SqlQueryBuilder;
 
+
+require_once('SqlQueryBuilder.php');
+
+
 /**
  * 書籍情報の登録を行うクラス
  */

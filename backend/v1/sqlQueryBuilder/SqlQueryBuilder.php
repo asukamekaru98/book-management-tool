@@ -4,6 +4,10 @@ namespace SqlQueryBuilder;
 
 use Interfaces\I_SqlQueryBuilder;
 
+
+require_once __DIR__ . '/../interfaces/i_sqlBuilder.php';
+
+
 /**
  * 書籍情報の登録を行うクラスのテンプレート
  */

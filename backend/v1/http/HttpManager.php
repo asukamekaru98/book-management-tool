@@ -15,7 +15,7 @@ class httpManager
     private $request;   // リクエスト
     private $pathInfo;  // パス情報
     //private $resource;  // リソース
-    private $data;      // データ
+    private array $data = [];      // データ
 
 
 
@@ -32,7 +32,7 @@ class httpManager
 
         switch ($this->aQueries[URI_QUERY_DATA_FORMAT]) {
             case URI_QUERY_DATA_FORMAT_JSON:
-                $this->data = json_decode(file_get_contents('php://input'), true);
+                $this->data = json_decode(file_get_contents('php://input'), true, 512, JSON_OBJECT_AS_ARRAY) ?? [];
                 break;
             case URI_QUERY_DATA_FORMAT_XML:
                 $this->data = xmlrpc_decode(file_get_contents('php://input'), true);

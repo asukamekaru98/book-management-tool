@@ -3,8 +3,8 @@
 use SqlQueryBuilder\SqlQueryBuilderFactory;
 
 require_once(__DIR__ . '/resourceController.php');
-require_once(__DIR__ . '/../sql/responseBodyCreator.php');
-require_once(__DIR__ . '/../parser/openDBUriParser.php');
+require_once(__DIR__ . '/../sql/sqlManager.php');
+require_once(__DIR__ . '/../sqlQueryBuilder/sqlQueryBuilderFactory.php');
 
 class bookShelfController extends resourceController
 {
@@ -72,17 +72,14 @@ class bookShelfController extends resourceController
             return;
         }
 
-        $bookShelfSQLQueryBuilder = SqlQueryBuilderFactory::CreateBookInfoBuilder(
+        $bookShelfSQLQueryBuilder = SqlQueryBuilderFactory::CreateBookShelfBuilder(
             $this->isbn,
-            $data
+            $this->data
         );
 
-        $sqlManager->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
+        $this->sqlManager->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
 
-        print($sqlManager->GetHttpResponseCode());
-
-        //http_response_code($sqlManager->GetHttpResponseCode());
-        //print_r($sqlManager->GetresponseBody());
+        print($this->sqlManager->GetHttpResponseCode());
     }
 
     // override

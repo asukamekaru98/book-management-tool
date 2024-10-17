@@ -3,9 +3,9 @@
 namespace SqlManager;
 
 use Interfaces\I_SQLManager;
-use Interfaces\I_SqlQueryBuilder;
 use DataBase\DataBaseMySQL;
 
+require_once __DIR__ . '/../interfaces/i_sqlManager.php';
 
 class SQLManager implements I_SQLManager
 {

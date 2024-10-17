@@ -2,6 +2,13 @@
 
 use DataBase\DataBaseMySQL;
 
+require_once __DIR__ . '/database/database.php';
+require_once __DIR__ . '/controller/bookShelfController.php';
+require_once __DIR__ . '/controller/wishListController.php';
+require_once __DIR__ . '/controller/readHistoriesController.php';
+require_once __DIR__ . '/http/httpManager.php';
+require_once __DIR__ . '/rooter.php';
+
 try {
     $db = DataBaseMySQL::connect2Database();
 } catch (Exception $e) {
