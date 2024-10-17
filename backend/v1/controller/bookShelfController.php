@@ -1,6 +1,6 @@
 <?php
 
-use SqlQueryBuilder\SqlBuilder_BookInfo;
+use SqlQueryBuilder\SqlQueryBuilderFactory;
 
 require_once(__DIR__ . '/resourceController.php');
 require_once(__DIR__ . '/../sql/responseBodyCreator.php');
@@ -72,50 +72,12 @@ class bookShelfController extends resourceController
             return;
         }
 
+        $bookShelfSQLQueryBuilder = SqlQueryBuilderFactory::CreateBookInfoBuilder(
+            $this->isbn,
+            $data
+        );
 
-
-
-        // OpenBD APIにアクセス
-        /*       $accessOpenDBAPI = new AccessOpenDBAPI();
-        $accessOpenDBAPI->SetOptionQueries("isbn={$this->isbn}");
-        $accessOpenDBAPI->AccessAPI();
-        $openDBApiResponse = $accessOpenDBAPI->GetApiResponseBody();
-
-        $isbn = $openDBApiResponse['isbn'] ?? '';
-        $title = $openDBApiResponse['title'] ?? '';
-        $sub_title = $openDBApiResponse['sub_title'] ?? '';
-        $author = $openDBApiResponse['author'] ?? '';
-        $description = $openDBApiResponse['description'] ?? '';
-        $page = $openDBApiResponse['page'] ?? '';
-        $image_url = $openDBApiResponse['image_url'] ?? '';
-        $published_date = $openDBApiResponse['published_date'] ?? '';
-        $content = $openDBApiResponse['content'] ?? '';
-
-
-        $sqlQuery = <<< "EOD"
-                    INSERT INTO books (isbn, title, sub_title, author, description, page, image_url, published_date, content, industry_important, work_important, user_important, priority, purchased_flag, viewed_flag)
-                    VALUES (
-                        '{$isbn}',
-                        '{$title}',
-                        '{$sub_title}',
-                        '{$author}',
-                        '{$description}',
-                        '{$page}',
-                        '{$image_url}',
-                        '{$published_date}',
-                        '{$content}',
-                        '{$this->industry_important}', 
-                        '{$this->work_important}', 
-                        '{$this->user_important}', 
-                        '{$this->priority}', 
-                        '{$this->purchased_flag}',
-                        '{$this->viewed_flag}')
-                    EOD;
-
-*/
-
-        //$sqlManager->SetSqlQuery($sqlQuery);
-        $sqlManager->ExecuteSqlQuery($sqlQuery);
+        $sqlManager->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
 
         print($sqlManager->GetHttpResponseCode());
 

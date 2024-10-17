@@ -2,29 +2,26 @@
 
 namespace SqlQueryBuilder;
 
-use Interfaces\I_SqlQueryBuilder;
 use API\AccessOpenDBAPI;
 
 /**
  * 書籍情報の登録を行うクラス
  */
-class SqlQueryBuilder_BookInfo implements I_SqlQueryBuilder
+class SqlQueryBuilder_Insert_BookInfo extends SqlQueryBuilder_BookManagementTool
 {
-	private string $sqlQuery = '';
-
-	public function __construct(
-		private string $isbn,
-		private array $data
-	) {
-		$this->BuildSQLQuery();
-	}
-
+	// override
 	public function BuildSQLQuery()
 	{
 		if (empty($this->isbn)) {
 			return;
 		}
 
+		$industry_important = $this->data['industry_important'] ?? 0;
+		$work_important = $this->data['work_important'] ?? 0;
+		$user_important = $this->data['user_important'] ?? 0;
+		$priority = $this->data['priority'] ?? 0;
+		$purchased_flag = $this->data['purchased_flag'] ?? 0;
+		$viewed_flag = $this->data['viewed_flag'] ?? 0;
 
 
 		// OpenBD APIにアクセス
@@ -56,17 +53,12 @@ class SqlQueryBuilder_BookInfo implements I_SqlQueryBuilder
                         '{$image_url}',
                         '{$published_date}',
                         '{$content}',
-                        '{$this->industry_important}', 
-                        '{$this->work_important}', 
-                        '{$this->user_important}', 
-                        '{$this->priority}', 
-                        '{$this->purchased_flag}',
-                        '{$this->viewed_flag}')
+                        '{$industry_important}', 
+                        '{$work_important}', 
+                        '{$user_important}', 
+                        '{$priority}', 
+                        '{$purchased_flag}',
+                        '{$viewed_flag}')
                     EOD;
-	}
-
-	public function GetSQLQuery(): string
-	{
-		return $this->sqlQuery;
 	}
 }

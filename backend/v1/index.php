@@ -1,10 +1,6 @@
 <?php
-require_once(__DIR__ . '/constant/const_uri.php');
-require_once(__DIR__ . '/http/httpManager.php');
-require_once(__DIR__ . '/controller/bookshelfController.php');
-require_once(__DIR__ . '/controller/wishListController.php');
-require_once(__DIR__ . '/controller/readHistoriesController.php');
-require_once(__DIR__ . '/rooter.php');
+
+use DataBase\DataBaseMySQL;
 
 try {
     $db = DataBaseMySQL::connect2Database();

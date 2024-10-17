@@ -3,7 +3,9 @@ require_once(__DIR__ . '/../database/database.php');
 require_once(__DIR__ . '/../constant/const_statusCode.php');
 require_once(__DIR__ . '/../sql/SqlManager.php');
 
-use SqlQueryBuilder\SqlQuerBuilder_BookInfo;
+use SqlQueryBuilder\SqlQueryBuilderFactory;
+use SqlManager\SqlManager;
+use DataBase\DataBaseMySQL;
 
 abstract class resourceController
 {
@@ -36,17 +38,12 @@ abstract class resourceController
 
         $this->sqlManager = new SqlManager($this->db);
 
-        $bookInfoSQLQuery = SqlQuerBuilder_BookInfo::BuildSQLQuery(
+        $bookInfoSQLQuery = SqlQueryBuilderFactory::CreateBookInfoBuilder(
             $this->isbn,
-            $data['industry_important'] ?? 0,
-            $data['work_important'] ?? 0,
-            $data['user_important'] ?? 0,
-            $data['priority'] ?? 0,
-            $data['purchased_flag'] ?? 0,
-            $data['viewed_flag'] ?? 0
+            $data
         );
 
-        $this->sqlManager->ExecuteSqlQuery($bookInfoSQLQuery);
+        $this->sqlManager->ExecuteSqlQuery($bookInfoSQLQuery->GetSQLQuery());
 
 
         /*

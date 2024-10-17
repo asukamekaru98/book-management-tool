@@ -9,7 +9,7 @@ interface I_SQLManager
     //public function SetSqlQuery(string $sqlQuery);
 
     // クエリの実行
-    public function ExecuteSqlQuery(I_SqlQueryBuilder $sqlQueryBuilder);
+    public function ExecuteSqlQuery(string $sqlQuery);
 
     // HTTPレスポンスコードの取得
     public function GetHttpResponseCode();

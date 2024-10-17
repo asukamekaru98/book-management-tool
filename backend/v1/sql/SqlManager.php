@@ -1,7 +1,10 @@
 <?php
 
+namespace SqlManager;
+
 use Interfaces\I_SQLManager;
 use Interfaces\I_SqlQueryBuilder;
+use DataBase\DataBaseMySQL;
 
 
 class SQLManager implements I_SQLManager
@@ -20,25 +23,20 @@ class SQLManager implements I_SQLManager
 	//	$this->arraySqlQuery[] = $sqlQuery;
 	//}
 
-	public function ExecuteSqlQuery(I_SqlQueryBuilder $sqlQueryBuilder)
+	public function ExecuteSqlQuery(string $sqlQuery)
 	{
 		//if ($this->arraySqlQuery === null || empty($this->arraySqlQuery)) {
-		if ($sqlQueryBuilder === null) {
+		if ($sqlQuery === null) {
 			$this->httpResponseCode = VARIANT_ALSO_NEGOTIATES_506;
 			return;
 		}
-
-		$sqlQuery = $sqlQueryBuilder->GetSQLQuery();
-
-
-		$this->arraySqlResult = [];
 
 		//foreach ($this->arraySqlQuery as $sqlQuery) {
 		try {
 			$stm = $this->db->prepare($sqlQuery);
 			$stm->execute();
 			//$this->arraySqlResult = array_merge($this->arraySqlResult, $stm->fetchAll(PDO::FETCH_ASSOC));
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			echo $e->getMessage();
 			$this->httpResponseCode = VARIANT_ALSO_NEGOTIATES_506;
 			return;

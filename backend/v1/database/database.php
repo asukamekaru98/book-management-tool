@@ -1,4 +1,12 @@
 <?php
+
+namespace DataBase;
+
+use PDO;
+use RuntimeException;
+use Exception;
+use Loader\ConfigLoader;
+
 require_once(__DIR__ . '/../loader/configLoader.php');
 require_once(__DIR__ . '/../constant/const_db.php');
 

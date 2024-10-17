@@ -1,4 +1,7 @@
 <?php
+
+namespace Loader;
+
 class ConfigLoader
 {
     public static function loadConfig(string $configFile): array
