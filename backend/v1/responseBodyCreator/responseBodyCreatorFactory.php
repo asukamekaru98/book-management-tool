@@ -4,9 +4,14 @@ namespace ResponseBodyCreator;
 
 use Interfaces\I_ResponseBodyCreator;
 
+require_once __DIR__ . '/../interfaces/i_responseBodyCreator.php';
+require_once __DIR__ . '/../constant/const_uri.php';
+require_once('responseBodyCreator_JSON.php');
+require_once('responseBodyCreator_XML.php');
+
 class ResponseBodyCreatorFactory
 {
-	public static function Create(string $format): I_ResponseBodyCreator
+	public static function CreateRespoonseBody(string $format = URI_QUERY_DATA_FORMAT_JSON): I_ResponseBodyCreator
 	{
 		return match ($format) {
 			URI_QUERY_DATA_FORMAT_JSON => new ResponseBodyCreator_JSON(),

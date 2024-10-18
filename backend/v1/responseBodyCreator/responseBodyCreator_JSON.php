@@ -18,7 +18,7 @@ class ResponseBodyCreator_JSON implements I_ResponseBodyCreator
 	public function CreateErrorResponseBody(array $data): string
 	{
 		$responseJSON = self::COMMON_RESPONSE_BODY_TEMPLATE;
-		$responseJSON['message'] = 'Error';
+		$responseJSON['message'] = $data['message'] ?? "Error";
 
 		return json_encode($responseJSON);
 	}

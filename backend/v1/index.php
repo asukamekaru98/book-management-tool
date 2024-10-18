@@ -1,6 +1,7 @@
 <?php
 
 use DataBase\DataBaseMySQL;
+use ResponseBodyCreator\ResponseBodyCreatorFactory;
 
 require_once __DIR__ . '/database/database.php';
 require_once __DIR__ . '/controller/bookShelfController.php';
@@ -8,46 +9,74 @@ require_once __DIR__ . '/controller/wishListController.php';
 require_once __DIR__ . '/controller/readHistoriesController.php';
 require_once __DIR__ . '/http/httpManager.php';
 require_once __DIR__ . '/rooter.php';
-
-try {
-    $db = DataBaseMySQL::connect2Database();
-} catch (Exception $e) {
-
-    ExitOfError($e->getMessage());
-}
+require_once __DIR__ . '/responseBodyCreator/responseBodyCreatorFactory.php';
 
 
-$router = new Router();
-$router->addRoute(URI_BOOK_SHELF, new bookShelfController($db));
-$router->addRoute(URI_WISH_LIST, new wishListController($db));
-$router->addRoute(URI_READ_HIST, new readHistoriesController($db));
+$bookManagementTool = new BookManagementTool();
+$bookManagementTool->run();
 
-
-try {
-    $httpMngr = new httpManager();
-} catch (Exception $e) {
-    ExitOfError($e->getMessage());
-}
-
-try {
-    $router->dispatch($httpMngr);
-} catch (Exception $e) {
-    ExitOfError($e->getMessage());
-}
-
-$db = null; // DB接続を切断
-
-function ExitOfError($message)
+class BookManagementTool
 {
-    http_response_code(INTERNAL_SERVER_ERROR_500);
+    public function run()
+    {
+        try {
+            $db = DataBaseMySQL::connect2Database();
+        } catch (Exception $e) {
+            $this->ExitOfError($e);
+        }
 
-    if (empty($message)) {
-        $message = "Internal Server Error";
+
+        $router = new Router();
+        $router->addRoute(URI_BOOK_SHELF, new bookShelfController($db));
+        $router->addRoute(URI_WISH_LIST, new wishListController($db));
+        $router->addRoute(URI_READ_HIST, new readHistoriesController($db));
+
+        //ToDo: httpManagetという名前と実際の動作が乖離しているので、リネームする
+
+        try {
+            $httpMngr = new httpManager();
+        } catch (Exception $e) {
+            $this->ExitOfError($e);
+        }
+
+        try {
+            $router->dispatch($httpMngr);
+        } catch (Exception $e) {
+            $this->ExitOfError($e);
+        }
+
+        $db = null; // DB接続を切断
+
     }
 
-    echo json_encode(["message" => $message]);
+    /**
+     * エラー終了
+     */
+    function ExitOfError(Exception $e, string $format = 'json')
+    {
+        http_response_code($e->getCode());
 
-    $db = null;
+        $responseBodyCreator = ResponseBodyCreatorFactory::CreateRespoonseBody($format);
 
-    exit;
+        echo  $responseBodyCreator->CreateErrorResponseBody(["message" => $e->getMessage()]);
+        exit;
+    }
+
+    /**
+     * 正常終了
+     */
+    function ExitOfCorrect(Exception $e)
+    {
+        http_response_code(OK_200);
+
+        if (empty($message)) {
+            $message = "Correct";
+        }
+
+        echo json_encode(["message" => $message]);
+
+        $db = null;
+
+        exit;
+    }
 }
