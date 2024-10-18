@@ -38,8 +38,7 @@ class SQLManager implements I_SQLManager
 			$this->arraySqlResult = $stm->fetchAll(DataBaseMySQL::FETCH_ASSOC);
 			//$this->arraySqlResult = array_merge($this->arraySqlResult, $stm->fetchAll(PDO::FETCH_ASSOC));
 		} catch (\Exception $e) {
-			echo $e->getMessage();
-			$this->httpResponseCode = VARIANT_ALSO_NEGOTIATES_506;
+			throw new \Exception($e->getMessage(), $e->getCode());
 			return;
 		}
 
@@ -59,20 +58,8 @@ class SQLManager implements I_SQLManager
 		return $this->httpResponseCode;
 	}
 
-
-
 	public final function GetSqlResult()
 	{
 		return $this->arraySqlResult;
-	}
-
-	//public final function GetResponseBody(): array
-	//{
-	//return $this->responseBodyCreator->GetResponseBody();
-	//}
-
-	public final function GetResponseBodyTemplate()
-	{
-		//return self::GET_RESPONSE_BODY_TEMPLATE;
 	}
 }

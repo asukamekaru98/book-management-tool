@@ -33,8 +33,5 @@ interface I_ResponseBodyCreator
 		'message' => '',
 	];
 
-	// 成功時のレスポンスボディを生成する
-	public function CreateSuccessResponseBody(array $data): string;
-	// エラー時のレスポンスボディを生成する
-	public function CreateErrorResponseBody(array $data): string;
+	public function CreateResponseBody(array $data): string;
 }

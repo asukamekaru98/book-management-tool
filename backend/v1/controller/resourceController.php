@@ -7,6 +7,7 @@ use SqlQueryBuilder\SqlQueryBuilderFactory;
 use SqlManager\SqlManager;
 use DataBase\DataBaseMySQL;
 
+
 abstract class resourceController
 {
 
@@ -22,7 +23,8 @@ abstract class resourceController
     protected $purchased_flag;
     protected $viewed_flag;
 */
-    protected $sqlManager;
+    protected SqlManager    $sqlManager;
+    protected bool          $bIsISBNDuplicate;
 
     public function __construct(
         protected DataBaseMySQL $db
@@ -38,7 +40,10 @@ abstract class resourceController
 
         $this->sqlManager = new SqlManager($this->db);
 
+        // ISBNが登録されていなければ登録する
         $this->RegisterBookInfoByIsbn();
+
+
         /*
         switch ($method) {
             case 'GET':
@@ -67,52 +72,77 @@ abstract class resourceController
                 return $this->methodPATCH();
         }
 
-        throw new BadMethodCallException("Bad Method");
+        throw new BadMethodCallException("Bad Method", METHOD_NOT_ALLOWED_405);
         // データベース接続を利用したアカウント作成処理
         //return $this->customerReg($data, $this->db);
 
     }
 
+
     public function methodGET()
     {
-        http_response_code(METHOD_NOT_ALLOWED_405);
-        echo json_encode(["message" => "Method not allowed"]);
-        throw new RuntimeException("Methods not supported by this function");
+        ### もしこのメソッドをサポートする場合、継承先でオーバーライドする ###
+
+        throw new RuntimeException("Methods not supported by this function", METHOD_NOT_ALLOWED_405);
     }
 
     public function methodPOST()
     {
-        http_response_code(METHOD_NOT_ALLOWED_405);
-        echo json_encode(["message" => "Method not allowed"]);
-        throw new RuntimeException("Methods not supported by this function");
+        ### もしこのメソッドをサポートする場合、継承先でオーバーライドする ###
+
+        throw new RuntimeException("Methods not supported by this function", METHOD_NOT_ALLOWED_405);
     }
 
     public function methodPUT()
     {
-        http_response_code(METHOD_NOT_ALLOWED_405);
-        echo json_encode(["message" => "Method not allowed"]);
-        throw new RuntimeException("Methods not supported by this function");
+        ### もしこのメソッドをサポートする場合、継承先でオーバーライドする ###
+
+        throw new RuntimeException("Methods not supported by this function", METHOD_NOT_ALLOWED_405);
     }
 
     public function methodDELETE()
     {
-        http_response_code(METHOD_NOT_ALLOWED_405);
-        echo json_encode(["message" => "Method not allowed"]);
-        throw new RuntimeException("Methods not supported by this function");
+        ### もしこのメソッドをサポートする場合、継承先でオーバーライドする ###
+
+        throw new RuntimeException("Methods not supported by this function", METHOD_NOT_ALLOWED_405);
     }
 
     public function methodPATCH()
     {
-        http_response_code(METHOD_NOT_ALLOWED_405);
-        echo json_encode(["message" => "Method not allowed"]);
-        throw new RuntimeException("Methods not supported by this function");
+        ### もしこのメソッドをサポートする場合、継承先でオーバーライドする ###
+
+        throw new RuntimeException("Methods not supported by this function", METHOD_NOT_ALLOWED_405);
     }
 
     /**
      * もしISBNが登録されていなければ、登録を行う
      * ISBNが登録されている場合は何もしない
      */
-    private function RegisterBookInfoByIsbn()
+    private function RegisterBookInfoByIsbn(): void
+    {
+        if ($this->IsISBNCodeNotSet()) {
+            // ISBNコードが設定されていない場合は何もしない
+            return;
+        }
+
+        if ($this->IsIsbnCodeDuplicate()) {
+            $bookInfoSQLQuery = SqlQueryBuilderFactory::InsertBookInfo(
+                $this->isbn,
+                $this->data
+            );
+
+            try {
+                $this->sqlManager->ExecuteSqlQuery($bookInfoSQLQuery->GetSQLQuery());
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage(), $e->getCode());
+            }
+        }
+    }
+
+    /**
+     * ISBNコードが重複しているか確認する
+     */
+    private function IsIsbnCodeDuplicate(): bool
     {
 
         $isbnCountSQLQuery = SqlQueryBuilderFactory::IsIsbnCodeDuplicate(
@@ -120,17 +150,22 @@ abstract class resourceController
             $this->data
         );
 
-        $this->sqlManager->ExecuteSqlQuery($isbnCountSQLQuery->GetSQLQuery());
+        try {
+            $this->sqlManager->ExecuteSqlQuery($isbnCountSQLQuery->GetSQLQuery());
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
+        }
 
         $result = $this->sqlManager->GetSqlResult()[0]['count'];
 
-        if ($result <= 0) {
-            $bookInfoSQLQuery = SqlQueryBuilderFactory::InsertBookInfo(
-                $this->isbn,
-                $this->data
-            );
+        return ($result > 0) ? $this->bIsISBNDuplicate = true : $this->bIsISBNDuplicate = false;
+    }
 
-            $this->sqlManager->ExecuteSqlQuery($bookInfoSQLQuery->GetSQLQuery());
-        }
+    /**
+     * ISBNコードが設定されているか確認する
+     */
+    protected function IsISBNCodeNotSet(): bool
+    {
+        return $this->isbn === null;
     }
 }

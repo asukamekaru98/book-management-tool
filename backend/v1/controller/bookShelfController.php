@@ -1,10 +1,17 @@
 <?php
 
 use SqlQueryBuilder\SqlQueryBuilderFactory;
+use ReturnResponse\ReturnResponse;
+use ResponseCreator\ResponseCreator;
+use ResponseBodyCreator\ResponseBodyCreatorFactory;
 
 require_once(__DIR__ . '/resourceController.php');
 require_once(__DIR__ . '/../sql/sqlManager.php');
 require_once(__DIR__ . '/../sqlQueryBuilder/sqlQueryBuilderFactory.php');
+require_once __DIR__ . '/../returnResponse/returnResponse.php';
+require_once __DIR__ . '/../responseCreator/responseCreator.php';
+require_once __DIR__ . '/../responseCreator/responseBodyCreator/responseBodyCreator.php';
+require_once __DIR__ . '/../responseCreator/responseBodyCreator/responseBodyCreatorFactory.php';
 
 class bookShelfController extends resourceController
 {
@@ -66,20 +73,35 @@ class bookShelfController extends resourceController
 
         require_once(__DIR__ . '/../api/accessOpenDBAPI.php');
 
-        if ($this->isbn == null) {
-            http_response_code(400);
-            echo json_encode(['error' => ['code' => '400', 'message' => 'Bad Request']]);
-            return;
+        if ($this->IsISBNCodeNotSet()) {
+            // ISBNコードが設定されていない場合、エラーを返す
+            throw new Exception("ISBN code is not set", PRECONDITION_REQUIRED_428);
         }
 
-        $bookShelfSQLQueryBuilder = SqlQueryBuilderFactory::CreateBookShelfBuilder(
+        // SQLクエリの生成
+        $bookShelfSQLQueryBuilder = SqlQueryBuilderFactory::InsertBookShelf(
             $this->isbn,
             $this->data
         );
 
+        // SQLクエリの実行
         $this->sqlManager->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
 
-        print($this->sqlManager->GetHttpResponseCode());
+        // SQLクエリの実行結果を確認
+        if ($this->sqlManager->GetHttpResponseCode() == 200) {
+            http_response_code(200);
+            echo json_encode(['message' => 'Book successfully added to the shelf']);
+        } else {
+            http_response_code($this->sqlManager->GetHttpResponseCode());
+            echo json_encode(['message' => 'Failed to add book to the shelf']);
+        }
+
+
+        $responseCreator = new ResponseCreator(
+            ResponseBodyCreatorFactory::CreateRespoonseBody($this->format)
+        );
+
+        ReturnResponse::returnHttpResponse($responseCreator);
     }
 
     // override

@@ -27,7 +27,6 @@ class Router
 
     private function handleNotFound()
     {
-        http_response_code(NOT_FOUND_404);
-        throw new BadFunctionCallException("Bad Function");
+        throw new BadFunctionCallException("Bad Function", NOT_FOUND_404);
     }
 }
