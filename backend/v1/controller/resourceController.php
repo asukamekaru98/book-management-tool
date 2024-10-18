@@ -38,14 +38,7 @@ abstract class resourceController
 
         $this->sqlManager = new SqlManager($this->db);
 
-        $bookInfoSQLQuery = SqlQueryBuilderFactory::CreateBookInfoBuilder(
-            $this->isbn,
-            $this->data
-        );
-
-        $this->sqlManager->ExecuteSqlQuery($bookInfoSQLQuery->GetSQLQuery());
-
-
+        $this->RegisterBookInfoByIsbn();
         /*
         switch ($method) {
             case 'GET':
@@ -113,5 +106,31 @@ abstract class resourceController
         http_response_code(METHOD_NOT_ALLOWED_405);
         echo json_encode(["message" => "Method not allowed"]);
         throw new RuntimeException("Methods not supported by this function");
+    }
+
+    /**
+     * もしISBNが登録されていなければ、登録を行う
+     * ISBNが登録されている場合は何もしない
+     */
+    private function RegisterBookInfoByIsbn()
+    {
+
+        $isbnCountSQLQuery = SqlQueryBuilderFactory::IsIsbnCodeDuplicate(
+            $this->isbn,
+            $this->data
+        );
+
+        $this->sqlManager->ExecuteSqlQuery($isbnCountSQLQuery->GetSQLQuery());
+
+        $result = $this->sqlManager->GetSqlResult()[0]['count'];
+
+        if ($result <= 0) {
+            $bookInfoSQLQuery = SqlQueryBuilderFactory::InsertBookInfo(
+                $this->isbn,
+                $this->data
+            );
+
+            $this->sqlManager->ExecuteSqlQuery($bookInfoSQLQuery->GetSQLQuery());
+        }
     }
 }

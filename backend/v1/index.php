@@ -17,19 +17,21 @@ $bookManagementTool->run();
 
 class BookManagementTool
 {
+    private DataBaseMySQL $dbSQL;
+
     public function run()
     {
         try {
-            $db = DataBaseMySQL::connect2Database();
+            $this->dbSQL = DataBaseMySQL::connect2Database();
         } catch (Exception $e) {
             $this->ExitOfError($e);
         }
 
 
         $router = new Router();
-        $router->addRoute(URI_BOOK_SHELF, new bookShelfController($db));
-        $router->addRoute(URI_WISH_LIST, new wishListController($db));
-        $router->addRoute(URI_READ_HIST, new readHistoriesController($db));
+        $router->addRoute(URI_BOOK_SHELF, new bookShelfController($this->dbSQL));
+        $router->addRoute(URI_WISH_LIST, new wishListController($this->dbSQL));
+        $router->addRoute(URI_READ_HIST, new readHistoriesController($this->dbSQL));
 
         //ToDo: httpManagetという名前と実際の動作が乖離しているので、リネームする
 
@@ -44,9 +46,6 @@ class BookManagementTool
         } catch (Exception $e) {
             $this->ExitOfError($e);
         }
-
-        $db = null; // DB接続を切断
-
     }
 
     /**
@@ -58,7 +57,9 @@ class BookManagementTool
 
         $responseBodyCreator = ResponseBodyCreatorFactory::CreateRespoonseBody($format);
 
+        http_response_code($e->getCode());
         echo  $responseBodyCreator->CreateErrorResponseBody(["message" => $e->getMessage()]);
+
         exit;
     }
 
@@ -78,5 +79,10 @@ class BookManagementTool
         $db = null;
 
         exit;
+    }
+
+    function __destruct()
+    {
+        $this->dbSQL = null; // DB接続を切断
     }
 }

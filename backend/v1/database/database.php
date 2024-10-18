@@ -13,7 +13,6 @@ class DataBaseMySQL extends PDO
 {
     private $dbConfig;
     private $configFile;
-    private $settings;
     private static $instance = null;
 
 
@@ -24,7 +23,7 @@ class DataBaseMySQL extends PDO
         $this->initConnection();
     }
 
-    public static function connect2Database($config = 'database.ini')
+    public static function connect2Database($config = 'database.ini'): DataBaseMySQL
     {
         if (self::$instance === null) {
             self::$instance = new self($config);
@@ -38,9 +37,9 @@ class DataBaseMySQL extends PDO
         $settings = ConfigLoader::loadConfig($this->configFile);
 
         if (!$settings) {
-            throw new RuntimeException("Error reading config:'{$config}'.");
+            throw new RuntimeException("Error reading config:'{$config}'.", INTERNAL_SERVER_ERROR_500);
         } else if (!array_key_exists('database', $settings)) {
-            throw new RuntimeException("Invalid config:'{$config}'.");
+            throw new RuntimeException("Invalid config:'{$config}'.", INTERNAL_SERVER_ERROR_500);
         }
 
         # Database接続
@@ -58,11 +57,8 @@ class DataBaseMySQL extends PDO
         try {
             parent::__construct($dsn, $username, $password);
             $this->isDBConnValid();
-            //            if (!$this->isDBConnValid()) {
-            //              throw new RuntimeException("Not connected to database");
-            //       }
         } catch (Exception $e) {
-            throw new RuntimeException("Database Connection Error: " . $e->getMessage(), 0, $e);
+            throw new RuntimeException("Database Connection Error: " . $e->getMessage(), INTERNAL_SERVER_ERROR_500, $e);
         }
     }
 
@@ -73,7 +69,7 @@ class DataBaseMySQL extends PDO
             $result = $this->query("SELECT 1");
             return $result !== false;
         } catch (Exception $e) {
-            throw new RuntimeException("Database Connection Test Error: " . $e->getMessage(), 0, $e);
+            throw new RuntimeException("Database Connection Test Error: " . $e->getMessage(), INTERNAL_SERVER_ERROR_500, $e);
         }
     }
 
