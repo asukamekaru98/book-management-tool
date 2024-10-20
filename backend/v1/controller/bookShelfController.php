@@ -19,6 +19,12 @@ class bookShelfController extends resourceController
     // override
     function methodGET()
     {
+        if ($this->IsISBNCodeNotSet()) {
+            // ISBNコードが設定されていない場合、エラーを返す
+            throw new Exception("ISBN code is not set", PRECONDITION_REQUIRED_428);
+        }
+
+
 
         if ($this->isbn) {
             // IDを指定した履歴の取得
