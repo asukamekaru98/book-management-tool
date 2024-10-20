@@ -53,12 +53,12 @@ class SQLManager implements I_SQLManager
 
 
 
-	public final function GetHttpResponseCode()
+	public final function GetHttpResponseCode(): int
 	{
 		return $this->httpResponseCode;
 	}
 
-	public final function GetSqlResult()
+	public function GetResponseBody(): array
 	{
 		return $this->arraySqlResult;
 	}

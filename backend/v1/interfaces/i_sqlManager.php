@@ -12,8 +12,8 @@ interface I_SQLManager
     public function ExecuteSqlQuery(string $sqlQuery);
 
     // HTTPレスポンスコードの取得
-    public function GetHttpResponseCode();
+    public function GetHttpResponseCode(): int;
 
     // HTTPレスポンスボディの取得
-    //public function GetResponseBody(): array;
+    public function GetResponseBody(): array;
 }

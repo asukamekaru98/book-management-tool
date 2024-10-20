@@ -88,17 +88,18 @@ class bookShelfController extends resourceController
         $this->sqlManager->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
 
         // SQLクエリの実行結果を確認
-        if ($this->sqlManager->GetHttpResponseCode() == 200) {
-            http_response_code(200);
-            echo json_encode(['message' => 'Book successfully added to the shelf']);
-        } else {
-            http_response_code($this->sqlManager->GetHttpResponseCode());
-            echo json_encode(['message' => 'Failed to add book to the shelf']);
+        $responseCode = $this->sqlManager->GetHttpResponseCode();
+        if ($responseCode >= MULTIPLE_CHOICES_300) {
+            throw new Exception("Failed to insert book shelf", $responseCode);
         }
-
 
         $responseCreator = new ResponseCreator(
             ResponseBodyCreatorFactory::CreateRespoonseBody($this->format)
+        );
+
+        $responseCreator->CreateResponse(
+            $this->sqlManager->GetHttpResponseCode(),
+            $this->sqlManager->GetresponseBody()
         );
 
         ReturnResponse::returnHttpResponse($responseCreator);
