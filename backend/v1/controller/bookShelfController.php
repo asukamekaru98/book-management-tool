@@ -32,27 +32,14 @@ class bookShelfController extends resourceController
             );
         }
 
-        // SQLクエリの実行
-        $this->sqlManager->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
-
-        // SQLクエリの実行結果を確認
-        $responseCode = $this->sqlManager->GetHttpResponseCode();
-        if ($responseCode >= MULTIPLE_CHOICES_300) {
-            throw new Exception("Failed to insert book shelf", $responseCode);
-        }
+        $this->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
 
         // ToDo：CreateResponseBodyで複数取得したときの処理が出来ていないかもしれないので、要確認
-
-        $responseCreator = new ResponseCreator(
-            ResponseBodyCreatorFactory::CreateRespoonseBody_Get_BookShelf($this->format)
+        $this->CreateResponse(
+            new ResponseCreator(
+                ResponseBodyCreatorFactory::CreateRespoonseBody_Get_BookShelf($this->format)
+            )
         );
-
-        $responseCreator->CreateResponse(
-            $this->sqlManager->GetHttpResponseCode(),
-            $this->sqlManager->GetResponseBody()
-        );
-
-        ReturnResponse::returnHttpResponse($responseCreator);
     }
 
     // override
@@ -69,25 +56,13 @@ class bookShelfController extends resourceController
             $this->data
         );
 
-        // SQLクエリの実行
-        $this->sqlManager->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
+        $this->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
 
-        // SQLクエリの実行結果を確認
-        $responseCode = $this->sqlManager->GetHttpResponseCode();
-        if ($responseCode >= MULTIPLE_CHOICES_300) {
-            throw new Exception("Failed to insert book shelf", $responseCode);
-        }
-
-        $responseCreator = new ResponseCreator(
-            ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+        $this->CreateResponse(
+            new ResponseCreator(
+                ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+            )
         );
-
-        $responseCreator->CreateResponse(
-            $this->sqlManager->GetHttpResponseCode(),
-            $this->sqlManager->GetResponseBody()
-        );
-
-        ReturnResponse::returnHttpResponse($responseCreator);
     }
 
     // override
@@ -104,26 +79,13 @@ class bookShelfController extends resourceController
             $this->data
         );
 
-        // SQLクエリの実行
-        $this->sqlManager->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
+        $this->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
 
-        // SQLクエリの実行結果を確認
-        $responseCode = $this->sqlManager->GetHttpResponseCode();
-        if ($responseCode >= MULTIPLE_CHOICES_300) {
-            throw new Exception("Failed to insert book shelf", $responseCode);
-        }
-
-        $responseCreator = new ResponseCreator(
-            ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+        $this->CreateResponse(
+            new ResponseCreator(
+                ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+            )
         );
-
-        $responseCreator->CreateResponse(
-            $this->sqlManager->GetHttpResponseCode(),
-            $this->sqlManager->GetResponseBody()
-        );
-
-        // レスポンスを返す
-        ReturnResponse::returnHttpResponse($responseCreator);
     }
 
     // override
@@ -141,24 +103,12 @@ class bookShelfController extends resourceController
         );
 
         // SQLクエリの実行
-        $this->sqlManager->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
+        $this->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
 
-        // SQLクエリの実行結果を確認
-        $responseCode = $this->sqlManager->GetHttpResponseCode();
-        if ($responseCode >= MULTIPLE_CHOICES_300) {
-            throw new Exception("Failed to insert book shelf", $responseCode);
-        }
-
-        $responseCreator = new ResponseCreator(
-            ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+        $this->CreateResponse(
+            new ResponseCreator(
+                ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+            )
         );
-
-        $responseCreator->CreateResponse(
-            $this->sqlManager->GetHttpResponseCode(),
-            $this->sqlManager->GetResponseBody()
-        );
-
-        // レスポンスを返す
-        ReturnResponse::returnHttpResponse($responseCreator);
     }
 }

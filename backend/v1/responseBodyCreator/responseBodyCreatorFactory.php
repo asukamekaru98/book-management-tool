@@ -30,4 +30,10 @@ class ResponseBodyCreatorFactory
 	): I_ResponseBodyCreator {
 		return new ResonseBodyCreator_Get_BookShelf($format);
 	}
+
+	public static function CreateRespoonseBody_Get_WishList(
+		string $format = URI_QUERY_DATA_FORMAT_JSON
+	): I_ResponseBodyCreator {
+		return new ResonseBodyCreator_Get_WishList($format);
+	}
 }

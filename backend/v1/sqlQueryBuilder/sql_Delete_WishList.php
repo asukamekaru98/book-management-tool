@@ -4,13 +4,13 @@ namespace SqlQueryBuilder;
 
 require_once('SqlQueryBuilder.php');
 
-class Sql_Delete_BookShelf extends SqlQueryBuilder_BookManagementTool
+class SqlDeleteWishList extends SqlQueryBuilder_BookManagementTool
 {
 
 	public function BuildSQLQuery()
 	{
 		$this->sqlQuery = <<< "EOD"
-                    DELETE FROM books_shelf
+                    DELETE FROM wish_list
                     WHERE isbn = '{$this->isbn}'
                     EOD;
 	}

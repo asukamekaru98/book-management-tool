@@ -2,10 +2,13 @@
 require_once(__DIR__ . '/../database/database.php');
 require_once(__DIR__ . '/../constant/const_statusCode.php');
 require_once(__DIR__ . '/../sql/SqlManager.php');
+require_once __DIR__ . '/../returnResponse/returnResponse.php';
 
 use SqlQueryBuilder\SqlQueryBuilderFactory;
 use SqlManager\SqlManager;
 use DataBase\DataBaseMySQL;
+use Interfaces\I_ResponseCreator;
+use ReturnResponse\ReturnResponse;
 
 
 abstract class resourceController
@@ -167,5 +170,33 @@ abstract class resourceController
     protected function IsISBNCodeNotSet(): bool
     {
         return $this->isbn === null;
+    }
+
+    protected function ExecuteSqlQuery(string $sqlQuery): void
+    {
+        try {
+            $this->sqlManager->ExecuteSqlQuery($sqlQuery);
+            $this->CheckResponseCode();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
+        }
+    }
+
+    private function CheckResponseCode(): void
+    {
+        $responseCode = $this->sqlManager->GetHttpResponseCode();
+        if ($responseCode >= MULTIPLE_CHOICES_300) {
+            throw new Exception("Failed to insert book shelf", $responseCode);
+        }
+    }
+
+    protected function CreateResponse(I_ResponseCreator $responseCreator): void
+    {
+        $responseCreator->CreateResponse(
+            $this->sqlManager->GetHttpResponseCode(),
+            $this->sqlManager->GetResponseBody()
+        );
+
+        ReturnResponse::returnHttpResponse($responseCreator);
     }
 }
