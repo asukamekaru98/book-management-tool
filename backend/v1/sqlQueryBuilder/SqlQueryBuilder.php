@@ -31,4 +31,9 @@ class SqlQueryBuilder_BookManagementTool implements I_SqlQueryBuilder
 	{
 		return $this->sqlQuery;
 	}
+
+	protected function IsISBNEmpty(): bool
+	{
+		return empty($this->isbn);
+	}
 }

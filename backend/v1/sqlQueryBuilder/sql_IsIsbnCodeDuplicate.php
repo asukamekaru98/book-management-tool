@@ -7,7 +7,7 @@ require_once('SqlQueryBuilder.php');
 /**
  * 書籍情報の登録を行うクラス
  */
-class SqlQueryBuilder_IsIsbnCodeDuplicate extends SqlQueryBuilder_BookManagementTool
+class Sql_IsIsbnCodeDuplicate extends SqlQueryBuilder_BookManagementTool
 {
 	// override
 	public function BuildSQLQuery()

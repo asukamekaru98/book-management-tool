@@ -19,66 +19,43 @@ class bookShelfController extends resourceController
     // override
     function methodGET()
     {
+
         if ($this->IsISBNCodeNotSet()) {
-            // ISBNコードが設定されていない場合、エラーを返す
-            throw new Exception("ISBN code is not set", PRECONDITION_REQUIRED_428);
-        }
-
-
-
-        if ($this->isbn) {
-            // IDを指定した履歴の取得
-            $sqlQuery = $this->getBookInfoSqlQuery();
+            $bookShelfSQLQueryBuilder = SqlQueryBuilderFactory::SelectBookShelf(
+                $this->isbn,
+                $this->data
+            );
         } else {
-            // 全履歴の取得
-            $sqlQuery = $this->getAllBooksInfo();
+            $bookShelfSQLQueryBuilder = SqlQueryBuilderFactory::SelectAllBookShelf(
+                $this->isbn,
+                $this->data
+            );
         }
 
-        $sqlManager = new SqlManager(
-            $this->db,
-            new GetResponseBodyGenerator($this->format)
+        // SQLクエリの実行
+        $this->sqlManager->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
+
+        // SQLクエリの実行結果を確認
+        $responseCode = $this->sqlManager->GetHttpResponseCode();
+        if ($responseCode >= MULTIPLE_CHOICES_300) {
+            throw new Exception("Failed to insert book shelf", $responseCode);
+        }
+
+        $responseCreator = new ResponseCreator(
+            ResponseBodyCreatorFactory::CreateRespoonseBody($this->format)
         );
 
-        $sqlManager->SetSqlQuery($sqlQuery);
-        $sqlManager->ExecuteSqlQuery();
+        $responseCreator->CreateResponse(
+            $this->sqlManager->GetHttpResponseCode(),
+            $this->sqlManager->GetResponseBody()
+        );
 
-        http_response_code($sqlManager->GetHttpResponseCode());
-        //  print_r($sqlManager->GetresponseBody());
-    }
-
-    private function getBookInfoSqlQuery(): string
-    {
-        $isbn = $this->isbn;
-
-        $sqlQuery = <<< "EOD"
-                    SELECT books.isbn,books.title,books.sub_title,books.author,books.description,books.page,books.image_url,books.published_date,books.content,books.industry_important,books.work_important,books.user_important,books.priority,books.purchased_flag,books.viewed_flag
-                    FROM books_shelf
-                    LEFT JOIN books
-                    ON books.id = books_shelf.book_id
-                    WHERE books.isbn = '$isbn'
-                    EOD;
-
-        return $sqlQuery;
-    }
-
-    private function getAllBooksInfo(): string
-    {
-        $sqlQuery = <<< "EOD"
-                    SELECT books.isbn,books.title,books.sub_title,books.author,books.description,books.page,books.image_url,books.published_date,books.content,books.industry_important,books.work_important,books.user_important,books.priority,books.purchased_flag,books.viewed_flag
-                    FROM books_shelf
-                    LEFT JOIN books
-                    ON books.id = books_shelf.book_id
-                    EOD;
-
-        return $sqlQuery;
+        ReturnResponse::returnHttpResponse($responseCreator);
     }
 
     // override
     function methodPOST()
     {
-
-        require_once(__DIR__ . '/../api/accessOpenDBAPI.php');
-
         if ($this->IsISBNCodeNotSet()) {
             // ISBNコードが設定されていない場合、エラーを返す
             throw new Exception("ISBN code is not set", PRECONDITION_REQUIRED_428);
@@ -105,7 +82,7 @@ class bookShelfController extends resourceController
 
         $responseCreator->CreateResponse(
             $this->sqlManager->GetHttpResponseCode(),
-            $this->sqlManager->GetresponseBody()
+            $this->sqlManager->GetResponseBody()
         );
 
         ReturnResponse::returnHttpResponse($responseCreator);
@@ -114,62 +91,72 @@ class bookShelfController extends resourceController
     // override
     function methodPUT()
     {
-        if ($this->isbn == null) {
-            http_response_code(400);
-            echo json_encode(['error' => ['code' => '400', 'message' => 'Bad Request']]);
-            return;
+        if ($this->IsISBNCodeNotSet()) {
+            // ISBNコードが設定されていない場合、エラーを返す
+            throw new Exception("ISBN code is not set", PRECONDITION_REQUIRED_428);
         }
 
-        $sqlQuery = <<< "EOD"
-                    UPDATE books_shelf
-                    SET industry_important = '{$this->industry_important}', work_important = '{$this->work_important}', user_important = '{$this->user_important}', priority = '{$this->priority}', purchased_flag = '{$this->purchased_flag}', viewed_flag = '{$this->viewed_flag}'
-                    WHERE isbn = '{$this->isbn}'
-                    EOD;
-
-        $sqlManager = new SqlManager(
-            $this->db,
-            new GetResponseBodyGenerator($this->format)
+        // SQLクエリの生成
+        $bookShelfSQLQueryBuilder = SqlQueryBuilderFactory::UpdateBookShelf(
+            $this->isbn,
+            $this->data
         );
 
-        $sqlManager->SetSqlQuery($sqlQuery);
-        $sqlManager->ExecuteSqlQuery();
+        // SQLクエリの実行
+        $this->sqlManager->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
 
-        http_response_code($sqlManager->GetHttpResponseCode());
-        // print_r($sqlManager->GetresponseBody());
+        // SQLクエリの実行結果を確認
+        $responseCode = $this->sqlManager->GetHttpResponseCode();
+        if ($responseCode >= MULTIPLE_CHOICES_300) {
+            throw new Exception("Failed to insert book shelf", $responseCode);
+        }
+
+        $responseCreator = new ResponseCreator(
+            ResponseBodyCreatorFactory::CreateRespoonseBody($this->format)
+        );
+
+        $responseCreator->CreateResponse(
+            $this->sqlManager->GetHttpResponseCode(),
+            $this->sqlManager->GetResponseBody()
+        );
+
+        // レスポンスを返す
+        ReturnResponse::returnHttpResponse($responseCreator);
     }
 
     // override
     function methodDELETE()
     {
-        $sqlQuery = <<< "EOD"
-                    DELETE FROM books_shelf
-                    WHERE isbn = '{$this->isbn}'
-                    EOD;
-
-        $sqlManager = new SqlManager(
-            $this->db,
-            new GetResponseBodyGenerator($this->format)
-        );
-
-        $sqlManager->SetSqlQuery($sqlQuery);
-        $sqlManager->ExecuteSqlQuery();
-
-        http_response_code($sqlManager->GetHttpResponseCode());
-        //print_r($sqlManager->GetresponseBody());
-    }
-
-    private function ResponseBody($message)
-    {
-        http_response_code(INTERNAL_SERVER_ERROR_500);
-
-        if (empty($message)) {
-            $message = "Internal Server Error";
+        if ($this->IsISBNCodeNotSet()) {
+            // ISBNコードが設定されていない場合、エラーを返す
+            throw new Exception("ISBN code is not set", PRECONDITION_REQUIRED_428);
         }
 
-        echo json_encode(["message" => $message]);
+        // SQLクエリの生成
+        $bookShelfSQLQueryBuilder = SqlQueryBuilderFactory::DeleteBookShelf(
+            $this->isbn,
+            $this->data
+        );
 
-        $db = null;
+        // SQLクエリの実行
+        $this->sqlManager->ExecuteSqlQuery($bookShelfSQLQueryBuilder->GetSQLQuery());
 
-        exit;
+        // SQLクエリの実行結果を確認
+        $responseCode = $this->sqlManager->GetHttpResponseCode();
+        if ($responseCode >= MULTIPLE_CHOICES_300) {
+            throw new Exception("Failed to insert book shelf", $responseCode);
+        }
+
+        $responseCreator = new ResponseCreator(
+            ResponseBodyCreatorFactory::CreateRespoonseBody($this->format)
+        );
+
+        $responseCreator->CreateResponse(
+            $this->sqlManager->GetHttpResponseCode(),
+            $this->sqlManager->GetResponseBody()
+        );
+
+        // レスポンスを返す
+        ReturnResponse::returnHttpResponse($responseCreator);
     }
 }

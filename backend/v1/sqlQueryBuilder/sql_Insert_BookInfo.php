@@ -10,7 +10,7 @@ require_once __DIR__ . '/../api/AccessOpenDBAPI.php';
 /**
  * 書籍情報の登録を行うクラス
  */
-class SqlQueryBuilder_Insert_BookInfo extends SqlQueryBuilder_BookManagementTool
+class Sql_Insert_BookInfo extends SqlQueryBuilder_BookManagementTool
 {
 	// override
 	public function BuildSQLQuery()
