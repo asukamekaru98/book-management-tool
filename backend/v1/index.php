@@ -1,6 +1,8 @@
 <?php
 
 use DataBase\DataBaseMySQL;
+use ReturnResponse\ReturnResponse;
+use ResponseCreator\ResponseCreator;
 use ResponseBodyCreator\ResponseBodyCreatorFactory;
 
 require_once __DIR__ . '/database/database.php';
@@ -10,7 +12,10 @@ require_once __DIR__ . '/controller/readHistoriesController.php';
 require_once __DIR__ . '/http/httpManager.php';
 require_once __DIR__ . '/rooter.php';
 require_once __DIR__ . '/responseBodyCreator/responseBodyCreatorFactory.php';
-
+require_once __DIR__ . '/../returnResponse/returnResponse.php';
+require_once __DIR__ . '/../responseCreator/responseCreator.php';
+require_once __DIR__ . '/../responseCreator/responseBodyCreator/responseBodyCreator.php';
+require_once __DIR__ . '/../responseCreator/responseBodyCreator/responseBodyCreatorFactory.php';
 
 $bookManagementTool = new BookManagementTool();
 $bookManagementTool->run();
@@ -72,24 +77,21 @@ class BookManagementTool
      */
     function CreateErrorResponseBody(Exception $e, string $format = 'json')
     {
-        http_response_code($e->getCode() ?? INTERNAL_SERVER_ERROR_500);
+        $responseCreator = new ResponseCreator(
+            ResponseBodyCreatorFactory::CreateRespoonseBody_Error($format)
+        );
 
-        $responseBodyCreator = ResponseBodyCreatorFactory::CreateRespoonseBody($format);
-        echo  $responseBodyCreator->CreateErrorResponseBody(["message" => $e->getMessage()]);
+        $responseCreator->CreateResponse(
+            $e->getCode(),
+            array('message' => $e->getMessage())
+        );
 
+        ReturnResponse::returnHttpResponse($responseCreator);
         exit;
     }
 
     function __destruct()
     {
-        $this->returnResponse();
         $this->dbSQL = null; // DB接続を切断
-    }
-
-    public function returnResponse()
-    {
-
-        echo "<br>aaaaaaaaaaa<br>bbbbbbbb";
-        exit;
     }
 }

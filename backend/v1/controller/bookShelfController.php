@@ -41,8 +41,10 @@ class bookShelfController extends resourceController
             throw new Exception("Failed to insert book shelf", $responseCode);
         }
 
+        // ToDo：CreateResponseBodyで複数取得したときの処理が出来ていないかもしれないので、要確認
+
         $responseCreator = new ResponseCreator(
-            ResponseBodyCreatorFactory::CreateRespoonseBody($this->format)
+            ResponseBodyCreatorFactory::CreateRespoonseBody_Get_BookShelf($this->format)
         );
 
         $responseCreator->CreateResponse(
@@ -77,7 +79,7 @@ class bookShelfController extends resourceController
         }
 
         $responseCreator = new ResponseCreator(
-            ResponseBodyCreatorFactory::CreateRespoonseBody($this->format)
+            ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
         );
 
         $responseCreator->CreateResponse(
@@ -112,7 +114,7 @@ class bookShelfController extends resourceController
         }
 
         $responseCreator = new ResponseCreator(
-            ResponseBodyCreatorFactory::CreateRespoonseBody($this->format)
+            ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
         );
 
         $responseCreator->CreateResponse(
@@ -148,7 +150,7 @@ class bookShelfController extends resourceController
         }
 
         $responseCreator = new ResponseCreator(
-            ResponseBodyCreatorFactory::CreateRespoonseBody($this->format)
+            ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
         );
 
         $responseCreator->CreateResponse(

@@ -26,6 +26,7 @@ interface I_ResponseBodyCreator
 			DB_BOOKS_PURCHASED_FLAG => '',
 			DB_BOOKS_VIEWED_FLAG => '',
 		],
+		'message' => '',
 	];
 
 	// 共通で使うレスポンスボディのテンプレート

@@ -156,7 +156,7 @@ abstract class resourceController
             throw new Exception($e->getMessage(), $e->getCode());
         }
 
-        $result = $this->sqlManager->GetSqlResult()[0]['count'];
+        $result = $this->sqlManager->GetResponseBody()[0]['count'];
 
         return ($result > 0) ? $this->bIsISBNDuplicate = true : $this->bIsISBNDuplicate = false;
     }
