@@ -5,7 +5,7 @@ namespace ResponseBodyCreator;
 use Interfaces\I_ResponseBodyCreator;
 
 // JSON形式のレスポンスボディを生成するクラス
-class ResonseBodyCorrectJSON implements I_ResponseBodyCreator
+class RespBodyCre8erCorrect extends RespBodyCre8er implements I_ResponseBodyCreator
 {
 	public function CreateResponseBody(array $data): string
 	{
@@ -13,5 +13,19 @@ class ResonseBodyCorrectJSON implements I_ResponseBodyCreator
 		$responseJSON['message'] = 'Correct';
 
 		return json_encode($responseJSON);
+	}
+
+	public function CreateResponseBody_JSON(array $data): string
+	{
+		$responseJSON['message'] = 'Correct';
+
+		return json_encode($responseJSON);
+	}
+
+	public function CreateResponseBody_XML(array $data): string
+	{
+		$responseXML['message'] = 'Correct';
+
+		return xmlrpc_encode($responseXML);
 	}
 }

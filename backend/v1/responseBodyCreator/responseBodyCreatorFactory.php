@@ -18,30 +18,30 @@ class ResponseBodyCreatorFactory
 	public static function CreateRespoonseBody_Correct(
 		string $format = URI_QUERY_DATA_FORMAT_JSON
 	): I_ResponseBodyCreator {
-		return new ResponseBodyCreator($format);
+		return new RespBodyCre8er($format);
 	}
 
 	public static function CreateRespoonseBody_Error(
 		string $format = URI_QUERY_DATA_FORMAT_JSON
 	): I_ResponseBodyCreator {
-		return new ResonseBodyCreator_Error($format);
+		return new RespBodyCre8erError($format);
 	}
 
 	public static function CreateRespoonseBody_Get_BookShelf(
 		string $format = URI_QUERY_DATA_FORMAT_JSON
 	): I_ResponseBodyCreator {
-		return new ResonseBodyCreator_Get_BookShelf($format);
+		return new RespBodyCre8erGetBookShelf($format);
 	}
 
 	public static function CreateRespoonseBody_Get_WishList(
 		string $format = URI_QUERY_DATA_FORMAT_JSON
 	): I_ResponseBodyCreator {
-		return new ResonseBodyCreator_Get_WishList($format);
+		return new RespBodyCre8erGetWishList($format);
 	}
 
 	public static function CreateRespoonseBody_Get_ReadHistories(
 		string $format = URI_QUERY_DATA_FORMAT_JSON
 	): I_ResponseBodyCreator {
-		return new ResonseBodyCreator_Get_ReadHistories($format);
+		return new RespBodyCre8erGetReadHistories($format);
 	}
 }

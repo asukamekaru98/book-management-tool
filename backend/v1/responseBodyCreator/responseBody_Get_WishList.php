@@ -5,10 +5,10 @@ namespace ResponseBodyCreator;
 use Interfaces\I_ResponseBodyCreator;
 
 // XML形式のレスポンスボディを生成するクラス
-class ResonseBodyCreator_Get_WishList extends ResponseBodyCreator implements I_ResponseBodyCreator
+class RespBodyCre8erGetWishList extends RespBodyCre8er implements I_ResponseBodyCreator
 {
 	// override
-	protected function CreateResponseBody_JSON(array $data): string
+	public function CreateResponseBody_JSON(array $data): string
 	{
 		$responseJSON = json_decode(file_get_contents('../json_template/getBookShelfRespBody.json'), true);
 
@@ -36,7 +36,7 @@ class ResonseBodyCreator_Get_WishList extends ResponseBodyCreator implements I_R
 	}
 
 	// override
-	protected function CreateResponseBody_XML(array $data): string
+	public function CreateResponseBody_XML(array $data): string
 	{
 		// XML形式のレスポンスボディは未実装
 		$responseXML['message'] = "XML is not supported";
