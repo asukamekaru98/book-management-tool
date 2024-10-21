@@ -17,6 +17,7 @@ abstract class resourceController
     protected $method;
     protected $isbn;
     protected $format;
+    protected $viewed_flag;
     protected array $data;
     /*
     protected $industry_important;
@@ -33,12 +34,13 @@ abstract class resourceController
         protected DataBaseMySQL $db
     ) {}
 
-    public function handle($method, $isbn, $format, array $data)
+    public function handle($method, $isbn, $format, $viewed_flag, array $data)
     {
 
         $this->method = $method;
         $this->isbn = $isbn;
         $this->format = $format;
+        $this->viewed_flag = $viewed_flag;
         $this->data = $data;
 
         $this->sqlManager = new SqlManager($this->db);

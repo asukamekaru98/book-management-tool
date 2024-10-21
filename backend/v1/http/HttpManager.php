@@ -103,6 +103,11 @@ class httpManager
         return $this->aQueries[URI_QUERY_DATA_FORMAT];
     }
 
+    function getViewedFlag()
+    {
+        return $this->aQueries[URI_QUERY_VIEWED_FLAG];
+    }
+
     /**
      * データを取得
      * @return array データ

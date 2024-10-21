@@ -66,9 +66,9 @@
 【Method】GET
 
 ・読み終えてない履歴の一覧取得
-【URI】/v1/read-histories?is-viewed-flag=0
+【URI】/v1/read-histories?viewed-flag=0
 【Method】GET
 
 ・読み終えた履歴の一覧取得
-【URI】/v1/read-histories?is-viewed-flag=1
+【URI】/v1/read-histories?viewed-flag=1
 【Method】GET

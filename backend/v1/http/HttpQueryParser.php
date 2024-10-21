@@ -14,6 +14,7 @@ class HttpQueryParser
 
         $this->queries[URI_QUERY_ISBN] = $_GET[URI_QUERY_ISBN] ?? INIT_URI_QUERY_ISBN;
         $this->queries[URI_QUERY_DATA_FORMAT] = $_GET[URI_QUERY_DATA_FORMAT] ?? INIT_URI_QUERY_DATA_FORMAT;
+        $this->queries[URI_QUERY_VIEWED_FLAG] = $_GET[URI_QUERY_VIEWED_FLAG] ?? INIT_URI_QUERY_VIEWED_FLAG;
     }
 
 
@@ -33,6 +34,13 @@ class HttpQueryParser
         return $this->queries[URI_QUERY_DATA_FORMAT];
     }
 
+    /**
+     * 閲覧フラグを取得する
+     */
+    function getQueryViewedFlag()
+    {
+        return $this->queries[URI_QUERY_VIEWED_FLAG];
+    }
 
     /**
      * 全クエリを取得する

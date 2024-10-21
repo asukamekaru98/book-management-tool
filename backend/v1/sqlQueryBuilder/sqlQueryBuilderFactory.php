@@ -84,6 +84,57 @@ class SqlQueryBuilderFactory
         return new SqlDeleteWishList($isbn, $data);
     }
 
+    ### ReadHistories ###
+    public static function SelectAllReadHistories(string $isbn, array $data): SqlSelectAllBookShelf
+    {
+        require_once('sql_Select_All_ReadHistories.php');
+
+        return new SqlSelectAllBookShelf($isbn, $data);
+    }
+
+    public static function SelectNoViewedReadHistories(string $isbn, array $data): SqlSelectNoViewedBookShelf
+    {
+        require_once('sql_Select_NoViewed_ReadHistories.php');
+
+        return new SqlSelectNoViewedBookShelf($isbn, $data);
+    }
+
+    public static function SelectViewedReadHistories(string $isbn, array $data): SqlSelectViewedBookShelf
+    {
+        require_once('sql_Select_NoViewed_ReadHistories.php');
+
+        return new SqlSelectViewedBookShelf($isbn, $data);
+    }
+
+    public static function InsertReadHistories(string $isbn, array $data): SqlInsertReadHistories
+    {
+        require_once('sql_Insert_ReadHistories.php');
+
+        return new SqlInsertReadHistories($isbn, $data);
+    }
+
+    public static function UpdateReadHistories(string $isbn, array $data): SqlUpdateReadHistories
+    {
+        require_once('sql_Update_ReadHistories.php');
+
+        return new SqlUpdateReadHistories($isbn, $data);
+    }
+
+    public static function DeleteReadHistories(string $isbn, array $data): SqlDeleteReadHistories
+    {
+        require_once('sql_Delete_ReadHistories.php');
+
+        return new SqlDeleteReadHistories($isbn, $data);
+    }
+
+    public static function DeleteAllReadHistories(string $isbn, array $data): SqlDeleteAllReadHistories
+    {
+        require_once('sql_Delete_All_ReadHistories.php');
+
+        return new SqlDeleteAllReadHistories($isbn, $data);
+    }
+
+
     // ISBNコードが重複しているかどうかを確認する
     public static function IsIsbnCodeDuplicate(string $isbn, array $data): Sql_IsIsbnCodeDuplicate
     {

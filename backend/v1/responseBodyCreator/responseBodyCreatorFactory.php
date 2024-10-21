@@ -9,6 +9,8 @@ require_once __DIR__ . '/../constant/const_uri.php';
 require_once('responseBody_Correct.php');
 require_once('responseBody_Error.php');
 require_once('responseBody_Get_BookShelf.php');
+require_once('responseBody_Get_WishList.php');
+require_once('responseBody_Get_ReadHistories.php');
 
 class ResponseBodyCreatorFactory
 {
@@ -35,5 +37,11 @@ class ResponseBodyCreatorFactory
 		string $format = URI_QUERY_DATA_FORMAT_JSON
 	): I_ResponseBodyCreator {
 		return new ResonseBodyCreator_Get_WishList($format);
+	}
+
+	public static function CreateRespoonseBody_Get_ReadHistories(
+		string $format = URI_QUERY_DATA_FORMAT_JSON
+	): I_ResponseBodyCreator {
+		return new ResonseBodyCreator_Get_ReadHistories($format);
 	}
 }

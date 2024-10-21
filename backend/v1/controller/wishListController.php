@@ -3,7 +3,6 @@
 require_once(__DIR__ . '/resourceController.php');
 
 use SqlQueryBuilder\SqlQueryBuilderFactory;
-use ReturnResponse\ReturnResponse;
 use ResponseCreator\ResponseCreator;
 use ResponseBodyCreator\ResponseBodyCreatorFactory;
 
