@@ -49,7 +49,6 @@ abstract class resourceController
         $this->RegisterBookInfoByIsbn();
 
 
-        /*
         switch ($method) {
             case 'GET':
                 return $this->methodGET();
@@ -62,25 +61,8 @@ abstract class resourceController
             case 'PATCH':
                 return $this->methodPATCH();
         }
-*/
-        // デバッグ用
-        switch ($method) {
-            case 'GET':
-                //return $this->methodGET();
-            case 'POST':
-                return $this->methodPOST();
-            case 'PUT':
-                return $this->methodPUT();
-            case 'DELETE':
-                return $this->methodDELETE();
-            case 'PATCH':
-                return $this->methodPATCH();
-        }
 
         throw new BadMethodCallException("Bad Method", METHOD_NOT_ALLOWED_405);
-        // データベース接続を利用したアカウント作成処理
-        //return $this->customerReg($data, $this->db);
-
     }
 
 
