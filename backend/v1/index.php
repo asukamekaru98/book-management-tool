@@ -41,27 +41,6 @@ class BookManagementTool
 
 
         //ToDo: httpManagetという名前と実際の動作が乖離しているので、リネームする
-
-        /*
-        try {
-            $this->dbSQL = DataBaseMySQL::connect2Database();
-        } catch (Exception $e) {
-            $this->ExitOfError($e);
-        }
-
-        try {
-            $httpMngr = new httpManager();
-        } catch (Exception $e) {
-            $this->ExitOfError($e);
-        }
-
-        try {
-            $router->dispatch($httpMngr);
-        } catch (Exception $e) {
-            $this->ExitOfError($e);
-        }
-        */
-
         try {
             $httpMngr = new httpManager();
             $router->dispatch($httpMngr);
