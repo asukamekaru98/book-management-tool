@@ -12,6 +12,8 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,9 +34,27 @@ class MainActivity : AppCompatActivity() {
 		const val DEFAULT_SERVER_URL = "http://192.168.1.51/v1/read-histories" // 任意のデフォルトURLを設定
 	}
 
+	private lateinit var binding : ActivityMainBinding
+
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_main)
+
+		binding = ActivityMainBinding.inflate(layoutInflater)
+
+		binding.bottomNavigationView.setOnItemSelectedListener{
+
+			when(it.itemId){
+				R.id.BtmBtnBookShelf -> replaceFragment()
+			}
+
+
+
+		}
+
+
+		//setContentView(R.layout.activity_main)
+		setContentView(binding.root)
 
 		//val httpMethodSpnrItems = arrayOf("GET","POST","PUT","DELETE","PATCH")
 		val httpMethodSpinner = findViewById<Spinner>(R.id.httpMethodSpinner)
@@ -130,6 +150,16 @@ class MainActivity : AppCompatActivity() {
 
 			//val userUrl = urlEditText.text.toString().ifEmpty { DEFAULT_SERVER_URL }
 		}
+
+
+	}
+
+	private fun replaceFragment(fragment: Fragment)
+	{
+		val fragmentManager = supportFragmentManager
+		val fragmentTransaction = fragmentManager.beginTransaction()
+		fragmentTransaction.replace(R.id.frame_layout,fragment)
+		fragmentTransaction.commit()
 	}
 
 	/*
