@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="BookShelf"
+    <item
+        android:title="BookShelf"
         android:id="@+id/BtmBtnBookShelf"
         android:icon="@drawable/bottom_button_bookshelf_24"/>
-    <item android:title="WishList"
+    <item
+        android:title="WishList"
         android:id="@+id/BtmBtnWishList"
         android:icon="@drawable/bottom_button_wishlist_24"/>
-    <item android:title="ReadHistories"
+    <item
+        android:title="ReadHistories"
         android:id="@+id/BtmBtnReadHistories"
         android:icon="@drawable/bottom_button_readhistories_24"/>
 </menu>
