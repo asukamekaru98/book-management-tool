@@ -79,6 +79,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/menu_item" />
+        app:menu="@menu/menu_footer" />
 
 </RelativeLayout>

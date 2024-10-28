@@ -14,6 +14,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
+import com.websarva.wings.android.book_management_tool.flagment.fragmentBookshelf
+import com.websarva.wings.android.book_management_tool.flagment.fragmentReadHistories
+import com.websarva.wings.android.book_management_tool.flagment.fragmentWishlist
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,19 +45,27 @@ class MainActivity : AppCompatActivity() {
 
 		binding = ActivityMainBinding.inflate(layoutInflater)
 
-		binding.bottomNavigationView.setOnItemSelectedListener{
 
-			when(it.itemId){
-				R.id.BtmBtnBookShelf -> replaceFragment()
-			}
-
-
-
-		}
 
 
 		//setContentView(R.layout.activity_main)
 		setContentView(binding.root)
+		replaceFragment(fragmentBookshelf())
+
+		binding.navView.setOnItemSelectedListener{
+
+			when(it.itemId){
+				R.id.BtmBtnBookShelf -> replaceFragment(fragmentBookshelf())
+				R.id.BtmBtnReadHistories -> replaceFragment(fragmentReadHistories())
+				R.id.BtmBtnWishList -> replaceFragment(fragmentWishlist())
+
+				else->{
+
+				}
+			}
+
+			true
+		}
 
 		//val httpMethodSpnrItems = arrayOf("GET","POST","PUT","DELETE","PATCH")
 		val httpMethodSpinner = findViewById<Spinner>(R.id.httpMethodSpinner)
