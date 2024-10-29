@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.websarva.wings.android.book_management_tool.adapter.RecyclerViewAdapter
 import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
 import com.websarva.wings.android.book_management_tool.flagment.fragmentBookshelf
 import com.websarva.wings.android.book_management_tool.flagment.fragmentReadHistories
@@ -48,15 +49,11 @@ class MainActivity : AppCompatActivity() {
 	private lateinit var listView : RecyclerView
 
 	private val names: ArrayList<String> = arrayListOf(
-		"Bougainvillea", "Cosmos", "Cosmos field",
-		"Delphinium", "Flowers", "Lotus", "Spring Flowers"
+
 	)
 
 	private val photos: ArrayList<Int> = arrayListOf(
-		R.drawable.bomb,
-		R.drawable.fire, R.drawable.kyoto,
-		R.drawable.mochi, R.drawable.skull,
-		R.drawable.torii, R.drawable.trashcan
+
 	)
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +71,7 @@ class MainActivity : AppCompatActivity() {
 		listView.setHasFixedSize(true)
 		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
 		listView.layoutManager = rLayoutManager
-		listView.adapter = MyAdapter(photos, names)
+		listView.adapter = RecyclerViewAdapter(photos, names)
 
 		//setContentView(R.layout.activity_main)
 		setContentView(binding.root)
@@ -88,7 +85,6 @@ class MainActivity : AppCompatActivity() {
 				R.id.BtmBtnWishList -> replaceFragment(fragmentWishlist())
 
 				else->{
-
 				}
 			}
 

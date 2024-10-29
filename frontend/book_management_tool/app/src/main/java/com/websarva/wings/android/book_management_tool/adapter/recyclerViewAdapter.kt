@@ -32,7 +32,7 @@ class RecyclerViewAdapter(
 			ViewHolder {
 		// Create a new view, which defines the UI of the list item
 		val itemView = LayoutInflater.from(viewGroup.context)
-			.inflate(R.layout.my_text_view, viewGroup, false)
+			.inflate(R.layout.book_list_view, viewGroup, false)
 		return ViewHolder(itemView)
 	}
 
@@ -50,35 +50,3 @@ class RecyclerViewAdapter(
 	override fun getItemCount() = iNames.size
 
 }
-/*
-class MyAdapter internal constructor(private val dataArray: List<String>) : RecyclerView.Adapter<MyAdapter.ViewHolder>{
-    internal class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var textView: TextView
-
-        init {
-            textView = view.findViewById<TextView>(R.id.text_view)
-        }
-    }
-
-    // Create new views (invoked by the layout manager)
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // create a new view
-        val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.my_text_view, parent, false)
-        return ViewHolder(view)
-    }
-
-    // Replace the contents of a view (invoked by the layout manager)
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        holder.textView.text = dataArray[position]
-    }
-
-    // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount(): Int {
-        return dataArray.size
-    }
-}
-
- */
