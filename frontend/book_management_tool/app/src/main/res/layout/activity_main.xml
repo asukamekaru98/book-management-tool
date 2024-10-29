@@ -8,57 +8,26 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:background="@color/teal_200"
+        app:title="HOGE"
+        app:titleMarginStart="30dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bookListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:layout_below="@id/toolbar" />
 
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <Spinner
-            android:id="@+id/httpMethodSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:id="@+id/ipAddressET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter IP Address" />
-
-        <EditText
-            android:id="@+id/apiVersionET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter API Version" />
-
-        <EditText
-            android:id="@+id/apiFunctionET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter API Function" />
-
-        <EditText
-            android:id="@+id/isbnCodeET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter ISBN Code" />
-
-        <Button
-            android:id="@+id/accessButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Access URL" />
-
-        <TextView
-            android:id="@+id/jsonTV"
-            android:layout_width="match_parent"
-            android:layout_height="300dp" />
-
-
-    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/frame_layout"

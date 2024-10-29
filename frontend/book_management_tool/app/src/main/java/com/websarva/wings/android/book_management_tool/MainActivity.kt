@@ -3,7 +3,10 @@ package com.websarva.wings.android.book_management_tool
 //import com.webserva.wings.android.sending_json_over_http_sample.ui.theme.SendingJSONOverHTTP_SampleTheme
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -11,8 +14,11 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
 import com.websarva.wings.android.book_management_tool.flagment.fragmentBookshelf
 import com.websarva.wings.android.book_management_tool.flagment.fragmentReadHistories
@@ -38,15 +44,37 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	private lateinit var binding : ActivityMainBinding
+	private lateinit var toolBar : androidx.appcompat.widget.Toolbar
+	private lateinit var listView : RecyclerView
 
+	private val names: ArrayList<String> = arrayListOf(
+		"Bougainvillea", "Cosmos", "Cosmos field",
+		"Delphinium", "Flowers", "Lotus", "Spring Flowers"
+	)
+
+	private val photos: ArrayList<Int> = arrayListOf(
+		R.drawable.bomb,
+		R.drawable.fire, R.drawable.kyoto,
+		R.drawable.mochi, R.drawable.skull,
+		R.drawable.torii, R.drawable.trashcan
+	)
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
+		// ここでActionBarを無効化
+		supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+
 		binding = ActivityMainBinding.inflate(layoutInflater)
 
+		toolBar = binding.toolbar
+		setSupportActionBar(toolBar)
 
-
+		listView = binding.bookListView
+		listView.setHasFixedSize(true)
+		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
+		listView.layoutManager = rLayoutManager
+		listView.adapter = MyAdapter(photos, names)
 
 		//setContentView(R.layout.activity_main)
 		setContentView(binding.root)
@@ -66,7 +94,7 @@ class MainActivity : AppCompatActivity() {
 
 			true
 		}
-
+/*
 		//val httpMethodSpnrItems = arrayOf("GET","POST","PUT","DELETE","PATCH")
 		val httpMethodSpinner = findViewById<Spinner>(R.id.httpMethodSpinner)
 		val httpMethodSpinnerAdapter = ArrayAdapter(
@@ -162,7 +190,29 @@ class MainActivity : AppCompatActivity() {
 			//val userUrl = urlEditText.text.toString().ifEmpty { DEFAULT_SERVER_URL }
 		}
 
+*/
+	}
 
+	override fun onCreateOptionsMenu(menu: Menu): Boolean {
+		getMenuInflater().inflate(R.menu.menu_header,menu)
+		return true
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		val itemID = item.getItemId()
+
+		when(itemID) {
+			R.id.BtmBtnBookShelf        -> Toast.makeText(this,"BtmBtnBookShelf",Toast.LENGTH_SHORT).show()
+			R.id.BtmBtnReadHistories    -> Toast.makeText(this,"BtmBtnReadHistories",Toast.LENGTH_SHORT).show()
+			R.id.BtmBtnWishList         -> Toast.makeText(this,"BtmBtnWishList",Toast.LENGTH_SHORT).show()
+			R.id.setting                -> Toast.makeText(this,"setting",Toast.LENGTH_SHORT).show()
+			R.id.icon_add               -> Toast.makeText(this,"icon_add",Toast.LENGTH_SHORT).show()
+			R.id.icon_search            -> Toast.makeText(this,"icon_search",Toast.LENGTH_SHORT).show()
+
+			else                        -> return false
+		}
+
+		return true
 	}
 
 	private fun replaceFragment(fragment: Fragment)

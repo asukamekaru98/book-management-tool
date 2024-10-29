@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:title="IconAdd"
+        android:id="@+id/icon_add"
+        android:icon="@drawable/add_24"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:title="IconSearch"
+        android:id="@+id/icon_search"
+        android:icon="@drawable/search_24"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="com.google.android.material.search.SearchView" />
+
+    <item
+    android:title="setting"
+    android:id="@+id/setting" />
+
 
 </menu>
