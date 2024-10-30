@@ -20,6 +20,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.book_management_tool.adapter.RecyclerViewAdapter
+import com.websarva.wings.android.book_management_tool.api.ApiResponse
+import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
+import com.websarva.wings.android.book_management_tool.api.bmtApiManager
+import com.websarva.wings.android.book_management_tool.apiRequest.bmtApiRequestCreatorFactory
 import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
 import com.websarva.wings.android.book_management_tool.flagment.fragmentBookshelf
 import com.websarva.wings.android.book_management_tool.flagment.fragmentReadHistories
@@ -77,6 +81,14 @@ class MainActivity : AppCompatActivity() {
 		setContentView(binding.root)
 		replaceFragment(fragmentBookshelf())
 
+		val apiManager = BookManagementToolAPIManager()
+		val apiResponse:ApiResponse = apiManager.GetAllBookShelf()
+
+
+		//val reqCreator = bmtApiRequestCreatorFactory::APIRequestCreator_AddOneBookShelf
+
+
+
 		binding.navView.setOnItemSelectedListener{
 
 			when(it.itemId){
@@ -90,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 
 			true
 		}
-/*
+
 		//val httpMethodSpnrItems = arrayOf("GET","POST","PUT","DELETE","PATCH")
 		val httpMethodSpinner = findViewById<Spinner>(R.id.httpMethodSpinner)
 		val httpMethodSpinnerAdapter = ArrayAdapter(
@@ -186,7 +198,7 @@ class MainActivity : AppCompatActivity() {
 			//val userUrl = urlEditText.text.toString().ifEmpty { DEFAULT_SERVER_URL }
 		}
 
-*/
+
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
