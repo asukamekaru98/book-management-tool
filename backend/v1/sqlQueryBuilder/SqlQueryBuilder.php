@@ -19,20 +19,20 @@ class SqlQueryBuilder_BookManagementTool implements I_SqlQueryBuilder
 		protected string $isbn,
 		protected array $data
 	) {
-		$this->BuildSQLQuery();
+		$this->buildSQLQuery();
 	}
 
-	public function BuildSQLQuery()
+	public function buildSQLQuery()
 	{
 		// ここにSQLクエリを記述
 	}
 
-	public function GetSQLQuery(): string
+	public function getSQLQuery(): string
 	{
 		return $this->sqlQuery;
 	}
 
-	protected function IsISBNEmpty(): bool
+	protected function isISBNEmpty(): bool
 	{
 		return empty($this->isbn);
 	}

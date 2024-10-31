@@ -3,9 +3,9 @@
 require_once(__DIR__ . '/resourceController.php');
 
 use SqlQueryBuilder\SqlQueryBuilderFactory;
-use ReturnResponse\ReturnResponse;
 use ResponseCreator\ResponseCreator;
 use ResponseBodyCreator\ResponseBodyCreatorFactory;
+use ResponseCodeCreator\ResponseCodeCreator;
 
 class readHistoriesController extends resourceController
 {
@@ -13,21 +13,21 @@ class readHistoriesController extends resourceController
 	public function methodGET()
 	{
 		switch ($this->viewed_flag) {
-			case BookViewedFlag::NoViewed:
+			case BOOK_VIEWED_FLAG_NOVIEWED:
 				$sqlQueryBuilder = SqlQueryBuilderFactory::SelectNoViewedReadHistories(
 					$this->isbn,
 					$this->data
 				);
 				break;
 
-			case BookViewedFlag::Viewed:
+			case BOOK_VIEWED_FLAG_VIEWED:
 				$sqlQueryBuilder = SqlQueryBuilderFactory::SelectViewedReadHistories(
 					$this->isbn,
 					$this->data
 				);
 				break;
 
-			case BookViewedFlag::All:
+			case BOOK_VIEWED_FLAG_ALL:
 				$sqlQueryBuilder = SqlQueryBuilderFactory::SelectAllReadHistories(
 					$this->isbn,
 					$this->data
@@ -44,7 +44,8 @@ class readHistoriesController extends resourceController
 		// ToDo：CreateResponseBodyで複数取得したときの処理が出来ていないかもしれないので、要確認
 		$this->CreateResponse(
 			new ResponseCreator(
-				ResponseBodyCreatorFactory::CreateRespoonseBody_Get_ReadHistories($this->format)
+				ResponseBodyCreatorFactory::CreateRespoonseBody_Get_ReadHistories($this->format),
+				new ResponseCodeCreator()
 			)
 		);
 	}
@@ -68,7 +69,8 @@ class readHistoriesController extends resourceController
 
 		$this->CreateResponse(
 			new ResponseCreator(
-				ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+				ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format),
+				new ResponseCodeCreator()
 			)
 		);
 	}
@@ -92,7 +94,8 @@ class readHistoriesController extends resourceController
 
 		$this->CreateResponse(
 			new ResponseCreator(
-				ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+				ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format),
+				new ResponseCodeCreator()
 			)
 		);
 	}
@@ -118,7 +121,8 @@ class readHistoriesController extends resourceController
 
 		$this->CreateResponse(
 			new ResponseCreator(
-				ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+				ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format),
+				new ResponseCodeCreator()
 			)
 		);
 	}

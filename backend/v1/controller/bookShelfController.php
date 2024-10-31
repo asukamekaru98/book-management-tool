@@ -1,17 +1,15 @@
 <?php
 
 use SqlQueryBuilder\SqlQueryBuilderFactory;
-use ReturnResponse\ReturnResponse;
 use ResponseCreator\ResponseCreator;
 use ResponseBodyCreator\ResponseBodyCreatorFactory;
+use ResponseCodeCreator\ResponseCodeCreator;
 
 require_once(__DIR__ . '/resourceController.php');
 require_once(__DIR__ . '/../sql/sqlManager.php');
 require_once(__DIR__ . '/../sqlQueryBuilder/sqlQueryBuilderFactory.php');
 require_once __DIR__ . '/../returnResponse/returnResponse.php';
 require_once __DIR__ . '/../responseCreator/responseCreator.php';
-require_once __DIR__ . '/../responseCreator/responseBodyCreator/responseBodyCreator.php';
-require_once __DIR__ . '/../responseCreator/responseBodyCreator/responseBodyCreatorFactory.php';
 
 class bookShelfController extends resourceController
 {
@@ -37,7 +35,8 @@ class bookShelfController extends resourceController
         // ToDo：CreateResponseBodyで複数取得したときの処理が出来ていないかもしれないので、要確認
         $this->CreateResponse(
             new ResponseCreator(
-                ResponseBodyCreatorFactory::CreateRespoonseBody_Get_BookShelf($this->format)
+                ResponseBodyCreatorFactory::CreateRespoonseBody_Get_BookShelf($this->format),
+                new ResponseCodeCreator()
             )
         );
     }
@@ -60,7 +59,8 @@ class bookShelfController extends resourceController
 
         $this->CreateResponse(
             new ResponseCreator(
-                ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+                ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format),
+                new ResponseCodeCreator()
             )
         );
     }
@@ -83,7 +83,8 @@ class bookShelfController extends resourceController
 
         $this->CreateResponse(
             new ResponseCreator(
-                ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+                ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format),
+                new ResponseCodeCreator()
             )
         );
     }
@@ -107,7 +108,8 @@ class bookShelfController extends resourceController
 
         $this->CreateResponse(
             new ResponseCreator(
-                ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+                ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format),
+                new ResponseCodeCreator()
             )
         );
     }

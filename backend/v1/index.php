@@ -4,6 +4,7 @@ use DataBase\DataBaseMySQL;
 use ReturnResponse\ReturnResponse;
 use ResponseCreator\ResponseCreator;
 use ResponseBodyCreator\ResponseBodyCreatorFactory;
+use ResponseCodeCreator\ResponseCodeCreator;
 
 require_once __DIR__ . '/database/database.php';
 require_once __DIR__ . '/controller/bookShelfController.php';
@@ -12,10 +13,9 @@ require_once __DIR__ . '/controller/readHistoriesController.php';
 require_once __DIR__ . '/http/httpManager.php';
 require_once __DIR__ . '/rooter.php';
 require_once __DIR__ . '/responseBodyCreator/responseBodyCreatorFactory.php';
-require_once __DIR__ . '/../returnResponse/returnResponse.php';
-require_once __DIR__ . '/../responseCreator/responseCreator.php';
-require_once __DIR__ . '/../responseCreator/responseBodyCreator/responseBodyCreator.php';
-require_once __DIR__ . '/../responseCreator/responseBodyCreator/responseBodyCreatorFactory.php';
+require_once __DIR__ . '/responseCodeCreator/responseCodeCreator.php';
+require_once __DIR__ . '/returnResponse/returnResponse.php';
+require_once __DIR__ . '/responseCreator/responseCreator.php';
 
 $bookManagementTool = new BookManagementTool();
 $bookManagementTool->run();
@@ -57,7 +57,8 @@ class BookManagementTool
     function CreateErrorResponseBody(Exception $e, string $format = 'json')
     {
         $responseCreator = new ResponseCreator(
-            ResponseBodyCreatorFactory::CreateRespoonseBody_Error($format)
+            ResponseBodyCreatorFactory::CreateRespoonseBody_Error($format),
+            new ResponseCodeCreator()
         );
 
         $responseCreator->CreateResponse(
@@ -71,6 +72,6 @@ class BookManagementTool
 
     function __destruct()
     {
-        $this->dbSQL = null; // DB接続を切断
+        //$this->dbSQL = null; // DB接続を切断
     }
 }

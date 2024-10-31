@@ -18,8 +18,8 @@ class ResponseCreator implements I_ResponseCreator
 	private string $returnBody;
 
 	public function __construct(
-		protected I_ResponseBodyCreator $respBodyCreator = new RespBodyCre8er(),
-		protected I_ResponseCodeCreator $respCodeCreator = new ResponseCodeCreator()
+		protected I_ResponseBodyCreator $respBodyCreator,
+		protected I_ResponseCodeCreator $respCodeCreator
 	) {}
 
 	public function CreateResponse(int $code, array $body): void

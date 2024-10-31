@@ -10,7 +10,8 @@ class SqlSelectNoViewedBookShelf extends SqlQueryBuilder_BookManagementTool
 	public function BuildSQLQuery()
 	{
 
-		$sqlQuery = <<< "EOD"
+		$this->sqlQuery =
+			<<< "EOD"
 					SELECT 
 						books.isbn,
 						books.title,
@@ -41,7 +42,5 @@ class SqlSelectNoViewedBookShelf extends SqlQueryBuilder_BookManagementTool
 					WHERE
 						books.viewed_flag = 0
 					EOD;
-
-		return $sqlQuery;
 	}
 }

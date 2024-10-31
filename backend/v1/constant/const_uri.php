@@ -1,11 +1,8 @@
 <?php
 
-enum BookViewedFlag: string
-{
-	case NoViewed = '0';	// 未読
-	case Viewed = '1';	// 読了
-	case All = '2';		// 全て
-}
+const BOOK_VIEWED_FLAG_NOVIEWED	= '0';		// 未読
+const BOOK_VIEWED_FLAG_VIEWED	= '1';		// 読了
+const BOOK_VIEWED_FLAG_ALL		= '2';		// 全て
 
 # URI
 // 本棚
@@ -29,6 +26,6 @@ const URI_QUERY_DATA_FORMAT_XML = 'xml';
 # Query初期値
 const INIT_URI_QUERY_ISBN = '0000000000000';
 const INIT_URI_QUERY_DATA_FORMAT = URI_QUERY_DATA_FORMAT_JSON;
-const INIT_URI_QUERY_VIEWED_FLAG = BookViewedFlag::All;
+const INIT_URI_QUERY_VIEWED_FLAG = BOOK_VIEWED_FLAG_ALL;
 
 #

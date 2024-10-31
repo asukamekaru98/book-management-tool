@@ -5,6 +5,7 @@ require_once(__DIR__ . '/resourceController.php');
 use SqlQueryBuilder\SqlQueryBuilderFactory;
 use ResponseCreator\ResponseCreator;
 use ResponseBodyCreator\ResponseBodyCreatorFactory;
+use ResponseCodeCreator\ResponseCodeCreator;
 
 class wishListController extends resourceController
 {
@@ -29,7 +30,8 @@ class wishListController extends resourceController
 		// ToDo：CreateResponseBodyで複数取得したときの処理が出来ていないかもしれないので、要確認
 		$this->CreateResponse(
 			new ResponseCreator(
-				ResponseBodyCreatorFactory::CreateRespoonseBody_Get_WishList($this->format)
+				ResponseBodyCreatorFactory::CreateRespoonseBody_Get_WishList($this->format),
+				new ResponseCodeCreator()
 			)
 		);
 	}
@@ -53,7 +55,8 @@ class wishListController extends resourceController
 
 		$this->CreateResponse(
 			new ResponseCreator(
-				ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+				ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format),
+				new ResponseCodeCreator()
 			)
 		);
 	}
@@ -77,7 +80,8 @@ class wishListController extends resourceController
 
 		$this->CreateResponse(
 			new ResponseCreator(
-				ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+				ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format),
+				new ResponseCodeCreator()
 			)
 		);
 	}
@@ -101,7 +105,8 @@ class wishListController extends resourceController
 
 		$this->CreateResponse(
 			new ResponseCreator(
-				ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format)
+				ResponseBodyCreatorFactory::CreateRespoonseBody_Correct($this->format),
+				new ResponseCodeCreator()
 			)
 		);
 	}

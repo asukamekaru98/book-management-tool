@@ -22,7 +22,8 @@ class httpManager
     function __construct()
     {
 
-        $this->httpMethod = $_SERVER['REQUEST_METHOD'];
+        //$this->httpMethod = $_SERVER['REQUEST_METHOD'];
+        $this->httpMethod = "GET";
 
         $httpUriScriptParser = new HttpURIPerser($_SERVER['REQUEST_URI']);
         $this->aUriResource = $httpUriScriptParser->getUriResource();

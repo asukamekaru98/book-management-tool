@@ -9,7 +9,8 @@ final class Sql_Select_WishList extends SqlQueryBuilder_BookManagementTool
 
 	public function BuildSQLQuery()
 	{
-		$sqlQuery = <<< "EOD"
+		$this->sqlQuery =
+			<<< "EOD"
 			SELECT 
 			books.isbn,
 			books.title,
@@ -33,7 +34,5 @@ final class Sql_Select_WishList extends SqlQueryBuilder_BookManagementTool
 			ON books.isbn = books_shelf.isbn
 			WHERE books.isbn = '{$this->isbn}'
 		EOD;
-
-		return $sqlQuery;
 	}
 }

@@ -10,7 +10,7 @@ class SqlSelectAllBookShelf extends SqlQueryBuilder_BookManagementTool
 	public function BuildSQLQuery()
 	{
 
-		$sqlQuery = <<< "EOD"
+		$this->sqlQuery = <<< "EOD"
 					SELECT 
 						books.isbn,
 						books.title,
@@ -39,7 +39,5 @@ class SqlSelectAllBookShelf extends SqlQueryBuilder_BookManagementTool
 					ON 
 						books.isbn = read_histories.isbn
 					EOD;
-
-		return $sqlQuery;
 	}
 }
