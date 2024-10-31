@@ -23,7 +23,7 @@ class BookManagementToolAPIManager {
 		BmtApiGetAllBookShelf().Execute()
 		return BmtApiGetAllBookShelf().GetResponseResult()
 	}
-
+/*
 	/**
 	 * 本棚の情報を1つ取得する
 	 * @return AbstractAPIHandler
@@ -160,6 +160,6 @@ class BookManagementToolAPIManager {
 		return BmtApiDeleteAllWishLists()
 	}
 
-
+*/
 
 }

@@ -22,8 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.book_management_tool.adapter.RecyclerViewAdapter
 import com.websarva.wings.android.book_management_tool.api.ApiResponse
 import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
-import com.websarva.wings.android.book_management_tool.api.bmtApiManager
-import com.websarva.wings.android.book_management_tool.apiRequest.bmtApiRequestCreatorFactory
 import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
 import com.websarva.wings.android.book_management_tool.flagment.fragmentBookshelf
 import com.websarva.wings.android.book_management_tool.flagment.fragmentReadHistories
@@ -45,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
 	// デフォルトのURLを定数として定義
 	companion object {
-		const val DEFAULT_SERVER_URL = "http://192.168.1.51/v1/read-histories" // 任意のデフォルトURLを設定
+		const val DEFAULT_SERVER_URL = "192.168.1.51/v1/read-histories" // 任意のデフォルトURLを設定
 	}
 
 	private lateinit var binding : ActivityMainBinding
@@ -84,6 +82,7 @@ class MainActivity : AppCompatActivity() {
 		val apiManager = BookManagementToolAPIManager()
 		val apiResponse:ApiResponse = apiManager.GetAllBookShelf()
 
+		Toast.makeText(this,apiResponse.body,Toast.LENGTH_SHORT).show()
 
 		//val reqCreator = bmtApiRequestCreatorFactory::APIRequestCreator_AddOneBookShelf
 
@@ -102,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
 			true
 		}
-
+/*
 		//val httpMethodSpnrItems = arrayOf("GET","POST","PUT","DELETE","PATCH")
 		val httpMethodSpinner = findViewById<Spinner>(R.id.httpMethodSpinner)
 		val httpMethodSpinnerAdapter = ArrayAdapter(
@@ -198,7 +197,7 @@ class MainActivity : AppCompatActivity() {
 			//val userUrl = urlEditText.text.toString().ifEmpty { DEFAULT_SERVER_URL }
 		}
 
-
+*/
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {

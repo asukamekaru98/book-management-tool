@@ -13,6 +13,7 @@ abstract class AbstractAPIHandler
 	fun Execute() {
 		val request = CreateRequest()
 		val response = SendRequest(request)
+		println(response)
 		ParseResponse(response)
 	}
 
