@@ -18,9 +18,10 @@ class Router
         $isbn = $httpMngr->getBookISBN();
         $viewed_flag = $httpMngr->getViewedFlag();
         $data = $httpMngr->getData();
+        $format = $httpMngr->getFormat();
 
         if (isset($this->resourceCtrlers[$resource])) {
-            return $this->resourceCtrlers[$resource]->handle($method, $isbn, $viewed_flag, $method, $data);
+            return $this->resourceCtrlers[$resource]->handle($method, $isbn, $format, $viewed_flag, $data);
         }
 
         return $this->handleNotFound();

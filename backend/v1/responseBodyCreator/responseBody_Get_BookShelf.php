@@ -14,7 +14,7 @@ class RespBodyCre8erGetBookShelf extends RespBodyCre8er implements I_ResponseBod
 	// override
 	public function CreateResponseBody_JSON(array $data): string
 	{
-		$responseJSON = json_decode(file_get_contents('../json_template/getBookShelfRespBody.json'), true);
+		$responseJSON = json_decode(file_get_contents(__DIR__ . '/../json_template/getBookShelfRespBody.json'), true);
 
 		$responseJSON['bookinfo']['isbn'] = $data['isbn'] ?? "";
 		$responseJSON['bookinfo']['title'] = $data['title'] ?? "";

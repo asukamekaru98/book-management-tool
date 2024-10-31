@@ -17,7 +17,6 @@ class bookShelfController extends resourceController
     // override
     function methodGET()
     {
-
         if ($this->IsISBNCodeNotSet()) {
             $bookShelfSQLQueryBuilder = SqlQueryBuilderFactory::SelectBookShelf(
                 $this->isbn,

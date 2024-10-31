@@ -23,9 +23,9 @@ class httpManager
     {
 
         //$this->httpMethod = $_SERVER['REQUEST_METHOD'];
-        $this->httpMethod = "GET";
+        $this->httpMethod = 'GET';
 
-        $httpUriScriptParser = new HttpURIPerser($_SERVER['REQUEST_URI']);
+        $httpUriScriptParser = new HttpURIPerser(uri: $_SERVER['REQUEST_URI']);
         $this->aUriResource = $httpUriScriptParser->getUriResource();
 
         $httpQueryParser = new HttpQueryParser($_SERVER['QUERY_STRING']);
@@ -33,10 +33,10 @@ class httpManager
 
         switch ($this->aQueries[URI_QUERY_DATA_FORMAT]) {
             case URI_QUERY_DATA_FORMAT_JSON:
-                $this->data = json_decode(file_get_contents('php://input'), true, 512, JSON_OBJECT_AS_ARRAY) ?? [];
+                $this->data = json_decode(json: file_get_contents(filename: 'php://input'), associative: true, depth: 512, flags: JSON_OBJECT_AS_ARRAY) ?? [];
                 break;
             case URI_QUERY_DATA_FORMAT_XML:
-                $this->data = xmlrpc_decode(file_get_contents('php://input'), true);
+                $this->data = xmlrpc_decode(file_get_contents(filename: 'php://input'), true);
                 break;
             default:
 
