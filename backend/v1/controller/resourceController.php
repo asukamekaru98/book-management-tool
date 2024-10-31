@@ -121,7 +121,7 @@ abstract class resourceController
             try {
                 $this->sqlManager->ExecuteSqlQuery($bookInfoSQLQuery->GetSQLQuery());
             } catch (Exception $e) {
-                throw new Exception($e->getMessage(), $e->getCode());
+                throw new Exception($e->getMessage(), (int)$e->getCode());
             }
         }
     }
@@ -140,7 +140,7 @@ abstract class resourceController
         try {
             $this->sqlManager->ExecuteSqlQuery($isbnCountSQLQuery->GetSQLQuery());
         } catch (Exception $e) {
-            throw new Exception($e->getMessage(), $e->getCode());
+            throw new Exception($e->getMessage(), (int)$e->getCode());
         }
 
         $result = $this->sqlManager->GetResponseBody()[0]['count'];
@@ -162,7 +162,7 @@ abstract class resourceController
             $this->sqlManager->ExecuteSqlQuery($sqlQuery);
             $this->CheckResponseCode();
         } catch (Exception $e) {
-            throw new Exception($e->getMessage(), $e->getCode());
+            throw new Exception($e->getMessage(), (int)$e->getCode());
         }
     }
 

@@ -31,7 +31,7 @@ class SQLManager implements I_SQLManager
 			$stmt->execute($params);
 			$this->arraySqlResult = $stmt->fetchAll(DataBaseMySQL::FETCH_ASSOC);
 		} catch (Exception $e) {
-			throw new Exception($e->getMessage(), $e->getCode());
+			throw new Exception($e->getMessage(), (int)$e->getCode());
 			return;
 		}
 
