@@ -44,6 +44,8 @@ class ApiRequestSender {
 		body: List<String>
 	) {
 
+		//Todo: ロード中のアニメーションを表示する
+
 		//CoroutineScope(Dispatchers.IO).launch {
 		runBlocking {
 			try {
@@ -55,16 +57,12 @@ class ApiRequestSender {
 					setRequestProperty("Content-Type", "application/json; utf-8")
 					setRequestProperty("Accept", "application/json")
 				}
-				println("b")
 				OutputStreamWriter(connection.outputStream).use {
 					it.write(body.joinToString(""))
 				}
-				println("c")
 				connection.disconnect() // 切断
-				println("d")
 				apiResponse.body = connection.responseMessage
 				apiResponse.code = connection.responseCode
-				println("e")
 			} catch (e: Exception) {
 				Log.d("Error", e.toString())
 				//throw Exception("Error:")

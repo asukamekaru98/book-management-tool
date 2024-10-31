@@ -18,8 +18,8 @@
 		"viewed_flag": ""
 	},
 	"read_histories": {
-		"view-start":"",
-		"view-end":"",
+		"view_start":"",
+		"view_end":"",
 		"impression":"",
 		"memo": "",
 		"understanding":""

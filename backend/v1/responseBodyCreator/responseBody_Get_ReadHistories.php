@@ -32,8 +32,8 @@ class RespBodyCre8erGetReadHistories extends RespBodyCre8er implements I_Respons
 		$responseJSON['userinfo']['purchased_flag'] = $data['purchased_flag'] ?? "";
 		$responseJSON['userinfo']['viewed_flag'] = $data['viewed_flag'] ?? "";
 
-		$responseJSON['read_histories']['view-start'] = $data['view-start'] ?? "";
-		$responseJSON['read_histories']['view-end'] = $data['view-end'] ?? "";
+		$responseJSON['read_histories']['view_start'] = $data['view_start'] ?? "";
+		$responseJSON['read_histories']['view_end'] = $data['view_end'] ?? "";
 		$responseJSON['read_histories']['impression'] = $data['impression'] ?? "";
 		$responseJSON['read_histories']['memo'] = $data['memo'] ?? "";
 		$responseJSON['read_histories']['understanding'] = $data['understanding'] ?? "";
