@@ -7,6 +7,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -39,32 +41,51 @@ class ApiRequestSender {
 	}
 
 	private fun accessAPI(
-		method: String,
-		uri: String,
+		methodStr: String,
+		uriStr: String,
 		body: List<String>
 	) {
 
 		//Todo: ロード中のアニメーションを表示する
 
-		//CoroutineScope(Dispatchers.IO).launch {
-		runBlocking {
+		CoroutineScope(Dispatchers.IO).launch {
+		//runBlocking {
 			try {
-				println("method: $method")
-				println("uri: $uri")
-				val connection = (URL(uri).openConnection() as HttpURLConnection).apply {
-					requestMethod = method
-					doOutput = true
-					setRequestProperty("Content-Type", "application/json; utf-8")
-					setRequestProperty("Accept", "application/json")
-				}
-				OutputStreamWriter(connection.outputStream).use {
-					it.write(body.joinToString(""))
-				}
-				connection.disconnect() // 切断
-				apiResponse.body = connection.responseMessage
+				println("hogehoge method: $methodStr")
+				println("hogehoge uri: $uriStr")
+
+				val url = URL(uriStr)
+				val connection = url.openConnection() as HttpURLConnection
+				connection.doOutput = false
+				connection.doInput = true
+				connection.readTimeout = 0
+				connection.connectTimeout = 0
+				connection.requestMethod = methodStr
+
+				println("hogehoge before connection")
+
+				connection.connect()
+
+				println("hogehoge after connection")
+
 				apiResponse.code = connection.responseCode
+
+				println("hogehoge uri: $apiResponse ")
+
+				apiResponse.body = BufferedReader(InputStreamReader(connection.inputStream)).use {
+					it.readText()
+				}
+				//OutputStreamWriter(connection.outputStream).use {
+				//	it.write(body.joinToString(""))
+				//}
+
+				println("hogehoge after body")
+
+				connection.disconnect() // 切断
+				//apiResponse.body = connection.responseMessage
+				//apiResponse.code = connection.responseCode
 			} catch (e: Exception) {
-				Log.d("Error", e.toString())
+				Log.d("hogehoge Error", e.toString())
 				//throw Exception("Error:")
 			}
 		}
