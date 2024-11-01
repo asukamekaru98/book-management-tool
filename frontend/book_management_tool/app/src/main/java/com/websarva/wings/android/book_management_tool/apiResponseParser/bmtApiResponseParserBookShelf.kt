@@ -128,4 +128,10 @@ class bmtApiResponseParserBookShelf : abstructAPIResponseParser() {
 		}
 		return bookList
 	}
+
+	override fun getTemplateList(): MutableList<BookInfo> {
+		val bookList: MutableList<BookInfo> = mutableListOf()
+
+		return bookList
+	}
 }

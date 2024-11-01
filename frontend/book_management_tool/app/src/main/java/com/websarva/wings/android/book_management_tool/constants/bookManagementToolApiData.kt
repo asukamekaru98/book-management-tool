@@ -75,7 +75,7 @@ data class BookInfo(
 )
 
 data class BookManagementToolApiData(
-	var responseCode: Int = 0,                        // レスポンスコード
-	var message: String = "",                         // メッセージ
-	var bookList: List<BookInfo> = emptyList()        // 書籍リスト
+    var responseCode: Int = 0,                        // レスポンスコード
+    var message: String = "",                         // メッセージ
+    var bookList: Unit = emptyList()        // 書籍リスト
 )

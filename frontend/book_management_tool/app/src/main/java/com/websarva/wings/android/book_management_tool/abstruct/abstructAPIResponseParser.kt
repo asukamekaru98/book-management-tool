@@ -13,23 +13,26 @@ abstract class abstructAPIResponseParser :i_ApiResponseParser{
 
 	abstract override fun ParseResponse(apiResponse: ApiResponse)
 
-	protected fun parseBody(body: String) {
+	protected fun parseBody(body: String): MutableList<BookInfo>{
 
 		if (body.startsWith("[")) {
 			//NOTE: [ で始まる場合はJSONArray
 			jsonArray = JSONArray(body)
 
-			this.parseJSONArray()
+			return this.parseJSONArray()
 
 		} else if(body.startsWith("{")) {
 			//NOTE: { で始まる場合はJSONObject
 			jsonObject = JSONObject(body)
 
-			this.parseJSONObject()
+			return this.parseJSONObject()
+		}else{
+
+			return this.getTemplateList()
 		}
 	}
 
 	abstract fun parseJSONObject(): MutableList<BookInfo>
 	abstract fun parseJSONArray(): MutableList<BookInfo>
-
+	abstract fun getTemplateList():MutableList<BookInfo>
 }
