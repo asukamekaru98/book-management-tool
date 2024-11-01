@@ -211,7 +211,7 @@ class MainActivity : AppCompatActivity() {
 
 		}
 
-		Toast.makeText(this,apiResponse.json.toString(),Toast.LENGTH_SHORT).show()
+		Toast.makeText(this,apiResponse.body.toString(),Toast.LENGTH_SHORT).show()
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -1,33 +1,55 @@
 package com.websarva.wings.android.book_management_tool.apiResponseParser
 
 import android.util.Log
+import com.websarva.wings.android.book_management_tool.abstruct.abstructAPIResponseParser
 import com.websarva.wings.android.book_management_tool.api.ApiResponse
 import com.websarva.wings.android.book_management_tool.constants.BookInfo
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
 import com.websarva.wings.android.book_management_tool.i_f.i_ApiResponseParser
+import org.json.JSONArray
 import org.json.JSONObject
 
-class bmtApiResponseParserBookShelf : i_ApiResponseParser {
+class bmtApiResponseParserBookShelf : abstructAPIResponseParser() {
+
+
 	override fun ParseResponse(apiResponse: ApiResponse) {
 		// 本棚のAPIレスポンスを解析
 
 		//val responseBody = apiResponse.getResponseBody()
 		//Log.d("ResponseBody", responseBody) // デバッグログを追加
 
-		val apiBody = apiResponse.getJSONObject()
+		parseBody(apiResponse.body)
 
+
+		// 本棚のAPIレスポンスを解析
+		val apiData = BookManagementToolApiData(
+			responseCode = apiResponse.code,
+			message =
+			if (apiBody.has("message")) {
+				apiBody.getJSONObject("message").getString("message")
+			} else {
+				""
+			},
+			bookList = bookList
+		)
+
+
+	}
+
+	override fun parseJSONObject(): MutableList<BookInfo> {
 
 		val bookList: MutableList<BookInfo> = mutableListOf()
 
-		if (apiBody.has("bookList")) {
+		if (this.jsonObject.has("bookList")) {
 
-			for (i in 0 until apiBody.getJSONArray("bookList").length()) {
-				if (apiBody.has("bookList")) {
-					val bookInfo = apiBody.getJSONArray("bookInfo").getJSONObject(i)
-					val userInfo = apiBody.getJSONArray("userInfo").getJSONObject(i)
-					val bookShelf = apiBody.getJSONArray("userInfo").getJSONObject(i)
-					val readHistories = apiBody.getJSONArray("readHistories").getJSONObject(i)
-					val wishList = apiBody.getJSONArray("wishList").getJSONObject(i)
+			for (i in 0 until this.jsonObject.getJSONArray("bookList").length()) {
+				if (this.jsonObject.has("bookList")) {
+					val bookInfo = this.jsonObject.getJSONArray("bookInfo").getJSONObject(i)
+					val userInfo = this.jsonObject.getJSONArray("userInfo").getJSONObject(i)
+					val bookShelf = this.jsonObject.getJSONArray("userInfo").getJSONObject(i)
+					val readHistories =
+						this.jsonObject.getJSONArray("readHistories").getJSONObject(i)
+					val wishList = this.jsonObject.getJSONArray("wishList").getJSONObject(i)
 					val book = BookInfo(
 						book_isbn = bookInfo.getString("isbn"),
 						book_title = bookInfo.getString("title"),
@@ -60,19 +82,50 @@ class bmtApiResponseParserBookShelf : i_ApiResponseParser {
 				}
 			}
 		}
+		return bookList
+	}
 
-		// 本棚のAPIレスポンスを解析
-		val apiData = BookManagementToolApiData(
-			responseCode = apiResponse.getResponseCode(),
-			message =
-			if (apiBody.has("message")) {
-				apiBody.getJSONObject("message").getString("message")
-			} else {
-				""
-			},
-			bookList = bookList
-		)
+	override fun parseJSONArray(): MutableList<BookInfo> {
+		val bookList: MutableList<BookInfo> = mutableListOf()
 
+		for (i in 0 until this.jsonArray.length()) {
+			val bookInfo = this.jsonArray.getJSONObject(i).getJSONObject("bookinfo")
+			val userInfo = this.jsonArray.getJSONObject(i).getJSONObject("userinfo")
+			val bookShelf = this.jsonArray.getJSONObject(i).getJSONObject("book_shelf")
+			val readHistories =
+				this.jsonArray.getJSONObject(i).getJSONArray("readHistories").getJSONObject(0)
+			val wishList = this.jsonArray.getJSONObject(i).getJSONArray("wishList").getJSONObject(0)
 
+			val book = BookInfo(
+				book_isbn = bookInfo.getString("isbn"),
+				book_title = bookInfo.getString("title"),
+				book_subTitle = bookInfo.getString("sub_title"),
+				book_author = bookInfo.getString("author"),
+				book_description = bookInfo.getString("description"),
+				book_imageURL = bookInfo.getString("image_url"),
+				book_publisher = bookInfo.getString("published_date"),
+				book_content = bookInfo.getString("content"),
+
+				userInfo_industry_important = userInfo.getString("industry_important"),
+				userInfo_work_important = userInfo.getString("work_important"),
+				userInfo_user_important = userInfo.getString("user_important"),
+				userInfo_priority = userInfo.getString("priority"),
+				userInfo_purchased_flag = userInfo.getString("purchased_flag"),
+				userInfo_viewed_flag = userInfo.getString("viewed_flag"),
+
+				bookInfo_purchased = bookShelf.getString("purchased"),
+				bookInfo_memo = bookShelf.getString("memo"),
+
+				readHistories_view_start = readHistories.getString("view_start"),
+				readHistories_view_end = readHistories.getString("view_end"),
+				readHistories_impression = readHistories.getString("impression"),
+				readHistories_memo = readHistories.getString("memo"),
+				readHistories_understanding = readHistories.getString("understanding"),
+
+				wishList_memo = wishList.getString("memo")
+			)
+			bookList.add(book)
+		}
+		return bookList
 	}
 }

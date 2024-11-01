@@ -53,9 +53,8 @@ class ApiRequestSender {
 		body: List<String>
 	): ApiResponse {
 
-		var code : Int
-		var json = JSONObject()
-
+		var apiCode : Int
+		var apiBody : String
 
 		withContext(Dispatchers.IO) {
 			try {
@@ -71,16 +70,16 @@ class ApiRequestSender {
 				connection.requestMethod = methodStr
 				connection.connect()
 
-				code = connection.responseCode
-				Log.d("BookMgmtTool API Get Code", code.toString())
+				apiCode = connection.responseCode
+				Log.d("BookMgmtTool API Response Code", apiCode.toString())
 
-				val responseBody =
+				apiBody =
 					BufferedReader(InputStreamReader(connection.inputStream, "UTF-8")).use {
 						it.readText()
 					}
 
-				Log.d("BookMgmtTool API Raw Response", responseBody)
-
+				Log.d("BookMgmtTool API Response Body", apiBody)
+/*
 				if (responseBody.startsWith("[")) {
 					//NOTE: [ で始まる場合はJSONArray
 					val jsonArray = JSONArray(responseBody)
@@ -92,19 +91,16 @@ class ApiRequestSender {
 					json = JSONObject(responseBody)
 				}
 				Log.d("BookMgmtTool API Get JSON", json.toString())
-
+*/
 				connection.disconnect()
 
 			} catch (e: Exception) {
 				Log.d("BookMgmtTool Exc Error", e.toString())
 
-				json = JSONObject("{\"message\":{\"message\":\"${e.message}\"}}")
-
-				code = HttpURLConnection.HTTP_INTERNAL_ERROR
-
+				apiBody = "{\"message\":{\"message\":\"${e.message}\"}}"
+				apiCode = HttpURLConnection.HTTP_INTERNAL_ERROR
 			}
 		}
-
-		return ApiResponse(json, code)
+		return ApiResponse(apiBody, apiCode)
 	}
 }
