@@ -15,7 +15,6 @@ class RespBodyCre8erGetBookShelf extends RespBodyCre8er implements I_ResponseBod
 	public function CreateResponseBody_JSON(array $data): string
 	{
 		$templatePath = __DIR__ . '/../json_template/getBookShelfRespBody.json';
-		$responseJSON = json_decode(file_get_contents($templatePath), true);
 
 		$fields = [
 			'bookinfo' => ['isbn', 'title', 'sub_title', 'author', 'description', 'image_url', 'published_date', 'content'],
@@ -24,13 +23,7 @@ class RespBodyCre8erGetBookShelf extends RespBodyCre8er implements I_ResponseBod
 			'message' => ['message']
 		];
 
-		foreach ($fields as $section => $keys) {
-			foreach ($keys as $key) {
-				$responseJSON[$section][$key] = $data[$key] ?? ($key === 'message' ? "Operation successful" : "");
-			}
-		}
-
-		return json_encode($responseJSON);
+		return $this->CreateJSON($templatePath, $data, $fields);
 	}
 
 	// override

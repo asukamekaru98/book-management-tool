@@ -14,30 +14,19 @@ class RespBodyCre8erGetWishList extends RespBodyCre8er implements I_ResponseBody
 	// override
 	public function CreateResponseBody_JSON(array $data): string
 	{
-		$responseJSON = json_decode(file_get_contents('../json_template/getBookShelfRespBody.json'), true);
 
-		$responseJSON['bookinfo']['isbn'] = $data['isbn'] ?? "";
-		$responseJSON['bookinfo']['title'] = $data['title'] ?? "";
-		$responseJSON['bookinfo']['sub_title'] = $data['title'] ?? "";
-		$responseJSON['bookinfo']['author'] = $data['author'] ?? "";
-		$responseJSON['bookinfo']['description'] = $data['description'] ?? "";
-		$responseJSON['bookinfo']['image_url'] = $data['image_url'] ?? "";
-		$responseJSON['bookinfo']['published_date'] = $data['published_date'] ?? "";
-		$responseJSON['bookinfo']['content'] = $data['content'] ?? "";
+		$templatePath = __DIR__ . '/../json_template/getBookShelfRespBody.json';
 
-		$responseJSON['userinfo']['industry_important'] = $data['industry_important'] ?? "";
-		$responseJSON['userinfo']['work_important'] = $data['work_important'] ?? "";
-		$responseJSON['userinfo']['user_important'] = $data['user_important'] ?? "";
-		$responseJSON['userinfo']['priority'] = $data['priority'] ?? "";
-		$responseJSON['userinfo']['purchased_flag'] = $data['purchased_flag'] ?? "";
-		$responseJSON['userinfo']['viewed_flag'] = $data['viewed_flag'] ?? "";
+		$fields = [
+			'bookinfo' => ['isbn', 'title', 'sub_title', 'author', 'description', 'image_url', 'published_date', 'content'],
+			'userinfo' => ['industry_important', 'work_important', 'user_important', 'priority', 'purchased_flag', 'viewed_flag'],
+			'wish_list' => ["memo"],
+			'message' => ['message']
+		];
 
-		$responseJSON['wish_list']['memo'] = $data['memo'] ?? "";
-
-		$responseJSON['message'] = $data['message'] ?? "Correct";
-
-		return json_encode($responseJSON);
+		return $this->CreateJSON($templatePath, $data, $fields);
 	}
+
 
 	// override
 	public function CreateResponseBody_XML(array $data): string

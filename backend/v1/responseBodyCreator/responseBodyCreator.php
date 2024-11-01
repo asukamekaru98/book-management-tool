@@ -33,4 +33,18 @@ class RespBodyCre8er implements I_ResponseBodyCreator
 
 		return xmlrpc_encode($responseXML);
 	}
+
+	// 取得したデータを元にレスポンスボディを生成するメソッド
+	protected function CreateJSON($tmpPath, $data, $fields): string
+	{
+		$responseJSON = json_decode(file_get_contents($tmpPath), true);
+
+		foreach ($fields as $section => $keys) {
+			foreach ($keys as $key) {
+				$responseJSON[$section][$key] = $data[$key] ?? ($key === 'message' ? "Operation successful" : "");
+			}
+		}
+
+		return json_encode($responseJSON);
+	}
 }
