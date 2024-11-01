@@ -11,7 +11,7 @@ class BmtApiGetAllBookShelf: AbstractAPIHandler() {
 		return BmtApiRequestCreatorFactory().APIRequestCreator_GetAllBookShelf()
 	}
 
-	override fun SendRequest(request: i_ApiRequestCreator): ApiResponse {
+	override suspend fun SendRequest(request: i_ApiRequestCreator):ApiResponse{
 		return ApiRequestSender().SendRequest(request)
 	}
 

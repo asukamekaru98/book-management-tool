@@ -18,7 +18,7 @@ class BookManagementToolAPIManager {
 	 * 本棚の情報を全て取得する
 	 * @return AbstractAPIHandler
 	 */
-	fun GetAllBookShelf():ApiResponse
+	suspend fun GetAllBookShelf():ApiResponse
 	{
 		BmtApiGetAllBookShelf().Execute()
 		return BmtApiGetAllBookShelf().GetResponseResult()

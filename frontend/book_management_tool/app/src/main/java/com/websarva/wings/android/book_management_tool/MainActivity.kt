@@ -3,6 +3,8 @@ package com.websarva.wings.android.book_management_tool
 //import com.webserva.wings.android.sending_json_over_http_sample.ui.theme.SendingJSONOverHTTP_SampleTheme
 
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Note
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -29,6 +31,8 @@ import com.websarva.wings.android.book_management_tool.flagment.fragmentWishlist
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.IOException
@@ -79,10 +83,10 @@ class MainActivity : AppCompatActivity() {
 		setContentView(binding.root)
 		replaceFragment(fragmentBookshelf())
 
-		val apiManager = BookManagementToolAPIManager()
-		val apiResponse:ApiResponse = apiManager.GetAllBookShelf()
-
-		Toast.makeText(this,apiResponse.body,Toast.LENGTH_SHORT).show()
+		// APIリクエストの送信
+		CoroutineScope(Dispatchers.Main).launch {
+			GetAPI()
+		}
 
 		//val reqCreator = bmtApiRequestCreatorFactory::APIRequestCreator_AddOneBookShelf
 
@@ -200,6 +204,18 @@ class MainActivity : AppCompatActivity() {
 */
 	}
 
+	suspend fun GetAPI(){
+		val apiManager = BookManagementToolAPIManager()
+		val apiResponse:ApiResponse = withContext(Dispatchers.IO) {
+			apiManager.GetAllBookShelf()
+
+		}
+		Log.d("BookMgmtTool body2", apiResponse.json.toString())
+		Log.d("BookMgmtTool code2", apiResponse.code.toString())
+
+		Toast.makeText(this,apiResponse.json.toString(),Toast.LENGTH_SHORT).show()
+	}
+
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
 		getMenuInflater().inflate(R.menu.menu_header,menu)
 		return true
@@ -229,108 +245,4 @@ class MainActivity : AppCompatActivity() {
 		fragmentTransaction.replace(R.id.frame_layout,fragment)
 		fragmentTransaction.commit()
 	}
-
-	/*
-	private fun sendJsonData(httpMethod:String,  urlString: String, jsonData: String) {
-		CoroutineScope(Dispatchers.IO).launch {
-			try {
-				val url = URL(urlString)
-				val connection = url.openConnection() as HttpURLConnection
-				connection.requestMethod = httpMethod
-				connection.doOutput = true
-				connection.setRequestProperty("Content-Type", "application/json; utf-8")
-				connection.setRequestProperty("Accept", "application/json")
-
-				// JSONデータを送信
-				OutputStreamWriter(connection.outputStream).use { it.write(jsonData) }
-
-				val responseCode = connection.responseCode
-				val responseMessage = connection.responseMessage
-
-				// UIスレッドでトーストを表示
-				runOnUiThread {
-					Toast.makeText(
-						this@MainActivity,
-						"Response: $responseCode - $responseMessage",
-						Toast.LENGTH_LONG
-					).show()
-				}
-
-				connection.disconnect()
-
-			} catch (e: Exception) {
-				// エラーが発生した場合もトーストを表示
-				runOnUiThread {
-					Toast.makeText(this@MainActivity, "Error: ${e.message} ~~~", Toast.LENGTH_LONG)
-						.show()
-				}
-			}
-		}
-	}
-*/
-
-	private fun accessUrl(httpMethod: String, urlString: String,jsonTV: TextView) {
-		CoroutineScope(Dispatchers.IO).launch {
-			try {
-				val url = URL(urlString)
-				val connection = url.openConnection() as HttpURLConnection
-				connection.doOutput = false
-				connection.doInput = true
-				connection.readTimeout = 0
-				connection.connectTimeout = 0
-				connection.requestMethod = httpMethod
-
-				connection.connect()
-
-				val responseCode = connection.responseCode
-				val responseMessage = connection.responseMessage
-
-				// レスポンスデータの読み込み
-				//val str = connection.inputStream.bufferedReader(Charsets.UTF_8).use { br ->
-				//	br.readLines().joinToString("")
-				//}
-
-				val response = BufferedReader(InputStreamReader(connection.inputStream)).use {
-					it.readText()
-				}
-
-
-				// UIスレッドでレスポンスをトーストで表示
-				/*runOnUiThread {
-					Toast.makeText(
-						this@MainActivity,
-						"GET Response: $responseCode - $responseMessage\n$response",
-						//"GET Response: $str",
-						Toast.LENGTH_LONG
-					).show()
-				}
-				 */
-
-				runOnUiThread {
-					jsonTV.text = "Response: $responseCode - $responseMessage\n$response"
-				}
-
-				/*
-				runOnUiThread {
-					Toast.makeText(
-						this@MainActivity,
-						"GET Response: $responseCode - $responseMessage",
-						//"GET Response: $str",
-						Toast.LENGTH_LONG
-					).show()
-				}
-				*/
-
-				connection.disconnect()
-
-			} catch (e: Exception) {
-				// エラーが発生した場合もトーストを表示
-				runOnUiThread {
-					Toast.makeText(this@MainActivity, "Error: ${e.message} ", Toast.LENGTH_LONG)
-						.show()
-				}
-			}
-		}
-	}
-
 }

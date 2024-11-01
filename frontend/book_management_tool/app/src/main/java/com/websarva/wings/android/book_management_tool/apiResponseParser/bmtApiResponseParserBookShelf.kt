@@ -11,9 +11,13 @@ class bmtApiResponseParserBookShelf : i_ApiResponseParser {
 	override fun ParseResponse(apiResponse: ApiResponse) {
 		// 本棚のAPIレスポンスを解析
 
-		Log.d("AndroidRuntime2", apiResponse.getResponseBody())
+		Log.d("AndroidRuntime2", apiResponse.getJSONObject().toString())
 
-		val apiBody = JSONObject(apiResponse.getResponseBody())
+		//val responseBody = apiResponse.getResponseBody()
+		//Log.d("ResponseBody", responseBody) // デバッグログを追加
+
+		val apiBody = apiResponse.getJSONObject()
+
 
 		val bookList: MutableList<BookInfo> = mutableListOf()
 

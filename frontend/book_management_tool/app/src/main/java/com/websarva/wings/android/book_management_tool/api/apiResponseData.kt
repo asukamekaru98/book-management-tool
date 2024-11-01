@@ -1,9 +1,11 @@
 package com.websarva.wings.android.book_management_tool.api
 
-data class ApiResponse(var body:String, var code:Int) {
+import org.json.JSONObject
 
-	fun getResponseBody(): String {
-		return body
+data class ApiResponse(var json:JSONObject, var code:Int) {
+
+	fun getJSONObject(): JSONObject {
+		return json
 	}
 
 	fun getResponseCode(): Int {

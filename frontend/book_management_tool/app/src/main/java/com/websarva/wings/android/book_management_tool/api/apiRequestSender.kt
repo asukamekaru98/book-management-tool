@@ -6,18 +6,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.json.JSONArray
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
 class ApiRequestSender {
 
-	var apiResponse: ApiResponse = ApiResponse("{ \"message\": { \"message\": \"error\"}}", 200)
-
-	fun SendRequest(request: i_ApiRequestCreator): ApiResponse {
+	suspend fun SendRequest(request: i_ApiRequestCreator):ApiResponse {
 		request.CreateRequest()
 		val method = request.GetMethod()
 		val uri = request.GetURI()
@@ -31,63 +29,66 @@ class ApiRequestSender {
 			"Invalid URI"
 		}
 
-		if (body.isEmpty()) {
-			accessAPI(method, uri, listOf("{ \"color\": \"green\", \"kana\": \"みどり\", \"code\": { \"rgba\": [0,255,0,1], \"hex\": \"#0F0\" } }"))
-		} else {
-			accessAPI(method, uri, body)
-		}
-		println("f")
-		return apiResponse
+		//runBlocking{
+		//CoroutineScope(Dispatchers.IO).launch {
+		return if (body.isEmpty()) {
+				accessAPI(
+					method,
+					uri,
+					listOf("{ \"color\": \"green\", \"kana\": \"みどり\", \"code\": { \"rgba\": [0,255,0,1], \"hex\": \"#0F0\" } }")
+				)
+			} else {
+				accessAPI(method, uri, body)
+			}
+		//}
+
 	}
 
-	private fun accessAPI(
+	private suspend fun accessAPI(
 		methodStr: String,
 		uriStr: String,
 		body: List<String>
-	) {
+	):ApiResponse {
+
+		val apiResponse: ApiResponse = ApiResponse(JSONObject("{message:{message:error}}"), 0)
 
 		//Todo: ロード中のアニメーションを表示する
 
-		CoroutineScope(Dispatchers.IO).launch {
+		withContext(Dispatchers.IO) {
+		//CoroutineScope(Dispatchers.IO).launch {
 		//runBlocking {
 			try {
-				println("hogehoge method: $methodStr")
-				println("hogehoge uri: $uriStr")
+				Log.d("BookMgmtTool Access Method", methodStr)
+				Log.d("BookMgmtTool Access URI", uriStr)
 
-				val url = URL(uriStr)
-				val connection = url.openConnection() as HttpURLConnection
+				val uri = URL(uriStr)
+				val connection = uri.openConnection() as HttpURLConnection
 				connection.doOutput = false
 				connection.doInput = true
 				connection.readTimeout = 0
 				connection.connectTimeout = 0
 				connection.requestMethod = methodStr
 
-				println("hogehoge before connection")
-
 				connection.connect()
 
-				println("hogehoge after connection")
-
 				apiResponse.code = connection.responseCode
-
-				println("hogehoge uri: $apiResponse ")
-
-				apiResponse.body = BufferedReader(InputStreamReader(connection.inputStream)).use {
+				val responseBody = BufferedReader(InputStreamReader(connection.inputStream)).use {
 					it.readText()
 				}
-				//OutputStreamWriter(connection.outputStream).use {
-				//	it.write(body.joinToString(""))
-				//}
 
-				println("hogehoge after body")
+				apiResponse.json = JSONObject(responseBody)
+
+				Log.d("BookMgmtTool API Get Code", apiResponse.code.toString())
+				Log.d("BookMgmtTool API Get Body", apiResponse.json.toString())
 
 				connection.disconnect() // 切断
-				//apiResponse.body = connection.responseMessage
-				//apiResponse.code = connection.responseCode
+
 			} catch (e: Exception) {
-				Log.d("hogehoge Error", e.toString())
+				Log.d("BookMgmtTool Exc Error", e.toString())
 				//throw Exception("Error:")
 			}
 		}
+
+		return apiResponse
 	}
 }

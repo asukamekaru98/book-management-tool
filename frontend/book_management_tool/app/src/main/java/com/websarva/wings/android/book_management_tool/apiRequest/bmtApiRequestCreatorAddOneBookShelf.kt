@@ -11,8 +11,7 @@ class BmtApiRequestCreatorAddOneBookShelf() : i_ApiRequestCreator {
 
 
 	override fun CreateRequest() {
-		val uriCreator = ApiUriCreator("http://192.168.1.64/v1/book-shelf/")
-		uriCreator.SetQueryParameter("")
+		val uriCreator = ApiUriCreator("http://192.168.1.64/v1/book-shelf")
 		uri = uriCreator.GetURI()
 	}
 
