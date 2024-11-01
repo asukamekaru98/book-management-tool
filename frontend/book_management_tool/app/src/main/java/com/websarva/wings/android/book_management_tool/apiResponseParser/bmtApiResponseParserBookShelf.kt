@@ -11,8 +11,6 @@ class bmtApiResponseParserBookShelf : i_ApiResponseParser {
 	override fun ParseResponse(apiResponse: ApiResponse) {
 		// 本棚のAPIレスポンスを解析
 
-		Log.d("AndroidRuntime2", apiResponse.getJSONObject().toString())
-
 		//val responseBody = apiResponse.getResponseBody()
 		//Log.d("ResponseBody", responseBody) // デバッグログを追加
 

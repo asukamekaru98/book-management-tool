@@ -41,8 +41,11 @@ class ApiRequestSender {
 				method, uri, body
 			)
 		}
-		return ApiResponse(JSONObject("{}"), 0)
+
 	}
+
+	//Todo: ここでAPIの解析までする必要はないので、APIの解析はAPIResponseParserで行う
+	//ここで返す値は、APIのレスポンスコードとレスポンスボディのみ。JSONに変換するのはAPIResponseParserで行う
 
 	private suspend fun accessAPI(
 		methodStr: String,
@@ -51,7 +54,7 @@ class ApiRequestSender {
 	): ApiResponse {
 
 		var code : Int
-		var json : Any // JSONObject or JSONArray
+		var json = JSONObject()
 
 
 		withContext(Dispatchers.IO) {
@@ -69,6 +72,7 @@ class ApiRequestSender {
 				connection.connect()
 
 				code = connection.responseCode
+				Log.d("BookMgmtTool API Get Code", code.toString())
 
 				val responseBody =
 					BufferedReader(InputStreamReader(connection.inputStream, "UTF-8")).use {
@@ -77,17 +81,17 @@ class ApiRequestSender {
 
 				Log.d("BookMgmtTool API Raw Response", responseBody)
 
-				json = if (responseBody.startsWith("\"[")) {
+				if (responseBody.startsWith("[")) {
 					//NOTE: [ で始まる場合はJSONArray
-					JSONArray(responseBody)
-				} else {
+					val jsonArray = JSONArray(responseBody)
+					json = JSONObject().put("data", jsonArray)
+
+
+				} else if(responseBody.startsWith("{")) {
 					//NOTE: { で始まる場合はJSONObject
-					JSONObject(responseBody)
+					json = JSONObject(responseBody)
 				}
-
-
-				Log.d("BookMgmtTool API Get Code", code.toString())
-				Log.d("BookMgmtTool API Get Body", json.toString())
+				Log.d("BookMgmtTool API Get JSON", json.toString())
 
 				connection.disconnect()
 
@@ -95,6 +99,7 @@ class ApiRequestSender {
 				Log.d("BookMgmtTool Exc Error", e.toString())
 
 				json = JSONObject("{\"message\":{\"message\":\"${e.message}\"}}")
+
 				code = HttpURLConnection.HTTP_INTERNAL_ERROR
 
 			}

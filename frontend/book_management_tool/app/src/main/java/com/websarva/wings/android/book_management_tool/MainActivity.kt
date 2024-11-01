@@ -210,8 +210,6 @@ class MainActivity : AppCompatActivity() {
 			apiManager.GetAllBookShelf()
 
 		}
-		Log.d("BookMgmtTool body2", apiResponse.json.toString())
-		Log.d("BookMgmtTool code2", apiResponse.code.toString())
 
 		Toast.makeText(this,apiResponse.json.toString(),Toast.LENGTH_SHORT).show()
 	}
