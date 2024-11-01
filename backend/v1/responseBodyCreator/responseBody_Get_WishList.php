@@ -23,7 +23,7 @@ class RespBodyCre8erGetWishList extends RespBodyCre8er implements I_ResponseBody
 			'message' => ['message']
 		];
 
-		return $this->CreateJSON($templatePath, $data, $fields);
+		return $this->generateJsonResponse($templatePath, $data, $fields);
 	}
 
 

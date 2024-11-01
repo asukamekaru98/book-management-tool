@@ -24,7 +24,7 @@ class RespBodyCre8erGetReadHistories extends RespBodyCre8er implements I_Respons
 			'message' => ['message']
 		];
 
-		return $this->CreateJSON($templatePath, $data, $fields);
+		return $this->generateJsonResponse($templatePath, $data, $fields);
 	}
 
 	// override
