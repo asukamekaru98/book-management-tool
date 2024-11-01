@@ -33,15 +33,15 @@ class Sql_Insert_BookInfo extends SqlQueryBuilder_BookManagementTool
 		$accessOpenDBAPI->AccessAPI();
 		$openDBApiResponse = $accessOpenDBAPI->GetApiResponseBody();
 
-		$isbn = $openDBApiResponse['isbn'] ?? '';
-		$title = $openDBApiResponse['title'] ?? '';
-		$sub_title = $openDBApiResponse['sub_title'] ?? '';
-		$author = $openDBApiResponse['author'] ?? '';
-		$description = $openDBApiResponse['description'] ?? '';
-		$page = $openDBApiResponse['page'] ?? '';
-		$image_url = $openDBApiResponse['image_url'] ?? '';
-		$published_date = $openDBApiResponse['published_date'] ?? '';
-		$content = $openDBApiResponse['content'] ?? '';
+		$isbn = is_array($openDBApiResponse['isbn']) ? json_encode($openDBApiResponse['isbn']) : ($openDBApiResponse['isbn'] ?? '');
+		$title = is_array($openDBApiResponse['title']) ? json_encode($openDBApiResponse['title']) : ($openDBApiResponse['title'] ?? '');
+		$sub_title = is_array($openDBApiResponse['sub_title']) ? json_encode($openDBApiResponse['sub_title']) : ($openDBApiResponse['sub_title'] ?? '');
+		$author = is_array($openDBApiResponse['author']) ? json_encode($openDBApiResponse['author']) : ($openDBApiResponse['author'] ?? '');
+		$description = is_array($openDBApiResponse['description']) ? json_encode($openDBApiResponse['description']) : ($openDBApiResponse['description'] ?? '');
+		$page = is_array($openDBApiResponse['page']) ? json_encode($openDBApiResponse['page']) : ($openDBApiResponse['page'] ?? '');
+		$image_url = is_array($openDBApiResponse['image_url']) ? json_encode($openDBApiResponse['image_url']) : ($openDBApiResponse['image_url'] ?? '');
+		$published_date = is_array($openDBApiResponse['published_date']) ? json_encode($openDBApiResponse['published_date']) : ($openDBApiResponse['published_date'] ?? '');
+		$content = is_array($openDBApiResponse['content']) ? json_encode($openDBApiResponse['content']) : ($openDBApiResponse['content'] ?? '');
 
 
 		$this->sqlQuery = <<< "EOD"

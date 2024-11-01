@@ -38,7 +38,7 @@ class RespBodyCre8erGetReadHistories extends RespBodyCre8er implements I_Respons
 		$responseJSON['read_histories']['memo'] = $data['memo'] ?? "";
 		$responseJSON['read_histories']['understanding'] = $data['understanding'] ?? "";
 
-		$responseJSON['message'] = $data['message'] ?? "Correct";
+		$responseJSON['message']['message'] = $data['message'] ?? "Correct";
 
 		return json_encode($responseJSON);
 	}
@@ -47,7 +47,7 @@ class RespBodyCre8erGetReadHistories extends RespBodyCre8er implements I_Respons
 	public function CreateResponseBody_XML(array $data): string
 	{
 		// XML形式のレスポンスボディは未実装
-		$responseXML['message'] = "XML is not supported";
+		$responseXML['message']['message'] = "XML is not supported";
 
 		return xmlrpc_encode($responseXML);
 	}

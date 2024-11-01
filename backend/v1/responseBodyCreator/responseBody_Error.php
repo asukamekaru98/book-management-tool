@@ -14,7 +14,7 @@ class RespBodyCre8erError extends RespBodyCre8er implements I_ResponseBodyCreato
 	// override
 	public function CreateResponseBody_JSON(array $data): string
 	{
-		$responseJSON['message'] = $data['message'] ?? "Error";
+		$responseJSON['message']['message'] = $data['message'] ?? "Error";
 
 		return json_encode($responseJSON);
 	}
@@ -22,7 +22,7 @@ class RespBodyCre8erError extends RespBodyCre8er implements I_ResponseBodyCreato
 	// override
 	public function CreateResponseBody_XML(array $data): string
 	{
-		$responseXML['message'] = $data['message'] ?? "Error";
+		$responseXML['message']['message'] = $data['message'] ?? "Error";
 
 		return xmlrpc_encode($responseXML);
 	}

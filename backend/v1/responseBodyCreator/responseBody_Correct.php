@@ -14,21 +14,21 @@ class RespBodyCre8erCorrect extends RespBodyCre8er implements I_ResponseBodyCrea
 	public function CreateResponseBody(array $data): string
 	{
 		//$responseJSON = json_decode(file_get_contents('../json_template/getRequestResponseBody.json'), true);
-		$responseJSON['message'] = 'Correct';
+		$responseJSON['message']['message'] = 'Correct';
 
 		return json_encode($responseJSON);
 	}
 
 	public function CreateResponseBody_JSON(array $data): string
 	{
-		$responseJSON['message'] = 'Correct';
+		$responseJSON['message']['message'] = 'Correct';
 
 		return json_encode($responseJSON);
 	}
 
 	public function CreateResponseBody_XML(array $data): string
 	{
-		$responseXML['message'] = 'Correct';
+		$responseXML['message']['message'] = 'Correct';
 
 		return xmlrpc_encode($responseXML);
 	}

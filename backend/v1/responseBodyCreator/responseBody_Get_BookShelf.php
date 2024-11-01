@@ -14,28 +14,21 @@ class RespBodyCre8erGetBookShelf extends RespBodyCre8er implements I_ResponseBod
 	// override
 	public function CreateResponseBody_JSON(array $data): string
 	{
-		$responseJSON = json_decode(file_get_contents(__DIR__ . '/../json_template/getBookShelfRespBody.json'), true);
+		$templatePath = __DIR__ . '/../json_template/getBookShelfRespBody.json';
+		$responseJSON = json_decode(file_get_contents($templatePath), true);
 
-		$responseJSON['bookinfo']['isbn'] = $data['isbn'] ?? "";
-		$responseJSON['bookinfo']['title'] = $data['title'] ?? "";
-		$responseJSON['bookinfo']['sub_title'] = $data['title'] ?? "";
-		$responseJSON['bookinfo']['author'] = $data['author'] ?? "";
-		$responseJSON['bookinfo']['description'] = $data['description'] ?? "";
-		$responseJSON['bookinfo']['image_url'] = $data['image_url'] ?? "";
-		$responseJSON['bookinfo']['published_date'] = $data['published_date'] ?? "";
-		$responseJSON['bookinfo']['content'] = $data['content'] ?? "";
+		$fields = [
+			'bookinfo' => ['isbn', 'title', 'sub_title', 'author', 'description', 'image_url', 'published_date', 'content'],
+			'userinfo' => ['industry_important', 'work_important', 'user_important', 'priority', 'purchased_flag', 'viewed_flag'],
+			'book_shelf' => ['purchased', 'memo'],
+			'message' => ['message']
+		];
 
-		$responseJSON['userinfo']['industry_important'] = $data['industry_important'] ?? "";
-		$responseJSON['userinfo']['work_important'] = $data['work_important'] ?? "";
-		$responseJSON['userinfo']['user_important'] = $data['user_important'] ?? "";
-		$responseJSON['userinfo']['priority'] = $data['priority'] ?? "";
-		$responseJSON['userinfo']['purchased_flag'] = $data['purchased_flag'] ?? "";
-		$responseJSON['userinfo']['viewed_flag'] = $data['viewed_flag'] ?? "";
-
-		$responseJSON['book_shelf']['purchased'] = $data['purchased'] ?? "";
-		$responseJSON['book_shelf']['memo'] = $data['memo'] ?? "";
-
-		$responseJSON['message'] = $data['message'] ?? "Correct";
+		foreach ($fields as $section => $keys) {
+			foreach ($keys as $key) {
+				$responseJSON[$section][$key] = $data[$key] ?? ($key === 'message' ? "Operation successful" : "");
+			}
+		}
 
 		return json_encode($responseJSON);
 	}

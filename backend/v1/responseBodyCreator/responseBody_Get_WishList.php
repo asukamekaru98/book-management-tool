@@ -43,7 +43,7 @@ class RespBodyCre8erGetWishList extends RespBodyCre8er implements I_ResponseBody
 	public function CreateResponseBody_XML(array $data): string
 	{
 		// XML形式のレスポンスボディは未実装
-		$responseXML['message'] = "XML is not supported";
+		$responseXML['message']['message'] = "XML is not supported";
 
 		return xmlrpc_encode($responseXML);
 	}
