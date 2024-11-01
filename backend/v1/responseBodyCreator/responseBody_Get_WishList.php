@@ -14,7 +14,6 @@ class RespBodyCre8erGetWishList extends RespBodyCre8er implements I_ResponseBody
 	// override
 	public function CreateResponseBody_JSON(array $data): string
 	{
-
 		$templatePath = __DIR__ . '/../json_template/getBookShelfRespBody.json';
 
 		$fields = [
