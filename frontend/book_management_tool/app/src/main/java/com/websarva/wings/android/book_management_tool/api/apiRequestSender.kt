@@ -1,12 +1,15 @@
 package com.websarva.wings.android.book_management_tool.api
 
 import android.util.Log
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import com.websarva.wings.android.book_management_tool.i_f.i_ApiRequestCreator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -15,7 +18,7 @@ import java.net.URL
 
 class ApiRequestSender {
 
-	suspend fun SendRequest(request: i_ApiRequestCreator):ApiResponse {
+	suspend fun SendRequest(request: i_ApiRequestCreator): ApiResponse {
 		request.CreateRequest()
 		val method = request.GetMethod()
 		val uri = request.GetURI()
@@ -29,34 +32,29 @@ class ApiRequestSender {
 			"Invalid URI"
 		}
 
-		//runBlocking{
-		//CoroutineScope(Dispatchers.IO).launch {
 		return if (body.isEmpty()) {
-				accessAPI(
-					method,
-					uri,
-					listOf("{ \"color\": \"green\", \"kana\": \"みどり\", \"code\": { \"rgba\": [0,255,0,1], \"hex\": \"#0F0\" } }")
-				)
-			} else {
-				accessAPI(method, uri, body)
-			}
-		//}
-
+			accessAPI(
+				method, uri, listOf("{none}")
+			)
+		} else {
+			accessAPI(
+				method, uri, body
+			)
+		}
+		return ApiResponse(JSONObject("{}"), 0)
 	}
 
 	private suspend fun accessAPI(
 		methodStr: String,
 		uriStr: String,
 		body: List<String>
-	):ApiResponse {
+	): ApiResponse {
 
-		val apiResponse: ApiResponse = ApiResponse(JSONObject("{message:{message:error}}"), 0)
+		var code : Int
+		var json : Any // JSONObject or JSONArray
 
-		//Todo: ロード中のアニメーションを表示する
 
 		withContext(Dispatchers.IO) {
-		//CoroutineScope(Dispatchers.IO).launch {
-		//runBlocking {
 			try {
 				Log.d("BookMgmtTool Access Method", methodStr)
 				Log.d("BookMgmtTool Access URI", uriStr)
@@ -68,27 +66,40 @@ class ApiRequestSender {
 				connection.readTimeout = 0
 				connection.connectTimeout = 0
 				connection.requestMethod = methodStr
-
 				connection.connect()
 
-				apiResponse.code = connection.responseCode
-				val responseBody = BufferedReader(InputStreamReader(connection.inputStream)).use {
-					it.readText()
+				code = connection.responseCode
+
+				val responseBody =
+					BufferedReader(InputStreamReader(connection.inputStream, "UTF-8")).use {
+						it.readText()
+					}
+
+				Log.d("BookMgmtTool API Raw Response", responseBody)
+
+				json = if (responseBody.startsWith("\"[")) {
+					//NOTE: [ で始まる場合はJSONArray
+					JSONArray(responseBody)
+				} else {
+					//NOTE: { で始まる場合はJSONObject
+					JSONObject(responseBody)
 				}
 
-				apiResponse.json = JSONObject(responseBody)
 
-				Log.d("BookMgmtTool API Get Code", apiResponse.code.toString())
-				Log.d("BookMgmtTool API Get Body", apiResponse.json.toString())
+				Log.d("BookMgmtTool API Get Code", code.toString())
+				Log.d("BookMgmtTool API Get Body", json.toString())
 
-				connection.disconnect() // 切断
+				connection.disconnect()
 
 			} catch (e: Exception) {
 				Log.d("BookMgmtTool Exc Error", e.toString())
-				//throw Exception("Error:")
+
+				json = JSONObject("{\"message\":{\"message\":\"${e.message}\"}}")
+				code = HttpURLConnection.HTTP_INTERNAL_ERROR
+
 			}
 		}
 
-		return apiResponse
+		return ApiResponse(json, code)
 	}
 }

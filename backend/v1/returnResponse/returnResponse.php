@@ -14,7 +14,9 @@ class ReturnResponse implements I_ReturnResponse
 	public function __construct(I_ResponseCreator $responseCreator)
 	{
 		http_response_code($responseCreator->GetResponseCode());
-		echo json_encode($responseCreator->GetResponseBody());
+
+		header('Content-Type: application/json');
+		echo $responseCreator->GetResponseBody();
 	}
 
 	public static function returnHttpResponse(

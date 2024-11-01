@@ -20,8 +20,7 @@ class RespBodyCre8erGetReadHistories extends RespBodyCre8er implements I_Respons
 		$fields = [
 			'bookinfo' => ['isbn', 'title', 'sub_title', 'author', 'description', 'image_url', 'published_date', 'content'],
 			'userinfo' => ['industry_important', 'work_important', 'user_important', 'priority', 'purchased_flag', 'viewed_flag'],
-			'read_histories' => ['view_start', 'view_end', "impression", "memo", "understanding"],
-			'message' => ['message']
+			'read_histories' => ['view_start', 'view_end', "impression", "memo", "understanding"]
 		];
 
 		return $this->generateJsonResponse($templatePath, $data, $fields);

@@ -49,24 +49,44 @@ class RespBodyCre8er implements I_ResponseBodyCreator
 
 		$JSON = json_decode(json: $fileContents, associative: true);
 
+		$mergedResponseJSON = [];
 
 		for ($idx = 0; !empty($data[$idx]); $idx++) {
 			foreach ($fields as $section => $keys) {
 				foreach ($keys as $key) {
-					$JSON[$section][$key] = $data[$idx][$key] ?? ($key === 'message' ? "Operation successful" : "");
+
+					if (empty($data[$idx][$key])) {
+						$str = "none";
+					} else {
+						$str = $data[$idx][$key];
+					}
+
+					$JSON[$section][$key] = $str;
+
+					//print_r($JSON[$section][$key]);
+					//print("<br>");
 				}
-				$responseJSON[] = $JSON;
 			}
+			$responseJSON[] = $JSON;
+			//$mergedResponseJSON[] = array_merge($JSON, $mergedResponseJSON);
 		}
 
-		$mergedResponseJSON = [];
+		//print_r($responseJSON);
+		//print("<br>");
 
-		foreach ($responseJSON as $json) {
-			$mergedResponseJSON = array_merge($mergedResponseJSON, $json);
-		}
+		//$mergedResponseJSON = [];
 
-		$mergedResponseJSON = array_merge($mergedResponseJSON, array('message' => 'Operation successful'));
+		//foreach ($responseJSON as $json) {
 
-		return json_encode($mergedResponseJSON);
+		//	print_r($json);
+		//	print("<br>");
+
+		//	$mergedResponseJSON = array_merge($mergedResponseJSON, $json);
+		//}
+
+		$responseJSON[] = array('message' => 'Operation successful');
+
+
+		return json_encode($responseJSON);
 	}
 }
