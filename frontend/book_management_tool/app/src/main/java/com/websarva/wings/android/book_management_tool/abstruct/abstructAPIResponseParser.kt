@@ -6,14 +6,14 @@ import com.websarva.wings.android.book_management_tool.i_f.i_ApiResponseParser
 import org.json.JSONArray
 import org.json.JSONObject
 
-abstract class abstructAPIResponseParser :i_ApiResponseParser{
+abstract class abstructAPIResponseParser<T> :i_ApiResponseParser{
 
 	protected var jsonObject: JSONObject = JSONObject("{\"message\":{\"message\":\"JSONObject is not support\"}}")
 	protected var jsonArray: JSONArray = JSONArray("[{\"message\":\"JSONArray is not support\"}]")
 
-	abstract override fun ParseResponse(apiResponse: ApiResponse)
+	abstract override fun parseResponse(apiResponse: ApiResponse)
 
-	protected fun parseBody(body: String): MutableList<BookInfo>{
+	protected fun parseBody(body: String): MutableList<T>{
 
 		if (body.startsWith("[")) {
 			//NOTE: [ で始まる場合はJSONArray
@@ -28,11 +28,11 @@ abstract class abstructAPIResponseParser :i_ApiResponseParser{
 			return this.parseJSONObject()
 		}else{
 
-			return this.getTemplateList()
+			return getTemplateList()
 		}
 	}
 
-	abstract fun parseJSONObject(): MutableList<BookInfo>
-	abstract fun parseJSONArray(): MutableList<BookInfo>
-	abstract fun getTemplateList():MutableList<BookInfo>
+	abstract fun parseJSONObject(): MutableList<T>
+	abstract fun parseJSONArray(): MutableList<T>
+	abstract fun getTemplateList():MutableList<T>
 }

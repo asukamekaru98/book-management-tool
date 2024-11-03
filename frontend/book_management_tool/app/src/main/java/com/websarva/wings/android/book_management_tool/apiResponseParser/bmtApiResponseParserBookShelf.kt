@@ -9,16 +9,16 @@ import com.websarva.wings.android.book_management_tool.i_f.i_ApiResponseParser
 import org.json.JSONArray
 import org.json.JSONObject
 
-class bmtApiResponseParserBookShelf : abstructAPIResponseParser() {
+class bmtApiResponseParserBookShelf<T> : abstructAPIResponseParser<T>() {
 
 
-	override fun ParseResponse(apiResponse: ApiResponse) {
+	override fun parseResponse(apiResponse: ApiResponse) {
 		// 本棚のAPIレスポンスを解析
 
 		//val responseBody = apiResponse.getResponseBody()
 		//Log.d("ResponseBody", responseBody) // デバッグログを追加
 
-		parseBody(apiResponse.body)
+		apiBody = parseBody(apiResponse.body)
 
 
 		// 本棚のAPIレスポンスを解析
@@ -36,9 +36,9 @@ class bmtApiResponseParserBookShelf : abstructAPIResponseParser() {
 
 	}
 
-	override fun parseJSONObject(): MutableList<BookInfo> {
+	override fun parseJSONObject(): MutableList<T> {
 
-		val bookList: MutableList<BookInfo> = mutableListOf()
+
 
 		if (this.jsonObject.has("bookList")) {
 
@@ -82,10 +82,10 @@ class bmtApiResponseParserBookShelf : abstructAPIResponseParser() {
 				}
 			}
 		}
-		return bookList
+		return bookList as MutableList<T>
 	}
 
-	override fun parseJSONArray(): MutableList<BookInfo> {
+	override fun parseJSONArray(): MutableList<T> {
 		val bookList: MutableList<BookInfo> = mutableListOf()
 
 		for (i in 0 until this.jsonArray.length()) {
@@ -126,12 +126,10 @@ class bmtApiResponseParserBookShelf : abstructAPIResponseParser() {
 			)
 			bookList.add(book)
 		}
-		return bookList
+		return bookList as MutableList<T>
 	}
 
-	override fun getTemplateList(): MutableList<BookInfo> {
-		val bookList: MutableList<BookInfo> = mutableListOf()
-
-		return bookList
+	override fun getTemplateList(): MutableList<T> {
+		return mutableListOf<BookInfo>() as MutableList<T>
 	}
 }
