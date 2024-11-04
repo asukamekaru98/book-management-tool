@@ -18,7 +18,7 @@ class bmtApiResponseParserBookShelf<T> : abstructAPIResponseParser<T>() {
 		//val responseBody = apiResponse.getResponseBody()
 		//Log.d("ResponseBody", responseBody) // デバッグログを追加
 
-		apiBody = parseBody(apiResponse.body)
+		val apiBody: MutableList<T> = parseBody(apiResponse.body)
 
 
 		// 本棚のAPIレスポンスを解析
@@ -30,7 +30,7 @@ class bmtApiResponseParserBookShelf<T> : abstructAPIResponseParser<T>() {
 			} else {
 				""
 			},
-			bookList = bookList
+			bookList = apiBody
 		)
 
 
@@ -38,7 +38,7 @@ class bmtApiResponseParserBookShelf<T> : abstructAPIResponseParser<T>() {
 
 	override fun parseJSONObject(): MutableList<T> {
 
-
+		val bookList: MutableList<BookInfo> = mutableListOf()
 
 		if (this.jsonObject.has("bookList")) {
 
@@ -86,6 +86,7 @@ class bmtApiResponseParserBookShelf<T> : abstructAPIResponseParser<T>() {
 	}
 
 	override fun parseJSONArray(): MutableList<T> {
+
 		val bookList: MutableList<BookInfo> = mutableListOf()
 
 		for (i in 0 until this.jsonArray.length()) {
