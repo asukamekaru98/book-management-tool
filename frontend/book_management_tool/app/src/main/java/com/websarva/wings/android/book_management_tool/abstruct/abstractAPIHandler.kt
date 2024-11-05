@@ -1,6 +1,7 @@
 package com.websarva.wings.android.book_management_tool.abstruct
 
 import com.websarva.wings.android.book_management_tool.api.ApiResponse
+import com.websarva.wings.android.book_management_tool.constants.BookInfo
 import com.websarva.wings.android.book_management_tool.i_f.i_ApiRequestCreator
 import com.websarva.wings.android.book_management_tool.i_f.i_ApiResponseParser
 import org.json.JSONObject
@@ -11,19 +12,15 @@ import org.json.JSONObject
  */
 abstract class AbstractAPIHandler
 {
-	protected var responseJSON : JSONObject = JSONObject("{}")
+	protected var responseJSON : MutableList<BookInfo> = mutableListOf()
 	protected var responseCode : Int = 0
 
 	suspend fun Execute() {
 		val request = CreateRequest()
 
 		val response = SendRequest(request)
-		println(response)
-		ParseResponse(response)
-	}
 
-	fun GetResponseResult(): ApiResponse {
-		return ApiResponse(responseJSON,responseCode)
+		ParseResponse(response)
 	}
 
 	/**
@@ -46,5 +43,9 @@ abstract class AbstractAPIHandler
 	 */
 	protected abstract fun ParseResponse(response:ApiResponse)
 
-
+	/**
+	 * レスポンス結果を取得する
+	 * @return Any
+	 */
+	protected abstract fun GetResponseResult():Any
 }

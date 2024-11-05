@@ -206,12 +206,20 @@ class MainActivity : AppCompatActivity() {
 
 	suspend fun GetAPI(){
 		val apiManager = BookManagementToolAPIManager()
-		val apiResponse:ApiResponse = withContext(Dispatchers.IO) {
-			apiManager.GetAllBookShelf()
+		val apiResponse:ApiResponse
 
+		//Todo: HTTPレスポンスコードが不正な場合は例外をスローする
+
+		try{
+			val apiResponse:ApiResponse = withContext(Dispatchers.IO) {
+				apiManager.GetAllBookShelf()
+			}
+
+			Toast.makeText(this,apiResponse.body.toString(),Toast.LENGTH_SHORT).show()
+
+		}catch(e:Exception){
+			Log.e("Error",e.toString(),e.)
 		}
-
-		Toast.makeText(this,apiResponse.body.toString(),Toast.LENGTH_SHORT).show()
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -74,8 +74,8 @@ data class BookInfo(
 	var wishList_memo: String = ""                    // メモ
 )
 
-data class BookManagementToolApiData<T>(
-    var responseCode: Int = 0,                        		// レスポンスコード
-    var message: String = "",                         		// メッセージ
-    var bookList: MutableList<T> = mutableListOf()	// 書籍リスト
+data class BookManagementToolApiData(
+	var responseCode: Int = 0,                        		// レスポンスコード
+	var message: String = "",                         		// メッセージ
+	var bookList: MutableList<BookInfo> = mutableListOf()	// 書籍リスト
 )

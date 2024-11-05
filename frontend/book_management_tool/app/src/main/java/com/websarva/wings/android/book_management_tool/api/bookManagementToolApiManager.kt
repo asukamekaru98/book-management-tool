@@ -1,6 +1,7 @@
 package com.websarva.wings.android.book_management_tool.api
 
 import com.websarva.wings.android.book_management_tool.abstruct.AbstractAPIHandler
+import com.websarva.wings.android.book_management_tool.constants.BookInfo
 
 class BookManagementToolAPIManager {
 
@@ -18,7 +19,7 @@ class BookManagementToolAPIManager {
 	 * 本棚の情報を全て取得する
 	 * @return AbstractAPIHandler
 	 */
-	suspend fun GetAllBookShelf():ApiResponse
+	suspend fun GetAllBookShelf():MutableList<BookInfo>
 	{
 		BmtApiGetAllBookShelf().Execute()
 		return BmtApiGetAllBookShelf().GetResponseResult()

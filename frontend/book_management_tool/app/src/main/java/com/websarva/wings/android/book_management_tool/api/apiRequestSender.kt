@@ -1,5 +1,6 @@
 package com.websarva.wings.android.book_management_tool.api
 
+import android.net.http.HttpException
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonParser
@@ -94,7 +95,10 @@ class ApiRequestSender {
 */
 				connection.disconnect()
 
-			} catch (e: Exception) {
+			} catch (e: HttpException) {
+
+				throw HttpException(e.code, e.message)
+
 				Log.d("BookMgmtTool Exc Error", e.toString())
 
 				apiBody = "{\"message\":{\"message\":\"${e.message}\"}}"
