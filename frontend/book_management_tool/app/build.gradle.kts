@@ -70,8 +70,9 @@ dependencies {
 	implementation("androidx.activity:activity:1.8.2")
 	implementation("com.google.android.material:material:1.9.0")
 	implementation("androidx.lifecycle:lifecycle-common:2.6.1")
-	implementation ("org.apache.commons:commons-text:1.9")
+	implementation("org.apache.commons:commons-text:1.9")
 	implementation("com.google.code.gson:gson:2.8.9")
+	implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
 	testImplementation(libs.junit)
 	androidTestImplementation(libs.androidx.junit)

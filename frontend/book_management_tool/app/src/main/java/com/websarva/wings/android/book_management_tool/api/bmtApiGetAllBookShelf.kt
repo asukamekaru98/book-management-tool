@@ -21,7 +21,7 @@ class BmtApiGetAllBookShelf: AbstractAPIHandler() {
 	}
 
 	override fun GetResponseResult(): MutableList<BookInfo> {
-		return ApiResponse(responseJSON,responseCode)
+		//return ApiResponse(responseJSON,responseCode)
 	}
 
 }
