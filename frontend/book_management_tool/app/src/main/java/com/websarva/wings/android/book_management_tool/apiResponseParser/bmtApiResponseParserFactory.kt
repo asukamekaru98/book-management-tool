@@ -1,6 +1,5 @@
 package com.websarva.wings.android.book_management_tool.apiResponseParser
 
-import com.websarva.wings.android.book_management_tool.api.ApiResponse
 import com.websarva.wings.android.book_management_tool.i_f.i_ApiResponseParser
 
 class BmtApiResponseParserFactory {
@@ -10,7 +9,7 @@ class BmtApiResponseParserFactory {
 	 * @return i_ApiResponseParser
 	 */
 	fun ApiResponseParser_BookShelf(): i_ApiResponseParser {
-		return bmtApiResponseParserBookShelf()
+		return bookManagementToolApiResponseParser()
 	}
 
 	/**

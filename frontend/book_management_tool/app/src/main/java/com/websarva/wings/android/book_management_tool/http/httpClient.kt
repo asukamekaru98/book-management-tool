@@ -6,6 +6,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import okhttp3.ResponseBody
 import java.io.IOException
 
@@ -23,7 +24,7 @@ class HttpClient(
 	 * @param query クエリパラメータ
 	 * @return レスポンスボディ
 	 */
-	fun runGetRequest(query: Map<String, String>? = null): ResponseBody {
+	fun runGetRequest(query: Map<String, String>? = null): Response {
 
 		val httpURI =
 			query?.let {
@@ -49,7 +50,7 @@ class HttpClient(
 	 * @param query クエリパラメータ
 	 * @return レスポンスボディ
 	 */
-	fun runPostRequest(body: String, query: Map<String, String>? = null): ResponseBody {
+	fun runPostRequest(body: String, query: Map<String, String>? = null): Response {
 
 		val httpURI =
 			query?.let {
@@ -76,7 +77,7 @@ class HttpClient(
 	 * @param query クエリパラメータ
 	 * @return レスポンスボディ
 	 */
-	fun runPutRequest(body: String, query: Map<String, String>? = null): ResponseBody {
+	fun runPutRequest(body: String, query: Map<String, String>? = null): Response {
 		val httpURI =
 			query?.let {
 				createUriWithQuery(this.url, it)
@@ -101,7 +102,7 @@ class HttpClient(
 	 * @param query クエリパラメータ
 	 * @return レスポンスボディ
 	 */
-	fun runDeleteRequest(query: Map<String, String>? = null): ResponseBody {
+	fun runDeleteRequest(query: Map<String, String>? = null): Response {
 		val httpURI =
 			query?.let {
 				createUriWithQuery(this.url, it)
@@ -144,7 +145,7 @@ class HttpClient(
 	 * @param request リクエスト
 	 * @return レスポンスボディ
 	 */
-	private fun sendRequest(request: Request): ResponseBody {
+	private fun sendRequest(request: Request): Response {
 
 		return this.okHttpClient.newCall(request).execute().use { response ->
 
@@ -152,7 +153,7 @@ class HttpClient(
 				throw IOException("Unexpected code $response") // 失敗
 			}
 
-			response.body!!
+			response
 		}
 	}
 }

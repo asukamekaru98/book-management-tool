@@ -1,77 +1,33 @@
 package com.websarva.wings.android.book_management_tool.constants
-/*data class BookInfo(
-	val isbn: String,                   // ISBN
-	val title: String,                  // タイトル
-	val subTitle: String,               // サブタイトル
-	val author: String,                 // 著者
-	val description: String,            // 説明
-	val imageURL: String,                // 画像URL
-	val publisher: String,              // 出版社
-	val content: String,                // 内容
-)
 
-data class UserInfo(
-	val industry_important: String,     // 会社での重要度
-	val work_important: String,         // 業界での重要度
-	val user_important: String,         // ユーザでの重要度
-	val priority: String,               // 優先度
-	val purchased_flag: String,         // 購入フラグ
-	val viewed_flag: String,            // 閲覧フラグ
-)
-
-data class BookShelf(
-	val purchased:String,               // 購入日
-	val memo:String,                    // メモ
-)
-
-data class ReadHistories(
-	val view_start:String,              // 閲覧開始日時
-	val view_end:String,                // 閲覧終了日時
-	val impression:String,              // 感想
-	val memo:String,                    // メモ
-	val understanding:String,           // 理解度
-)
-
-data class WishList(
-	val memo: String,                   // メモ
-)
-
-data class Book(
-	val bookInfo: BookInfo,            // 書籍情報
-	val userInfo: UserInfo,            // ユーザ情報
-	val bookShelf: BookShelf,          // 本棚情報
-	val readHistories: ReadHistories,  // 閲覧履歴
-	val wishList: WishList,            // 欲しいものリスト
-)
- */
 
 data class BookInfo(
-	var book_isbn: String = "",                   // ISBN
-	var book_title: String = "",                  // タイトル
-	var book_subTitle: String = "",               // サブタイトル
-	var book_author: String = "",                 // 著者
-	var book_description: String = "",            // 説明
-	var book_imageURL: String = "",               // 画像URL
-	var book_publisher: String = "",              // 出版社
-	var book_content: String = "",                // 内容
+	var bookIsbn: String = "",                   // ISBN
+	var bookTitle: String = "",                  // タイトル
+	var bookSubtitle: String = "",               // サブタイトル
+	var bookAuthor: String = "",                 // 著者
+	var bookDescription: String = "",            // 説明
+	var bookImageUrl: String = "",               // 画像URL
+	var bookPublisher: String = "",              // 出版社
+	var bookContent: String = "",                // 内容
 
-	var userInfo_industry_important: String = "",     // 会社での重要度
-	var userInfo_work_important: String = "",         // 業界での重要度
-	var userInfo_user_important: String = "",         // ユーザでの重要度
-	var userInfo_priority: String = "",               // 優先度
-	var userInfo_purchased_flag: String = "",         // 購入フラグ
-	var userInfo_viewed_flag: String = "",            // 閲覧フラグ
+	var userInfoIndustryImportant: String = "",     // 会社での重要度
+	var userInfoWorkImportant: String = "",         // 業界での重要度
+	var userInfoUserImportant: String = "",         // ユーザでの重要度
+	var userInfoPriority: String = "",               // 優先度
+	var userInfoPurchasedFlag: String = "",         // 購入フラグ
+	var userInfoViewedFlag: String = "",            // 閲覧フラグ
 
-	var bookInfo_purchased: String = "",              // 購入日
-	var bookInfo_memo: String = "",                   // メモ
+	var bookInfoPurchased: String = "",              // 購入日
+	var bookInfoMemo: String = "",                   // メモ
 
-	var readHistories_view_start: String = "",        // 閲覧開始日時
-	var readHistories_view_end: String = "",          // 閲覧終了日時
-	var readHistories_impression: String = "",        // 感想
-	var readHistories_memo: String = "",              // メモ
-	var readHistories_understanding: String = "",     // 理解度
+	var readHistoriesViewStart: String = "",        // 閲覧開始日時
+	var readHistoriesViewEnd: String = "",          // 閲覧終了日時
+	var readHistoriesImpression: String = "",        // 感想
+	var readHistoriesMemo: String = "",              // メモ
+	var readHistoriesUnderstanding: String = "",     // 理解度
 
-	var wishList_memo: String = ""                    // メモ
+	var wishListMemo: String = ""                    // メモ
 )
 
 data class BookManagementToolApiData(
@@ -79,3 +35,54 @@ data class BookManagementToolApiData(
 	var message: String = "",                         		// メッセージ
 	var bookList: MutableList<BookInfo> = mutableListOf()	// 書籍リスト
 )
+
+// APIパラメータ名
+object BookManagementToolApiParameterName
+{
+	//booksテーブル
+	const val DB_BOOKS_TB_NAME				= "books";
+	const val DB_BOOKS_ISBN					= "isbn";
+	const val DB_BOOKS_TITLE				= "title";
+	const val DB_BOOKS_SUB_TITLE			= "sub_title";
+	const val DB_BOOKS_AUTHOR				= "author";
+	const val DB_BOOKS_DESCRIPTION			= "description";
+	const val DB_BOOKS_IMAGE_URL			= "image_url";
+	const val DB_BOOKS_PUBLISHED_DATE		= "published_date";
+	const val DB_BOOKS_CONTENT				= "content";
+	const val DB_BOOKS_INDUSTRY_IMPORTANT	= "industry_important";
+	const val DB_BOOKS_WORK_IMPORTANT		= "work_important";
+	const val DB_BOOKS_USER_IMPORTANT		= "user_important";
+	const val DB_BOOKS_PRIORITY				= "priority";
+	const val DB_BOOKS_PURCHASED_FLAG		= "purchased_flag";
+	const val DB_BOOKS_VIEWED_FLAG			= "viewed_flag";
+	const val DB_BOOKS_CREATE_TIME			= "created_time";
+
+	//books_shelfテーブル
+	const val DB_BOOKS_SHELF_TB_NAME		= "books_shelf";
+	const val DB_BOOKS_SHELF_ISBN			= "isbn";
+	const val DB_BOOKS_SHELF_PURCHASED		= "purchased";
+	const val DB_BOOKS_SHELF_MEMO			= "memo";
+
+	//read_historiesテーブル
+	const val DB_READ_HISTORIES_TB_NAME			= "read_histories";
+	const val DB_READ_HISTORIES_ISBN			= "isbn";
+	const val DB_READ_HISTORIES_VIEW_START		= "view_start";
+	const val DB_READ_HISTORIES_VIEW_END		= "view_end";
+	const val DB_READ_HISTORIES_IMPRESSION		= "impression";
+	const val DB_READ_HISTORIES_MEMO			= "memo";
+	const val DB_READ_HISTORIES_UNDERSTANDING	= "understanding";
+
+	//wish_listsテーブル
+	const val DB_WISH_LISTS_TB_NAME			= "wish_lists";
+	const val DB_WISH_LISTS_ISBN			= "isbn";
+	const val DB_WISH_LISTS_MEMO			= "memo";
+}
+
+// API BookManagementTookのURI
+object BookManagementToolApiUri {
+	const val API_URI                   = "http://192.168.1.64"
+	const val API_VERSION               = "v1"
+	const val API_FUNC_BOOK_SHELF       = "book-shelf"
+	const val API_FUNC_READ_HISTORIES   = "read-histories"
+	const val API_FUNC_WISH_LIST        = "wish-list"
+}

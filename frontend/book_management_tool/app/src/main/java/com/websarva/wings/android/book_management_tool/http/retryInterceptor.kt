@@ -4,7 +4,17 @@ import android.util.Log
 import com.websarva.wings.android.book_management_tool.time.getCurrentTime
 import okhttp3.Interceptor
 
+/**
+ * リトライインターセプタークラス
+ */
 class RetryInterceptor:Interceptor {
+
+	/**
+	 * インターセプト処理
+	 *
+	 * @param chain チェーン
+	 * @return レスポンス
+	 */
 	override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
 
 		val currentTime = getCurrentTime("yyyy/MM/dd HH:mm:ss")

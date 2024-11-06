@@ -1,7 +1,11 @@
 package com.websarva.wings.android.book_management_tool.api
 
 import com.websarva.wings.android.book_management_tool.abstruct.AbstractAPIHandler
+import com.websarva.wings.android.book_management_tool.apiResponseParser.BookManagementToolApiResponseParser
 import com.websarva.wings.android.book_management_tool.constants.BookInfo
+import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
+import com.websarva.wings.android.book_management_tool.uri.UriFetcher
+import okhttp3.Response
 
 class BookManagementToolAPIManager {
 
@@ -10,8 +14,7 @@ class BookManagementToolAPIManager {
 	 * 本棚に本を1冊追加する
 	 * @return AbstractAPIHandler
 	 */
-	fun AddOneBookShelf()
-	{
+	fun AddOneBookShelf() {
 
 	}
 
@@ -19,148 +22,154 @@ class BookManagementToolAPIManager {
 	 * 本棚の情報を全て取得する
 	 * @return AbstractAPIHandler
 	 */
-	suspend fun GetAllBookShelf():MutableList<BookInfo>
-	{
-		BmtApiGetAllBookShelf().Execute()
-		return BmtApiGetAllBookShelf().GetResponseResult()
-	}
-/*
-	/**
-	 * 本棚の情報を1つ取得する
-	 * @return AbstractAPIHandler
-	 */
-	fun GetOneBookShelf(): AbstractAPIHandler
-	{
-		return BmtApiGetOneBookShelf()
-	}
+	suspend fun getAllBookShelf(bookInfo: BookInfo): BookManagementToolApiData {
+		val uri = UriFetcher().bmtAPIBookShelf()
 
-	/**
-	 * 本棚の情報を1つ修正する
-	 * @return AbstractAPIHandler
-	 */
-	fun UpdateOneBookShelf(): AbstractAPIHandler
-	{
-		return BmtApiUpdateOneBookShelf()
-	}
+		// APIリクエストを送信、レスポンスを取得
+		val response = BmtApiGetAllBookShelf(uri,bookInfo).execute()
 
-	/**
-	 * 本棚から本を1冊削除する
-	 * @return AbstractAPIHandler
-	 */
-	fun DeleteOneBookShelf(): AbstractAPIHandler
-	{
-		return BmtApiDeleteOneBookShelf()
+		// レスポンスを解析、返却
+		return BookManagementToolApiResponseParser().apply {
+			parseResponse(response)
+		}.getResponseResult()
 	}
+	/*
+		/**
+		 * 本棚の情報を1つ取得する
+		 * @return AbstractAPIHandler
+		 */
+		fun GetOneBookShelf(): AbstractAPIHandler
+		{
+			return BmtApiGetOneBookShelf()
+		}
 
-	/**
-	 * 読書履歴に本を1冊追加する
-	 * @return AbstractAPIHandler
-	 */
-	fun AddOneReadHistory(): AbstractAPIHandler
-	{
-		return BmtApiAddOneReadHistory()
-	}
+		/**
+		 * 本棚の情報を1つ修正する
+		 * @return AbstractAPIHandler
+		 */
+		fun UpdateOneBookShelf(): AbstractAPIHandler
+		{
+			return BmtApiUpdateOneBookShelf()
+		}
 
-	/**
-	 * 読書履歴の情報を全て取得する
-	 * @return AbstractAPIHandler
-	 */
-	fun GetAllReadHistories(): AbstractAPIHandler
-	{
-		return BmtApiGetAllReadHistories()
-	}
+		/**
+		 * 本棚から本を1冊削除する
+		 * @return AbstractAPIHandler
+		 */
+		fun DeleteOneBookShelf(): AbstractAPIHandler
+		{
+			return BmtApiDeleteOneBookShelf()
+		}
 
-	/**
-	 * 読書履歴の情報を1つ取得する
-	 * @return AbstractAPIHandler
-	 */
-	fun GetOneReadHistory(): AbstractAPIHandler
-	{
-		return BmtApiGetOneReadHistory()
-	}
+		/**
+		 * 読書履歴に本を1冊追加する
+		 * @return AbstractAPIHandler
+		 */
+		fun AddOneReadHistory(): AbstractAPIHandler
+		{
+			return BmtApiAddOneReadHistory()
+		}
 
-	/**
-	 * 読み終えた本の読書履歴を取得する
-	 * @return AbstractAPIHandler
-	 */
-	fun GetReadHistoryOfReadBooks(): AbstractAPIHandler
-	{
-		return BmtApiGetReadHistoryOfReadBooks()
-	}
+		/**
+		 * 読書履歴の情報を全て取得する
+		 * @return AbstractAPIHandler
+		 */
+		fun GetAllReadHistories(): AbstractAPIHandler
+		{
+			return BmtApiGetAllReadHistories()
+		}
 
-	/**
-	 * 途中で読みかけの本の読書履歴を取得する
-	 * @return AbstractAPIHandler
-	 */
-	fun GetReadHistoryOfReadingBooks(): AbstractAPIHandler
-	{
-		return BmtApiGetReadHistoryOfReadingBooks()
-	}
+		/**
+		 * 読書履歴の情報を1つ取得する
+		 * @return AbstractAPIHandler
+		 */
+		fun GetOneReadHistory(): AbstractAPIHandler
+		{
+			return BmtApiGetOneReadHistory()
+		}
 
-	/**
-	 * 読書履歴から本を1冊削除する
-	 * @return AbstractAPIHandler
-	 */
-	fun DeleteOneReadHistory(): AbstractAPIHandler{
-		return BmtApiDeleteOneReadHistory()
-	}
+		/**
+		 * 読み終えた本の読書履歴を取得する
+		 * @return AbstractAPIHandler
+		 */
+		fun GetReadHistoryOfReadBooks(): AbstractAPIHandler
+		{
+			return BmtApiGetReadHistoryOfReadBooks()
+		}
 
-	/**
-	 * 読書履歴の情報を全て削除する
-	 * @return AbstractAPIHandler
-	 */
-	fun DeleteAllReadHistories(): AbstractAPIHandler{
-		return BmtApiDeleteAllReadHistories()
-	}
+		/**
+		 * 途中で読みかけの本の読書履歴を取得する
+		 * @return AbstractAPIHandler
+		 */
+		fun GetReadHistoryOfReadingBooks(): AbstractAPIHandler
+		{
+			return BmtApiGetReadHistoryOfReadingBooks()
+		}
 
-	/**
-	 * ほしいものリストに本を1冊追加する
-	 * @return AbstractAPIHandler
-	 */
-	fun AddOneWishList(): AbstractAPIHandler{
-		return BmtApiAddOneWishList()
-	}
+		/**
+		 * 読書履歴から本を1冊削除する
+		 * @return AbstractAPIHandler
+		 */
+		fun DeleteOneReadHistory(): AbstractAPIHandler{
+			return BmtApiDeleteOneReadHistory()
+		}
 
-	/**
-	 * ほしいものリストの情報を全て取得する
-	 * @return AbstractAPIHandler
-	 */
-	fun GetAllWishLists(): AbstractAPIHandler{
-		return BmtApiGetAllWishLists()
-	}
+		/**
+		 * 読書履歴の情報を全て削除する
+		 * @return AbstractAPIHandler
+		 */
+		fun DeleteAllReadHistories(): AbstractAPIHandler{
+			return BmtApiDeleteAllReadHistories()
+		}
 
-	/**
-	 * ほしいものリストの情報を1つ取得する
-	 * @return AbstractAPIHandler
-	 */
-	fun GetOneWishList(): AbstractAPIHandler{
-		return BmtApiGetOneWishList()
-	}
+		/**
+		 * ほしいものリストに本を1冊追加する
+		 * @return AbstractAPIHandler
+		 */
+		fun AddOneWishList(): AbstractAPIHandler{
+			return BmtApiAddOneWishList()
+		}
 
-	/**
-	 * ほしいものリストの情報を1つ修正する
-	 * @return AbstractAPIHandler
-	 */
-	fun UpdateOneWishList(): AbstractAPIHandler{
-		return BmtApiUpdateOneWishList()
-	}
+		/**
+		 * ほしいものリストの情報を全て取得する
+		 * @return AbstractAPIHandler
+		 */
+		fun GetAllWishLists(): AbstractAPIHandler{
+			return BmtApiGetAllWishLists()
+		}
 
-	/**
-	 * ほしいものリストから本を1冊削除する
-	 * @return AbstractAPIHandler
-	 */
-	fun DeleteOneWishList(): AbstractAPIHandler{
-		return BmtApiDeleteOneWishList()
-	}
+		/**
+		 * ほしいものリストの情報を1つ取得する
+		 * @return AbstractAPIHandler
+		 */
+		fun GetOneWishList(): AbstractAPIHandler{
+			return BmtApiGetOneWishList()
+		}
 
-	/**
-	 * ほしいものリストの情報を全て削除する
-	 * @return AbstractAPIHandler
-	 */
-	fun DeleteAllWishLists(): AbstractAPIHandler{
-		return BmtApiDeleteAllWishLists()
-	}
+		/**
+		 * ほしいものリストの情報を1つ修正する
+		 * @return AbstractAPIHandler
+		 */
+		fun UpdateOneWishList(): AbstractAPIHandler{
+			return BmtApiUpdateOneWishList()
+		}
 
-*/
+		/**
+		 * ほしいものリストから本を1冊削除する
+		 * @return AbstractAPIHandler
+		 */
+		fun DeleteOneWishList(): AbstractAPIHandler{
+			return BmtApiDeleteOneWishList()
+		}
+
+		/**
+		 * ほしいものリストの情報を全て削除する
+		 * @return AbstractAPIHandler
+		 */
+		fun DeleteAllWishLists(): AbstractAPIHandler{
+			return BmtApiDeleteAllWishLists()
+		}
+
+	*/
 
 }

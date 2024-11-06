@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
 		// APIリクエストの送信
 		CoroutineScope(Dispatchers.Main).launch {
-			GetAPI()
+			getAPI()
 		}
 
 		//val reqCreator = bmtApiRequestCreatorFactory::APIRequestCreator_AddOneBookShelf
@@ -204,7 +204,7 @@ class MainActivity : AppCompatActivity() {
 */
 	}
 
-	suspend fun GetAPI(){
+	private suspend fun getAPI(){
 		val apiManager = BookManagementToolAPIManager()
 		val apiResponse:ApiResponse
 
@@ -212,7 +212,7 @@ class MainActivity : AppCompatActivity() {
 
 		try{
 			val apiResponse:ApiResponse = withContext(Dispatchers.IO) {
-				apiManager.GetAllBookShelf()
+				apiManager.getAllBookShelf()
 			}
 
 			Toast.makeText(this,apiResponse.body.toString(),Toast.LENGTH_SHORT).show()
