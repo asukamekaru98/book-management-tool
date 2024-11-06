@@ -1,38 +1,35 @@
 package com.websarva.wings.android.book_management_tool.http
 
+import android.util.Log
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import java.io.IOException
 
-
+/**
+ * HTTPクライアントクラス
+ * @param url URI
+ */
 class httpClient(private val url: String) {
-
-	private val client = OkHttpClient.Builder()
-		.addInterceptor(RetryInterceptor()) // リトライ処理
-		.build()
 
 	/**
 	 * GETリクエストを送信する
 	 * @return レスポンスボディ
 	 */
-	fun runGetRequest():ResponseBody {
+	fun runGetRequest(): ResponseBody {
+
+		Log.d("BookMgmtTool Access URI", this.url)
 
 		val request = Request.Builder()
 			.url(this.url)
 			.build()
 
-
-		client.newCall(request).execute().use { response ->
-
-			if (!response.isSuccessful){
-				throw IOException("Unexpected code $response") // 失敗
-			}
-
-			return response.body!!
+		return try {
+			this.sendRequest(request)
+		} catch (e: IOException) {
+			throw e
 		}
 	}
 
@@ -41,131 +38,162 @@ class httpClient(private val url: String) {
 	 * @param query クエリパラメータ
 	 * @return レスポンスボディ
 	 */
-	fun runGetRequest(query: Map<String, String>):ResponseBody {
-		val urlBuilder: HttpUrl.Builder = url.toHttpUrlOrNull()!!.newBuilder()
+	fun runGetRequest(query: Map<String, String>): ResponseBody {
+		val httpUriWithQuery: HttpUrl = createUriWithQuery(this.url, query)
 
-		val params: MutableMap<String, String> = HashMap()
+		Log.d("BookMgmtTool Access URI", httpUriWithQuery.toString())
 
-		query.forEach { (key, value) ->
-			urlBuilder.addQueryParameter(key, value)
-		}
-
-		val request = Request.Builder()
-			.url(url)
+		val request: Request = Request.Builder()
+			.url(httpUriWithQuery)
 			.build()
 
-		client.newCall(request).execute().use { response ->
-
-			if (!response.isSuccessful){
-				throw IOException("Unexpected code $response") // 失敗
-			}
-
-			return response.body!!
+		return try {
+			this.sendRequest(request)
+		} catch (e: IOException) {
+			throw e
 		}
 	}
 
 	/**
-	 * POSTリクエストを送信する
+	 * POSTリクエストを送信する(クエリパラメータ無し)
 	 * @return レスポンスボディ
 	 */
-	fun runPostRequest(body: RequestBody,query: Map<String, String>):ResponseBody {
+	fun runPostRequest(body: String): ResponseBody {
 
-		val request = Request.Builder()
-			.url(this.url)
-			.post(null)
-			.build()
-	}
-
-	@Throws(Exception::class)
-	fun postJson() {
-		val url = "http://localhost:8080/dog_json"
-		val dog = Dog(100, "pome")
-		val requestBody: RequestBody = create(JSON, mapper.writeValueAsString(dog))
-		val request: Request = Builder()
-			.url(url)
-			.post(requestBody)
-			.build()
-		val okHttpClient: OkHttpClient = Builder()
-			.build()
-		okHttpClient.newCall(request).execute().use { response ->
-			val responseCode = response.code()
-			println("responseCode: $responseCode")
-			if (!response.isSuccessful) {
-				println("error!!")
-			}
-			if (response.body() != null) {
-				println("body: " + response.body()!!.string())
-			}
-		}
-	}
-
-	/**
-	 * POSTリクエストを送信する
-	 * @param body リクエストボディ
-	 * @return レスポンスボディ
-	 */
-	fun runPostRequest(body: String):ResponseBody {
-		//var responseBody:ResponseBody = ResponseBody.create(null, "default response")
+		Log.d("BookMgmtTool Access URI", this.url)
 
 		val request = Request.Builder()
 			.url(this.url)
 			.post(body.toRequestBody())
 			.build()
+
+		return try {
+			this.sendRequest(request)
+		} catch (e: IOException) {
+			throw e
+		}
 	}
 
+
 	/**
-	 * PUTリクエストを送信する
+	 * POSTリクエストを送信する(クエリパラメータ有り)
+	 * @param body リクエストボディ
+	 * @param query クエリパラメータ
 	 * @return レスポンスボディ
 	 */
-	fun runPutRequest():ResponseBody {
-		//var responseBody:ResponseBody = ResponseBody.create(null, "default response")
+	fun runPostRequest(body: String, query: Map<String, String>): ResponseBody {
+		val httpUriWithQuery: HttpUrl = createUriWithQuery(this.url, query)
+
+		Log.d("BookMgmtTool Access URI", httpUriWithQuery.toString())
 
 		val request = Request.Builder()
-			.url(this.url)
-			.put(null)
+			.url(httpUriWithQuery)
+			.post(body.toRequestBody())
 			.build()
+
+		return try {
+			this.sendRequest(request)
+		} catch (e: IOException) {
+			throw e
+		}
 	}
 
 	/**
 	 * PUTリクエストを送信する
 	 * @param body リクエストボディ
+	 * @param query クエリパラメータ
 	 * @return レスポンスボディ
 	 */
-	fun runPutRequest(body: String):ResponseBody {
-		//var responseBody:ResponseBody = ResponseBody.create(null, "default response")
+	fun runPutRequest(body: String, query: Map<String, String>): ResponseBody {
+		val httpUriWithQuery: HttpUrl = createUriWithQuery(this.url, query)
+
+		Log.d("BookMgmtTool Access URI", httpUriWithQuery.toString())
 
 		val request = Request.Builder()
-			.url(this.url)
+			.url(httpUriWithQuery)
 			.put(body.toRequestBody())
 			.build()
+
+		return try {
+			this.sendRequest(request)
+		} catch (e: IOException) {
+			throw e
+		}
 	}
 
 	/**
 	 * DELETEリクエストを送信する
 	 * @return レスポンスボディ
 	 */
-	fun runDeleteRequest():ResponseBody {
-		//var responseBody:ResponseBody = ResponseBody.create(null, "default response")
+	fun runDeleteRequest(): ResponseBody {
 
 		val request = Request.Builder()
 			.url(this.url)
-			.delete(null)
+			.delete()
 			.build()
+
+		return try {
+			this.sendRequest(request)
+		} catch (e: IOException) {
+			throw e
+		}
 	}
 
 	/**
 	 * DELETEリクエストを送信する
-	 * @param body リクエストボディ
+	 * @param query クエリパラメータ
 	 * @return レスポンスボディ
 	 */
-	fun runDeleteRequest(body: String):ResponseBody {
-		//var responseBody:ResponseBody = ResponseBody.create(null, "default response")
+	fun runDeleteRequest(query: Map<String, String>): ResponseBody {
+		val httpUriWithQuery: HttpUrl = createUriWithQuery(this.url, query)
+
+		Log.d("BookMgmtTool Access URI", httpUriWithQuery.toString())
 
 		val request = Request.Builder()
-			.url(this.url)
-			.delete(body.toRequestBody())
+			.url(httpUriWithQuery)
+			.delete()
 			.build()
+
+		return try {
+			this.sendRequest(request)
+		} catch (e: IOException) {
+			throw e
+		}
 	}
 
+	/**
+	 * URIにクエリパラメータを付与する
+	 * @param uri URI
+	 * @param query クエリパラメータ
+	 * @return URI
+	 */
+	private fun createUriWithQuery(
+		uri: String, query: Map<String, String>
+	): HttpUrl {
+		val httpUrl: HttpUrl.Builder = uri.toHttpUrlOrNull()!!.newBuilder()
 
+		query.forEach { (key, value) ->
+			httpUrl.addQueryParameter(key, value)
+		}
+
+		return httpUrl.build()
+	}
+
+	/**
+	 * リクエストを送信する
+	 * @param request リクエスト
+	 * @return レスポンスボディ
+	 */
+	private fun sendRequest(request: Request): ResponseBody {
+
+		return try {
+			// リクエスト送信後、レスポンスボディを取得
+			UriSender(request).apply {
+				sendRequest()
+			}.getResponseBody()
+		} catch (e: IOException) {
+			throw e
+		}
+
+	}
 }
