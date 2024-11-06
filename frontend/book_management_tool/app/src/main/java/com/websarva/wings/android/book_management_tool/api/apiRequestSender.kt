@@ -14,29 +14,6 @@ import java.net.URL
 
 class ApiRequestSender {
 
-	@Throws(Exception::class)
-	fun get() {
-		val url = "http://localhost:8080/hello"
-		val request: Request = Builder()
-			.url(url)
-			.build()
-		val okHttpClient: OkHttpClient = Builder()
-			.build()
-		okHttpClient.newCall(request).execute().use { response ->
-			val responseCode = response.code()
-			println("responseCode: $responseCode")
-			if (!response.isSuccessful) {
-				println("error!!")
-			}
-			if (response.body() != null) {
-				val body = response.body()!!.string()
-				println("body: $body")
-				val dog: Dog = mapper.readValue(body, Dog::class.java)
-				println("deserialized: $dog")
-			}
-		}
-	}
-
 	suspend fun SendRequest(request: i_ApiRequestCreator): ApiResponse {
 		request.CreateRequest()
 		val method = request.GetMethod()
