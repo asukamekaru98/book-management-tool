@@ -22,11 +22,13 @@ class BookManagementToolAPIManager {
 	 * 本棚の情報を全て取得する
 	 * @return AbstractAPIHandler
 	 */
-	suspend fun getAllBookShelf(bookInfo: BookInfo): BookManagementToolApiData {
+	suspend fun getAllBookShelf(/*bookInfo: BookInfo*/): BookManagementToolApiData {
 		val uri = UriFetcher().bmtAPIBookShelf()
 
 		// APIリクエストを送信、レスポンスを取得
-		val response = BmtApiGetAllBookShelf(uri,bookInfo).execute()
+		val response = BmtApiGetAllBookShelf(uri/*,bookInfo*/).execute()
+
+
 
 		// レスポンスを解析、返却
 		return BookManagementToolApiResponseParser().apply {

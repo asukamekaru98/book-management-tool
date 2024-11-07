@@ -39,43 +39,45 @@ data class BookManagementToolApiData(
 // APIパラメータ名
 object BookManagementToolApiParameterName
 {
-	//booksテーブル
-	const val DB_BOOKS_TB_NAME				= "books";
-	const val DB_BOOKS_ISBN					= "isbn";
-	const val DB_BOOKS_TITLE				= "title";
-	const val DB_BOOKS_SUB_TITLE			= "sub_title";
-	const val DB_BOOKS_AUTHOR				= "author";
-	const val DB_BOOKS_DESCRIPTION			= "description";
-	const val DB_BOOKS_IMAGE_URL			= "image_url";
-	const val DB_BOOKS_PUBLISHED_DATE		= "published_date";
-	const val DB_BOOKS_CONTENT				= "content";
-	const val DB_BOOKS_INDUSTRY_IMPORTANT	= "industry_important";
-	const val DB_BOOKS_WORK_IMPORTANT		= "work_important";
-	const val DB_BOOKS_USER_IMPORTANT		= "user_important";
-	const val DB_BOOKS_PRIORITY				= "priority";
-	const val DB_BOOKS_PURCHASED_FLAG		= "purchased_flag";
-	const val DB_BOOKS_VIEWED_FLAG			= "viewed_flag";
-	const val DB_BOOKS_CREATE_TIME			= "created_time";
+	//本の情報
+	const val API_PARAM_BOOKS				        = "bookinfo"
+	const val API_PARAM_BOOKS_ISBN					= "isbn"
+	const val API_PARAM_BOOKS_TITLE				    = "title"
+	const val API_PARAM_BOOKS_SUB_TITLE			    = "sub_title"
+	const val API_PARAM_BOOKS_AUTHOR				= "author"
+	const val API_PARAM_BOOKS_DESCRIPTION			= "description"
+	const val API_PARAM_BOOKS_IMAGE_URL			    = "image_url"
+	const val API_PARAM_BOOKS_PUBLISHED_DATE		= "published_date"
+	const val API_PARAM_BOOKS_CONTENT				= "content"
 
-	//books_shelfテーブル
-	const val DB_BOOKS_SHELF_TB_NAME		= "books_shelf";
-	const val DB_BOOKS_SHELF_ISBN			= "isbn";
-	const val DB_BOOKS_SHELF_PURCHASED		= "purchased";
-	const val DB_BOOKS_SHELF_MEMO			= "memo";
+	//ユーザ情報
+	const val API_PARAM_USER_INFO					    = "userinfo"
+	const val API_PARAM_USER_INFO_INDUSTRY_IMPORTANT	= "industry_important"
+	const val API_PARAM_USER_INFO_WORK_IMPORTANT		= "work_important"
+	const val API_PARAM_USER_INFO_USER_IMPORTANT		= "user_important"
+	const val API_PARAM_USER_INFO_PRIORITY				= "priority"
+	const val API_PARAM_USER_INFO_PURCHASED_FLAG		= "purchased_flag"
+	const val API_PARAM_USER_INFO_VIEWED_FLAG			= "viewed_flag"
 
-	//read_historiesテーブル
-	const val DB_READ_HISTORIES_TB_NAME			= "read_histories";
-	const val DB_READ_HISTORIES_ISBN			= "isbn";
-	const val DB_READ_HISTORIES_VIEW_START		= "view_start";
-	const val DB_READ_HISTORIES_VIEW_END		= "view_end";
-	const val DB_READ_HISTORIES_IMPRESSION		= "impression";
-	const val DB_READ_HISTORIES_MEMO			= "memo";
-	const val DB_READ_HISTORIES_UNDERSTANDING	= "understanding";
+	//本棚
+	const val API_PARAM_BOOKS_SHELF		            = "books_shelf";
+	const val API_PARAM_BOOKS_SHELF_ISBN			= "isbn";
+	const val API_PARAM_BOOKS_SHELF_PURCHASED		= "purchased";
+	const val API_PARAM_BOOKS_SHELF_MEMO			= "memo";
 
-	//wish_listsテーブル
-	const val DB_WISH_LISTS_TB_NAME			= "wish_lists";
-	const val DB_WISH_LISTS_ISBN			= "isbn";
-	const val DB_WISH_LISTS_MEMO			= "memo";
+	//読書履歴
+	const val API_PARAM_READ_HISTORIES			        = "read_histories";
+	const val API_PARAM_READ_HISTORIES_ISBN			    = "isbn";
+	const val API_PARAM_READ_HISTORIES_VIEW_START		= "view_start";
+	const val API_PARAM_READ_HISTORIES_VIEW_END		    = "view_end";
+	const val API_PARAM_READ_HISTORIES_IMPRESSION		= "impression";
+	const val API_PARAM_READ_HISTORIES_MEMO			    = "memo";
+	const val API_PARAM_READ_HISTORIES_UNDERSTANDING	= "understanding";
+
+	//ほしいものリスト
+	const val API_PARAM_WISH_LIST           = "wish_lists";
+	const val API_PARAM_WISH_LIST_ISBN      = "isbn";
+	const val API_PARAM_WISH_LIST_MEMO      = "memo";
 }
 
 // API BookManagementTookのURI

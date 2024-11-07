@@ -11,7 +11,7 @@ import java.io.IOException
 
 class BmtApiGetAllBookShelf(
 	private val uri: String,
-	private val bookInfo:BookInfo
+	//private val bookInfo:BookInfo
 	) : AbstractAPIHandler() {
 
 	private val okHttpClient = OkHttpClient.Builder()
@@ -20,6 +20,8 @@ class BmtApiGetAllBookShelf(
 
 	override fun createRequestBody(): String {
 
+		return ""
+		/*
 		return BmtAPIBookShelfRequestBodyCreator(
 			bookInfo.userInfoIndustryImportant,
 			bookInfo.userInfoWorkImportant,
@@ -30,9 +32,10 @@ class BmtApiGetAllBookShelf(
 			bookInfo.bookInfoPurchased,
 			bookInfo.bookInfoMemo
 		).get()
+		*/
 	}
 
-	override suspend fun sendRequest(request: String): Response {
+	override suspend fun sendRequest(request: String): String {
 		return try {
 			HttpClient(uri, okHttpClient).runGetRequest()
 		} catch (e: IOException) {

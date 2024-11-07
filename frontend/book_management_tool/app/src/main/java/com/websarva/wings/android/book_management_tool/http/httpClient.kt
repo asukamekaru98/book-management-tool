@@ -1,6 +1,9 @@
 package com.websarva.wings.android.book_management_tool.http
 
 import android.util.Log
+import com.websarva.wings.android.book_management_tool.apiResponseParser.ApiResponseCodeParser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
@@ -24,7 +27,7 @@ class HttpClient(
 	 * @param query クエリパラメータ
 	 * @return レスポンスボディ
 	 */
-	fun runGetRequest(query: Map<String, String>? = null): Response {
+	suspend fun runGetRequest(query: Map<String, String>? = null): String {
 
 		val httpURI =
 			query?.let {
@@ -37,10 +40,12 @@ class HttpClient(
 			.url(httpURI)
 			.build()
 
-		return try {
-			this.sendRequest(request)
-		} catch (e: IOException) {
-			throw e
+		return withContext(Dispatchers.IO) {
+			try {
+				sendRequest(request)
+			} catch (e: IOException) {
+				throw e
+			}
 		}
 	}
 
@@ -50,7 +55,7 @@ class HttpClient(
 	 * @param query クエリパラメータ
 	 * @return レスポンスボディ
 	 */
-	fun runPostRequest(body: String, query: Map<String, String>? = null): Response {
+	fun runPostRequest(body: String, query: Map<String, String>? = null): String {
 
 		val httpURI =
 			query?.let {
@@ -77,7 +82,7 @@ class HttpClient(
 	 * @param query クエリパラメータ
 	 * @return レスポンスボディ
 	 */
-	fun runPutRequest(body: String, query: Map<String, String>? = null): Response {
+	fun runPutRequest(body: String, query: Map<String, String>? = null): String {
 		val httpURI =
 			query?.let {
 				createUriWithQuery(this.url, it)
@@ -102,7 +107,7 @@ class HttpClient(
 	 * @param query クエリパラメータ
 	 * @return レスポンスボディ
 	 */
-	fun runDeleteRequest(query: Map<String, String>? = null): Response {
+	fun runDeleteRequest(query: Map<String, String>? = null): String {
 		val httpURI =
 			query?.let {
 				createUriWithQuery(this.url, it)
@@ -145,7 +150,7 @@ class HttpClient(
 	 * @param request リクエスト
 	 * @return レスポンスボディ
 	 */
-	private fun sendRequest(request: Request): Response {
+	private fun sendRequest(request: Request): String {
 
 		return this.okHttpClient.newCall(request).execute().use { response ->
 
@@ -153,7 +158,18 @@ class HttpClient(
 				throw IOException("Unexpected code $response") // 失敗
 			}
 
-			response
+			try{
+				ApiResponseCodeParser(response.code).parse()
+			}catch (e: Exception){
+				throw e
+			}
+
+			// CAUTION: response.body!!.string()は一度しか呼び出せない
+			val body = response.body!!.string()
+
+			Log.d("BookMgmtTool Response", body)
+
+			body
 		}
 	}
 }

@@ -11,7 +11,7 @@ abstract class AbstractAPIResponseParser:i_ApiResponseParser{
 	//protected var jsonObject: JSONObject = JSONObject("{\"message\":{\"message\":\"JSONObject is not support\"}}")
 	//protected var jsonArray: JSONArray = JSONArray("[{\"message\":\"JSONArray is not support\"}]")
 
-	abstract override fun parseResponse(response: Response)
+	abstract override fun parseResponse(response: String)
 
 	protected fun parseBody(body: String)
 	{
@@ -26,9 +26,10 @@ abstract class AbstractAPIResponseParser:i_ApiResponseParser{
 			val jsonObject = JSONObject(body)
 
 			this.parseJSONObject(jsonObject)
-		}
 
-		throw Exception("body is not JSON")
+		}else {
+			throw Exception("body is not JSON")
+		}
 	}
 
 	abstract fun parseJSONObject(jsonObject: JSONObject)

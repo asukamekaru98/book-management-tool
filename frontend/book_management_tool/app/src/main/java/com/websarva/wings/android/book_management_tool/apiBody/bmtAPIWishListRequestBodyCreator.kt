@@ -18,14 +18,14 @@ class BmtAPIWishListRequestBodyCreator(
 	override fun get(): String {
 
 		val body = mapOf(
-			API_PARAM.DB_BOOKS_INDUSTRY_IMPORTANT  to industryImportant,
-			API_PARAM.DB_BOOKS_WORK_IMPORTANT      to workImportant,
-			API_PARAM.DB_BOOKS_USER_IMPORTANT      to userImportant,
-			API_PARAM.DB_BOOKS_PRIORITY            to priority,
-			API_PARAM.DB_BOOKS_PURCHASED_FLAG      to purchasedFlag,
-			API_PARAM.DB_BOOKS_VIEWED_FLAG         to viewedFlag,
+			API_PARAM.API_PARAM_USER_INFO_INDUSTRY_IMPORTANT  to industryImportant,
+			API_PARAM.API_PARAM_USER_INFO_WORK_IMPORTANT      to workImportant,
+			API_PARAM.API_PARAM_USER_INFO_USER_IMPORTANT      to userImportant,
+			API_PARAM.API_PARAM_USER_INFO_PRIORITY            to priority,
+			API_PARAM.API_PARAM_USER_INFO_PURCHASED_FLAG      to purchasedFlag,
+			API_PARAM.API_PARAM_USER_INFO_VIEWED_FLAG         to viewedFlag,
 
-			API_PARAM.DB_WISH_LISTS_MEMO           to memo
+			API_PARAM.API_PARAM_WISH_LIST_MEMO           to memo
 		)
 		return createBody(body)
 	}

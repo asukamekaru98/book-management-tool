@@ -3,7 +3,7 @@ package com.websarva.wings.android.book_management_tool.apiResponseParser
 import com.websarva.wings.android.book_management_tool.abstruct.AbstractAPIResponseParser
 import com.websarva.wings.android.book_management_tool.constants.BookInfo
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
-import okhttp3.Response
+import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiParameterName as API_PARAM
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -13,19 +13,31 @@ class BookManagementToolApiResponseParser : AbstractAPIResponseParser() {
 	private var message: String = "error"
 	private var code: Int = -1
 
-	override fun parseResponse(response: Response) {
+	override fun parseResponse(response: String) {
 		// 本棚のAPIレスポンスを解析
 
-		//val responseBody = apiResponse.getResponseBody()
-		//Log.d("ResponseBody", responseBody) // デバッグログを追加
+		//this.code = response.code
+		//val body = response
 
-		this.code = response.code
 
 		// レスポンスコードを解析
-		try{
-			ApiResponseCodeParser(this.code).parse()
-			parseBody(response.body!!.string())
-		}catch (e: Exception){
+		/*
+				try {
+					ApiResponseCodeParser(this.code).parse()
+
+					body?.use { responseBody ->
+						parseBody(responseBody.string())
+					} ?: throw IOException("Response body is null")
+
+				} catch (e: Exception) {
+					throw e
+				}
+
+		 */
+		try {
+			//ApiResponseCodeParser(this.code).parse()
+			parseBody(response)
+		} catch (e: Exception) {
 			throw e
 		}
 	}
@@ -38,88 +50,91 @@ class BookManagementToolApiResponseParser : AbstractAPIResponseParser() {
 		)
 	}
 
+	/**
+	 * レスポンスメッセージを取得
+	 * @return レスポンスメッセージ
+	 */
 	override fun parseJSONObject(jsonObject: JSONObject) {
-		this.message = jsonObject.getString("message")
+		val jsonArray = jsonObject.optJSONArray("data") ?: JSONArray()
 
+		for (i in 0 until jsonArray.length()) {
+			val bookInfo = jsonArray.optJSONObject(i)?.optJSONObject(API_PARAM.API_PARAM_BOOKS) ?: JSONObject()
+			val userInfo = jsonArray.optJSONObject(i)?.optJSONObject(API_PARAM.API_PARAM_USER_INFO) ?: JSONObject()
+			val bookShelf = jsonArray.optJSONObject(i)?.optJSONObject(API_PARAM.API_PARAM_BOOKS_SHELF) ?: JSONObject()
+			val readHistories = jsonArray.optJSONObject(i)?.optJSONObject(API_PARAM.API_PARAM_READ_HISTORIES) ?: JSONObject()
+			val wishList = jsonArray.optJSONObject(i)?.optJSONObject(API_PARAM.API_PARAM_WISH_LIST) ?: JSONObject()
 
-		for (i in 0 until jsonObject.length()) {
-			if (jsonObject.has("bookList")) {
-				val bookInfo = jsonObject.getJSONArray("bookInfo").getJSONObject(i)
-				val userInfo = jsonObject.getJSONArray("userInfo").getJSONObject(i)
-				val bookShelf = jsonObject.getJSONArray("userInfo").getJSONObject(i)
-				val readHistories = jsonObject.getJSONArray("readHistories").getJSONObject(i)
-				val wishList = jsonObject.getJSONArray("wishList").getJSONObject(i)
+			val book = BookInfo(
+				bookIsbn = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_ISBN, "データ無し"),
+				bookTitle = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_TITLE, "データ無し"),
+				bookSubtitle = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_SUB_TITLE, "データ無し"),
+				bookAuthor = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_AUTHOR, "データ無し"),
+				bookDescription = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_DESCRIPTION, "データ無し"),
+				bookImageUrl = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_IMAGE_URL, "データ無し"),
+				bookPublisher = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_PUBLISHED_DATE, "データ無し"),
+				bookContent = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_CONTENT, "データ無し"),
 
-				val book = BookInfo(
-					bookIsbn = bookInfo.getString("isbn"),
-					bookTitle = bookInfo.getString("title"),
-					bookSubtitle = bookInfo.getString("subTitle"),
-					bookAuthor = bookInfo.getString("author"),
-					bookDescription = bookInfo.getString("description"),
-					bookImageUrl = bookInfo.getString("imageURL"),
-					bookPublisher = bookInfo.getString("publisher"),
-					bookContent = bookInfo.getString("content"),
+				userInfoIndustryImportant = userInfo.optString(API_PARAM.API_PARAM_USER_INFO_INDUSTRY_IMPORTANT, "データ無し"),
+				userInfoWorkImportant = userInfo.optString(API_PARAM.API_PARAM_USER_INFO_WORK_IMPORTANT, "データ無し"),
+				userInfoUserImportant = userInfo.optString(API_PARAM.API_PARAM_USER_INFO_USER_IMPORTANT, "データ無し"),
+				userInfoPriority = userInfo.optString(API_PARAM.API_PARAM_USER_INFO_PRIORITY, "データ無し"),
+				userInfoPurchasedFlag = userInfo.optString(API_PARAM.API_PARAM_USER_INFO_PURCHASED_FLAG, "データ無し"),
+				userInfoViewedFlag = userInfo.optString(API_PARAM.API_PARAM_USER_INFO_VIEWED_FLAG, "データ無し"),
 
-					userInfoIndustryImportant = userInfo.getString("industry_important"),
-					userInfoWorkImportant = userInfo.getString("work_important"),
-					userInfoUserImportant = userInfo.getString("user_important"),
-					userInfoPriority = userInfo.getString("priority"),
-					userInfoPurchasedFlag = userInfo.getString("purchased_flag"),
-					userInfoViewedFlag = userInfo.getString("viewed_flag"),
+				bookInfoPurchased = bookShelf.optString(API_PARAM.API_PARAM_BOOKS_SHELF_PURCHASED, "データ無し"),
+				bookInfoMemo = bookShelf.optString(API_PARAM.API_PARAM_BOOKS_SHELF_MEMO, "データ無し"),
 
-					bookInfoPurchased = bookShelf.getString("purchased"),
-					bookInfoMemo = bookShelf.getString("memo"),
+				readHistoriesViewStart = readHistories.optString(API_PARAM.API_PARAM_READ_HISTORIES_VIEW_START, "データ無し"),
+				readHistoriesViewEnd = readHistories.optString(API_PARAM.API_PARAM_READ_HISTORIES_VIEW_END, "データ無し"),
+				readHistoriesImpression = readHistories.optString(API_PARAM.API_PARAM_READ_HISTORIES_IMPRESSION, "データ無し"),
+				readHistoriesMemo = readHistories.optString(API_PARAM.API_PARAM_READ_HISTORIES_MEMO, "データ無し"),
+				readHistoriesUnderstanding = readHistories.optString(API_PARAM.API_PARAM_READ_HISTORIES_UNDERSTANDING, "データ無し"),
 
-					readHistoriesViewStart = readHistories.getString("view_start"),
-					readHistoriesViewEnd = readHistories.getString("view_end"),
-					readHistoriesImpression = readHistories.getString("impression"),
-					readHistoriesMemo = readHistories.getString("memo"),
-					readHistoriesUnderstanding = readHistories.getString("understanding"),
-
-					wishListMemo = wishList.getString("wishList_memo")
-
-				)
-				this.bookList.add(book)
-			}
+				wishListMemo = wishList.optString(API_PARAM.API_PARAM_WISH_LIST_MEMO, "データ無し")
+			)
+			this.bookList.add(book)
 		}
 	}
 
+	/**
+	 * レスポンスメッセージを取得
+	 * @return レスポンスメッセージ
+	 */
 	override fun parseJSONArray(jsonArray: JSONArray) {
 		for (i in 0 until jsonArray.length()) {
-			val bookInfo = jsonArray.getJSONObject(i).getJSONObject("bookinfo")
-			val userInfo = jsonArray.getJSONObject(i).getJSONObject("userinfo")
-			val bookShelf = jsonArray.getJSONObject(i).getJSONObject("book_shelf")
-			val readHistories =
-				jsonArray.getJSONObject(i).getJSONArray("readHistories").getJSONObject(0)
-			val wishList = jsonArray.getJSONObject(i).getJSONArray("wishList").getJSONObject(0)
+			val bookInfo = jsonArray.optJSONObject(i)?.optJSONObject(API_PARAM.API_PARAM_BOOKS) ?: JSONObject()
+			val userInfo = jsonArray.optJSONObject(i)?.optJSONObject(API_PARAM.API_PARAM_USER_INFO) ?: JSONObject()
+			val bookShelf = jsonArray.optJSONObject(i)?.optJSONObject(API_PARAM.API_PARAM_BOOKS_SHELF) ?: JSONObject()
+			val readHistories = jsonArray.optJSONObject(i)?.optJSONObject(API_PARAM.API_PARAM_READ_HISTORIES) ?: JSONObject()
+			val wishList = jsonArray.optJSONObject(i)?.optJSONObject(API_PARAM.API_PARAM_WISH_LIST) ?: JSONObject()
 
 			val book = BookInfo(
-				bookIsbn = bookInfo.getString("isbn"),
-				bookTitle = bookInfo.getString("title"),
-				bookSubtitle = bookInfo.getString("sub_title"),
-				bookAuthor = bookInfo.getString("author"),
-				bookDescription = bookInfo.getString("description"),
-				bookImageUrl = bookInfo.getString("image_url"),
-				bookPublisher = bookInfo.getString("published_date"),
-				bookContent = bookInfo.getString("content"),
+				bookIsbn = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_ISBN, "データ無し"),
+				bookTitle = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_TITLE, "データ無し"),
+				bookSubtitle = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_SUB_TITLE, "データ無し"),
+				bookAuthor = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_AUTHOR, "データ無し"),
+				bookDescription = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_DESCRIPTION, "データ無し"),
+				bookImageUrl = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_IMAGE_URL, "データ無し"),
+				bookPublisher = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_PUBLISHED_DATE, "データ無し"),
+				bookContent = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_CONTENT, "データ無し"),
 
-				userInfoIndustryImportant = userInfo.getString("industry_important"),
-				userInfoWorkImportant = userInfo.getString("work_important"),
-				userInfoUserImportant = userInfo.getString("user_important"),
-				userInfoPriority = userInfo.getString("priority"),
-				userInfoPurchasedFlag = userInfo.getString("purchased_flag"),
-				userInfoViewedFlag = userInfo.getString("viewed_flag"),
+				userInfoIndustryImportant = userInfo.optString(API_PARAM.API_PARAM_USER_INFO_INDUSTRY_IMPORTANT, "データ無し"),
+				userInfoWorkImportant = userInfo.optString(API_PARAM.API_PARAM_USER_INFO_WORK_IMPORTANT, "データ無し"),
+				userInfoUserImportant = userInfo.optString(API_PARAM.API_PARAM_USER_INFO_USER_IMPORTANT, "データ無し"),
+				userInfoPriority = userInfo.optString(API_PARAM.API_PARAM_USER_INFO_PRIORITY, "データ無し"),
+				userInfoPurchasedFlag = userInfo.optString(API_PARAM.API_PARAM_USER_INFO_PURCHASED_FLAG, "データ無し"),
+				userInfoViewedFlag = userInfo.optString(API_PARAM.API_PARAM_USER_INFO_VIEWED_FLAG, "データ無し"),
 
-				bookInfoPurchased = bookShelf.getString("purchased"),
-				bookInfoMemo = bookShelf.getString("memo"),
+				bookInfoPurchased = bookShelf.optString(API_PARAM.API_PARAM_BOOKS_SHELF_PURCHASED, "データ無し"),
+				bookInfoMemo = bookShelf.optString(API_PARAM.API_PARAM_BOOKS_SHELF_MEMO, "データ無し"),
 
-				readHistoriesViewStart = readHistories.getString("view_start"),
-				readHistoriesViewEnd = readHistories.getString("view_end"),
-				readHistoriesImpression = readHistories.getString("impression"),
-				readHistoriesMemo = readHistories.getString("memo"),
-				readHistoriesUnderstanding = readHistories.getString("understanding"),
+				readHistoriesViewStart = readHistories.optString(API_PARAM.API_PARAM_READ_HISTORIES_VIEW_START, "データ無し"),
+				readHistoriesViewEnd = readHistories.optString(API_PARAM.API_PARAM_READ_HISTORIES_VIEW_END, "データ無し"),
+				readHistoriesImpression = readHistories.optString(API_PARAM.API_PARAM_READ_HISTORIES_IMPRESSION, "データ無し"),
+				readHistoriesMemo = readHistories.optString(API_PARAM.API_PARAM_READ_HISTORIES_MEMO, "データ無し"),
+				readHistoriesUnderstanding = readHistories.optString(API_PARAM.API_PARAM_READ_HISTORIES_UNDERSTANDING, "データ無し"),
 
-				wishListMemo = wishList.getString("memo")
+				wishListMemo = wishList.optString(API_PARAM.API_PARAM_WISH_LIST_MEMO, "データ無し")
 			)
 			this.bookList.add(book)
 		}

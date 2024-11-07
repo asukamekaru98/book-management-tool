@@ -13,7 +13,7 @@ import org.json.JSONObject
  */
 abstract class AbstractAPIHandler
 {
-	suspend fun execute():Response {
+	suspend fun execute():String {
 		val request = createRequestBody()
 
 		return sendRequest(request)
@@ -30,6 +30,6 @@ abstract class AbstractAPIHandler
 	 * @param request i_ApiRequestCreator
 	 * @return i_ApiResponseParser
 	 */
-	protected abstract suspend fun sendRequest(request:String): Response
+	protected abstract suspend fun sendRequest(request:String): String
 
 }

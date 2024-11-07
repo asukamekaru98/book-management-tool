@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.book_management_tool.adapter.RecyclerViewAdapter
 import com.websarva.wings.android.book_management_tool.api.ApiResponse
 import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
+import com.websarva.wings.android.book_management_tool.constants.BookInfo
+import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData as BMTApiData
 import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
 import com.websarva.wings.android.book_management_tool.flagment.fragmentBookshelf
 import com.websarva.wings.android.book_management_tool.flagment.fragmentReadHistories
@@ -205,20 +207,15 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	private suspend fun getAPI(){
-		val apiManager = BookManagementToolAPIManager()
-		val apiResponse:ApiResponse
-
-		//Todo: HTTPレスポンスコードが不正な場合は例外をスローする
+	//	val apiManager = BookManagementToolAPIManager()
 
 		try{
-			val apiResponse:ApiResponse = withContext(Dispatchers.IO) {
-				apiManager.getAllBookShelf()
-			}
+			val data: BMTApiData = BookManagementToolAPIManager().getAllBookShelf()
 
-			Toast.makeText(this,apiResponse.body.toString(),Toast.LENGTH_SHORT).show()
+			Toast.makeText(this,data.bookList.firstOrNull()?.bookIsbn,Toast.LENGTH_SHORT).show()
 
 		}catch(e:Exception){
-			Log.e("Error",e.toString(),e.)
+			Log.e("BookMgmtTool Exception",e.message.toString()+"/" + e.stackTraceToString()+"/"+e.cause.toString())
 		}
 	}
 
