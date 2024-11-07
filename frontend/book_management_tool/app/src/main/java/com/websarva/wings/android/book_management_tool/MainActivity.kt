@@ -2,6 +2,8 @@ package com.websarva.wings.android.book_management_tool
 
 //import com.webserva.wings.android.sending_json_over_http_sample.ui.theme.SendingJSONOverHTTP_SampleTheme
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Note
 import android.util.Log
@@ -46,26 +48,52 @@ import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
-
-	// デフォルトのURLを定数として定義
-	companion object {
-		const val DEFAULT_SERVER_URL = "192.168.1.51/v1/read-histories" // 任意のデフォルトURLを設定
-	}
-
 	private lateinit var binding : ActivityMainBinding
 	private lateinit var toolBar : androidx.appcompat.widget.Toolbar
 	private lateinit var listView : RecyclerView
 
-	private val names: ArrayList<String> = arrayListOf(
 
-	)
+	private val names: ArrayList<String> = arrayListOf()
+	private val photos: ArrayList<Int> = arrayListOf()
 
-	private val photos: ArrayList<Int> = arrayListOf(
+	private val bitmaps: ArrayList<Bitmap> = arrayListOf()
 
-	)
+	private var bookData: BMTApiData = BMTApiData()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+
+		// APIリクエストの送信
+		CoroutineScope(Dispatchers.Main).launch {
+			bookData = try{
+				BookManagementToolAPIManager().getAllBookShelf()
+			}catch (e:Exception){
+
+				Log.e("BookMgmtTool Exception",e.message.toString()+"/" + e.stackTraceToString()+"/"+e.cause.toString())
+				BMTApiData()
+			}
+
+			bookData.bookList.forEach {
+				names.add(it.bookTitle)
+
+				Log.d("BookMgmtTool", it.bookImageUrl)
+
+				val imageUrl = if (it.bookImageUrl.startsWith("http")) {
+					URL(it.bookImageUrl)
+				} else {
+					URL("https://example.com/default_image.png") // デフォルトの画像URL
+				}
+
+				val bitmap = runCatching {
+					BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream())
+				}.getOrNull()
+
+
+				bitmaps.add(bitmap?:BitmapFactory.decodeResource(resources,R.drawable.ic_launcher_foreground))
+
+				photos.add(bitmaps.hashCode())
+			}
+		}
 
 		// ここでActionBarを無効化
 		supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -85,10 +113,7 @@ class MainActivity : AppCompatActivity() {
 		setContentView(binding.root)
 		replaceFragment(fragmentBookshelf())
 
-		// APIリクエストの送信
-		CoroutineScope(Dispatchers.Main).launch {
-			getAPI()
-		}
+
 
 		//val reqCreator = bmtApiRequestCreatorFactory::APIRequestCreator_AddOneBookShelf
 

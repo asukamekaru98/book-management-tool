@@ -15,27 +15,7 @@ class BookManagementToolApiResponseParser : AbstractAPIResponseParser() {
 
 	override fun parseResponse(response: String) {
 		// 本棚のAPIレスポンスを解析
-
-		//this.code = response.code
-		//val body = response
-
-
-		// レスポンスコードを解析
-		/*
-				try {
-					ApiResponseCodeParser(this.code).parse()
-
-					body?.use { responseBody ->
-						parseBody(responseBody.string())
-					} ?: throw IOException("Response body is null")
-
-				} catch (e: Exception) {
-					throw e
-				}
-
-		 */
 		try {
-			//ApiResponseCodeParser(this.code).parse()
 			parseBody(response)
 		} catch (e: Exception) {
 			throw e
@@ -114,7 +94,7 @@ class BookManagementToolApiResponseParser : AbstractAPIResponseParser() {
 				bookSubtitle = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_SUB_TITLE, "データ無し"),
 				bookAuthor = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_AUTHOR, "データ無し"),
 				bookDescription = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_DESCRIPTION, "データ無し"),
-				bookImageUrl = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_IMAGE_URL, "データ無し"),
+				bookImageUrl = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_IMAGE_URL, ""),
 				bookPublisher = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_PUBLISHED_DATE, "データ無し"),
 				bookContent = bookInfo.optString(API_PARAM.API_PARAM_BOOKS_CONTENT, "データ無し"),
 

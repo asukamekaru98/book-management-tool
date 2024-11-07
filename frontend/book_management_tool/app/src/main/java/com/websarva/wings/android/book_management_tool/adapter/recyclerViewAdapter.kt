@@ -22,8 +22,8 @@ class RecyclerViewAdapter(
 
 		init {
 			// Define click listener for the ViewHolder's View.
-			textView = view.findViewById(R.id.text_view)
-			imageView = view.findViewById(R.id.image_view)
+			textView = view.findViewById(R.id.bookName)
+			imageView = view.findViewById(R.id.bookImage)
 		}
 	}
 
