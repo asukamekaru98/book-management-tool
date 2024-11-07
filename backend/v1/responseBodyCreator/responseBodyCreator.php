@@ -49,8 +49,6 @@ class RespBodyCre8er implements I_ResponseBodyCreator
 
 		$JSON = json_decode(json: $fileContents, associative: true);
 
-		$mergedResponseJSON = [];
-
 		for ($idx = 0; !empty($data[$idx]); $idx++) {
 			foreach ($fields as $section => $keys) {
 				foreach ($keys as $key) {
@@ -62,27 +60,11 @@ class RespBodyCre8er implements I_ResponseBodyCreator
 					}
 
 					$JSON[$section][$key] = $str;
-
-					//print_r($JSON[$section][$key]);
-					//print("<br>");
 				}
 			}
 			$responseJSON[] = $JSON;
-			//$mergedResponseJSON[] = array_merge($JSON, $mergedResponseJSON);
 		}
 
-		//print_r($responseJSON);
-		//print("<br>");
-
-		//$mergedResponseJSON = [];
-
-		//foreach ($responseJSON as $json) {
-
-		//	print_r($json);
-		//	print("<br>");
-
-		//	$mergedResponseJSON = array_merge($mergedResponseJSON, $json);
-		//}
 
 		$responseJSON[] = array('message' => 'Operation successful');
 
