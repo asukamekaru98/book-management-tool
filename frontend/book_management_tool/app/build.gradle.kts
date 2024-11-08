@@ -1,6 +1,8 @@
 plugins {
 	alias(libs.plugins.androidApplication)
 	alias(libs.plugins.jetbrainsKotlinAndroid)
+	kotlin("kapt")
+
 }
 
 android {
@@ -73,6 +75,9 @@ dependencies {
 	implementation("org.apache.commons:commons-text:1.9")
 	implementation("com.google.code.gson:gson:2.8.9")
 	implementation("com.squareup.okhttp3:okhttp:4.11.0")
+
+	implementation ("com.github.bumptech.glide:glide:4.15.1")
+	kapt ("com.github.bumptech.glide:compiler:4.15.1")
 
 	testImplementation(libs.junit)
 	androidTestImplementation(libs.androidx.junit)

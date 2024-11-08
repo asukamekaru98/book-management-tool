@@ -1,5 +1,6 @@
 package com.websarva.wings.android.book_management_tool.adapter
 
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.book_management_tool.R
 
 class RecyclerViewAdapter(
-	private val iImages: ArrayList<Int>,
+	private val iImages: ArrayList<Bitmap>,
 	private val iNames: ArrayList<String>
 ) :
 	RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
@@ -41,12 +42,16 @@ class RecyclerViewAdapter(
 
 		// Get element from your dataset at this position and replace the
 		// contents of the view with that element
-		viewHolder.imageView.setImageResource(iImages.get(position))
+
+		viewHolder.imageView.setImageBitmap(iImages[position])
+		//setImageBitmap(viewHolder.imageView, iImages[position])
+
 		viewHolder.textView.text = iNames[position]
 
 	}
 
 	// Return the size of your dataset (invoked by the layout manager)
 	override fun getItemCount() = iNames.size
+
 
 }

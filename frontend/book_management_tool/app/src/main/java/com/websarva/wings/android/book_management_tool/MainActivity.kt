@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.websarva.wings.android.book_management_tool.adapter.RecyclerViewAdapter
 import com.websarva.wings.android.book_management_tool.api.ApiResponse
 import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
@@ -48,9 +49,9 @@ import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
-	private lateinit var binding : ActivityMainBinding
-	private lateinit var toolBar : androidx.appcompat.widget.Toolbar
-	private lateinit var listView : RecyclerView
+	private lateinit var binding: ActivityMainBinding
+	private lateinit var toolBar: androidx.appcompat.widget.Toolbar
+	private lateinit var listView: RecyclerView
 
 
 	private val names: ArrayList<String> = arrayListOf()
@@ -65,11 +66,14 @@ class MainActivity : AppCompatActivity() {
 
 		// APIリクエストの送信
 		CoroutineScope(Dispatchers.Main).launch {
-			bookData = try{
+			bookData = try {
 				BookManagementToolAPIManager().getAllBookShelf()
-			}catch (e:Exception){
+			} catch (e: Exception) {
 
-				Log.e("BookMgmtTool Exception",e.message.toString()+"/" + e.stackTraceToString()+"/"+e.cause.toString())
+				Log.e(
+					"BookMgmtTool Exception",
+					e.message.toString() + "/" + e.stackTraceToString() + "/" + e.cause.toString()
+				)
 				BMTApiData()
 			}
 
@@ -78,18 +82,33 @@ class MainActivity : AppCompatActivity() {
 
 				Log.d("BookMgmtTool", it.bookImageUrl)
 
-				val imageUrl = if (it.bookImageUrl.startsWith("http")) {
-					URL(it.bookImageUrl)
+				if (it.bookImageUrl.startsWith("http")) {
+					val imageUrl = URL(it.bookImageUrl)
+
+					withContext(Dispatchers.IO) {
+						bitmaps.add(
+							Glide.with(this@MainActivity)
+								.asBitmap()
+								.load(imageUrl.toString())
+								.submit()
+								.get()
+						)
+					}
+
 				} else {
-					URL("https://example.com/default_image.png") // デフォルトの画像URL
+					bitmaps.add(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_foreground))
 				}
 
-				val bitmap = runCatching {
-					BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream())
-				}.getOrNull()
+				//val bitmap = runCatching {
+				//	BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream())
+				//}.getOrNull()
+//
+				//if (bitmap != null) {
+				//	bitmaps.add(bitmap)
+				//}else{
+				//	bitmaps.add(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_foreground))
+				//}
 
-
-				bitmaps.add(bitmap?:BitmapFactory.decodeResource(resources,R.drawable.ic_launcher_foreground))
 
 				photos.add(bitmaps.hashCode())
 			}
@@ -107,170 +126,177 @@ class MainActivity : AppCompatActivity() {
 		listView.setHasFixedSize(true)
 		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
 		listView.layoutManager = rLayoutManager
-		listView.adapter = RecyclerViewAdapter(photos, names)
+		listView.adapter = RecyclerViewAdapter(bitmaps, names)
 
 		//setContentView(R.layout.activity_main)
 		setContentView(binding.root)
 		replaceFragment(fragmentBookshelf())
 
 
-
 		//val reqCreator = bmtApiRequestCreatorFactory::APIRequestCreator_AddOneBookShelf
 
 
+		binding.navView.setOnItemSelectedListener {
 
-		binding.navView.setOnItemSelectedListener{
-
-			when(it.itemId){
+			when (it.itemId) {
 				R.id.BtmBtnBookShelf -> replaceFragment(fragmentBookshelf())
 				R.id.BtmBtnReadHistories -> replaceFragment(fragmentReadHistories())
 				R.id.BtmBtnWishList -> replaceFragment(fragmentWishlist())
 
-				else->{
+				else -> {
 				}
 			}
 
 			true
 		}
-/*
-		//val httpMethodSpnrItems = arrayOf("GET","POST","PUT","DELETE","PATCH")
-		val httpMethodSpinner = findViewById<Spinner>(R.id.httpMethodSpinner)
-		val httpMethodSpinnerAdapter = ArrayAdapter(
-			this,
-			android.R.layout.simple_spinner_item,
-			arrayOf("GET", "POST", "PUT", "DELETE", "PATCH")
-		)
-		httpMethodSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-		httpMethodSpinner.adapter = httpMethodSpinnerAdapter
+		/*
+				//val httpMethodSpnrItems = arrayOf("GET","POST","PUT","DELETE","PATCH")
+				val httpMethodSpinner = findViewById<Spinner>(R.id.httpMethodSpinner)
+				val httpMethodSpinnerAdapter = ArrayAdapter(
+					this,
+					android.R.layout.simple_spinner_item,
+					arrayOf("GET", "POST", "PUT", "DELETE", "PATCH")
+				)
+				httpMethodSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+				httpMethodSpinner.adapter = httpMethodSpinnerAdapter
 
-		var strHttpMethod = ""
+				var strHttpMethod = ""
 
-		val ipAddressET = findViewById<EditText>(R.id.ipAddressET)
-		val apiVersionET = findViewById<EditText>(R.id.apiVersionET)
-		val apiFunctionET = findViewById<EditText>(R.id.apiFunctionET)
-		val isbnCodeET = findViewById<EditText>(R.id.isbnCodeET)
-		val jsonTV = findViewById<TextView>(R.id.jsonTV)
+				val ipAddressET = findViewById<EditText>(R.id.ipAddressET)
+				val apiVersionET = findViewById<EditText>(R.id.apiVersionET)
+				val apiFunctionET = findViewById<EditText>(R.id.apiFunctionET)
+				val isbnCodeET = findViewById<EditText>(R.id.isbnCodeET)
+				val jsonTV = findViewById<TextView>(R.id.jsonTV)
 
-		//	val urlEditText = findViewById<EditText>(R.id.urlEditText)
-		//	val loginIdEditText = findViewById<EditText>(R.id.loginIdEditText)
-		//	val passwordEditText = findViewById<EditText>(R.id.passwordEditText)
-		//	val customerIdEditText = findViewById<EditText>(R.id.customerIdEditText)
-		//	val customerNameEditText = findViewById<EditText>(R.id.customerNameEditText)
-		//val sendButton = findViewById<Button>(R.id.sendButton)
-		val accessButton = findViewById<Button>(R.id.accessButton)
+				//	val urlEditText = findViewById<EditText>(R.id.urlEditText)
+				//	val loginIdEditText = findViewById<EditText>(R.id.loginIdEditText)
+				//	val passwordEditText = findViewById<EditText>(R.id.passwordEditText)
+				//	val customerIdEditText = findViewById<EditText>(R.id.customerIdEditText)
+				//	val customerNameEditText = findViewById<EditText>(R.id.customerNameEditText)
+				//val sendButton = findViewById<Button>(R.id.sendButton)
+				val accessButton = findViewById<Button>(R.id.accessButton)
 
-		// HTTPメソッド用プルダウンのOCL
-		httpMethodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-			override fun onItemSelected(
-				parent: AdapterView<*>,
-				view: View?,
-				position: Int,
-				id: Long
-			) {
-				strHttpMethod = parent.getItemAtPosition(position) as String
-				Toast.makeText(this@MainActivity, "Selected: $strHttpMethod", Toast.LENGTH_SHORT)
-					.show()
-			}
+				// HTTPメソッド用プルダウンのOCL
+				httpMethodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+					override fun onItemSelected(
+						parent: AdapterView<*>,
+						view: View?,
+						position: Int,
+						id: Long
+					) {
+						strHttpMethod = parent.getItemAtPosition(position) as String
+						Toast.makeText(this@MainActivity, "Selected: $strHttpMethod", Toast.LENGTH_SHORT)
+							.show()
+					}
 
-			override fun onNothingSelected(parent: AdapterView<*>) {
-				// アイテムが選択されなかった場合の処理
-			}
-		}
-
-
-		//	sendButton.setOnClickListener {
-		//		val userUrl = urlEditText.text.toString().ifEmpty { DEFAULT_SERVER_URL }
-		//		val loginId = loginIdEditText.text.toString()
-		//		val password = passwordEditText.text.toString()
-		//		val customerId = customerIdEditText.text.toString()
-		//		val customerName = customerNameEditText.text.toString()
-//
-		//		// JSONデータの作成
-		//		val jsonData = JSONObject().apply {
-		//			put("loginId", loginId)
-		//			put("password", password)
-		//			put("customerId", customerId)
-		//			put("customerName", customerName)
-		//		}.toString()
-//
-		//		if (jsonData.isNotEmpty()) {
-		//			// JSONデータを送信
-		//			sendJsonData(selectedHttpMethod, userUrl, jsonData)
-		//		} else {
-		//			Toast.makeText(this, "すべてのフィールドを入力してください", Toast.LENGTH_SHORT)
-		//				.show()
-		//		}
-		//	}
-
-		accessButton.setOnClickListener {
-
-			val strIPAddress = ipAddressET.text.toString().ifEmpty { "192.168.1.64" }
-			val strAPIVersion = apiVersionET.text.toString().ifEmpty { "v1" }
-			val strAPIFunction = apiFunctionET.text.toString().ifEmpty { "book-shelf" }
-			val strISBNCode = isbnCodeET.text.toString().ifEmpty { "9784780802047" }
-
-			if (strHttpMethod.isBlank() || strIPAddress.isBlank() || strAPIVersion.isBlank() || strAPIFunction.isBlank()) {
-				Toast.makeText(this@MainActivity, "入力が不足しています", Toast.LENGTH_SHORT).show()
-			} else {
-				var sendURI = "http://$strIPAddress/$strAPIVersion/$strAPIFunction"
-
-				// ISBNコードの入力があれば、クエリとして加える
-				if (strISBNCode.isNotBlank()) {
-					sendURI = "$sendURI?isbn=$strISBNCode"
+					override fun onNothingSelected(parent: AdapterView<*>) {
+						// アイテムが選択されなかった場合の処理
+					}
 				}
 
-				accessUrl(strHttpMethod, sendURI,jsonTV)
-			}
 
-			//var sendURI : String = "http://$ipAddressET/$apiVersionET/$apiFunctionET"
+				//	sendButton.setOnClickListener {
+				//		val userUrl = urlEditText.text.toString().ifEmpty { DEFAULT_SERVER_URL }
+				//		val loginId = loginIdEditText.text.toString()
+				//		val password = passwordEditText.text.toString()
+				//		val customerId = customerIdEditText.text.toString()
+				//		val customerName = customerNameEditText.text.toString()
+		//
+				//		// JSONデータの作成
+				//		val jsonData = JSONObject().apply {
+				//			put("loginId", loginId)
+				//			put("password", password)
+				//			put("customerId", customerId)
+				//			put("customerName", customerName)
+				//		}.toString()
+		//
+				//		if (jsonData.isNotEmpty()) {
+				//			// JSONデータを送信
+				//			sendJsonData(selectedHttpMethod, userUrl, jsonData)
+				//		} else {
+				//			Toast.makeText(this, "すべてのフィールドを入力してください", Toast.LENGTH_SHORT)
+				//				.show()
+				//		}
+				//	}
+
+				accessButton.setOnClickListener {
+
+					val strIPAddress = ipAddressET.text.toString().ifEmpty { "192.168.1.64" }
+					val strAPIVersion = apiVersionET.text.toString().ifEmpty { "v1" }
+					val strAPIFunction = apiFunctionET.text.toString().ifEmpty { "book-shelf" }
+					val strISBNCode = isbnCodeET.text.toString().ifEmpty { "9784780802047" }
+
+					if (strHttpMethod.isBlank() || strIPAddress.isBlank() || strAPIVersion.isBlank() || strAPIFunction.isBlank()) {
+						Toast.makeText(this@MainActivity, "入力が不足しています", Toast.LENGTH_SHORT).show()
+					} else {
+						var sendURI = "http://$strIPAddress/$strAPIVersion/$strAPIFunction"
+
+						// ISBNコードの入力があれば、クエリとして加える
+						if (strISBNCode.isNotBlank()) {
+							sendURI = "$sendURI?isbn=$strISBNCode"
+						}
+
+						accessUrl(strHttpMethod, sendURI,jsonTV)
+					}
+
+					//var sendURI : String = "http://$ipAddressET/$apiVersionET/$apiFunctionET"
 
 
-			//val userUrl = urlEditText.text.toString().ifEmpty { DEFAULT_SERVER_URL }
-		}
+					//val userUrl = urlEditText.text.toString().ifEmpty { DEFAULT_SERVER_URL }
+				}
 
-*/
+		*/
 	}
 
-	private suspend fun getAPI(){
-	//	val apiManager = BookManagementToolAPIManager()
+	private suspend fun getAPI() {
+		//	val apiManager = BookManagementToolAPIManager()
 
-		try{
+		try {
 			val data: BMTApiData = BookManagementToolAPIManager().getAllBookShelf()
 
-			Toast.makeText(this,data.bookList.firstOrNull()?.bookIsbn,Toast.LENGTH_SHORT).show()
+			Toast.makeText(this, data.bookList.firstOrNull()?.bookIsbn, Toast.LENGTH_SHORT).show()
 
-		}catch(e:Exception){
-			Log.e("BookMgmtTool Exception",e.message.toString()+"/" + e.stackTraceToString()+"/"+e.cause.toString())
+		} catch (e: Exception) {
+			Log.e(
+				"BookMgmtTool Exception",
+				e.message.toString() + "/" + e.stackTraceToString() + "/" + e.cause.toString()
+			)
 		}
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
-		getMenuInflater().inflate(R.menu.menu_header,menu)
+		getMenuInflater().inflate(R.menu.menu_header, menu)
 		return true
 	}
 
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		val itemID = item.getItemId()
 
-		when(itemID) {
-			R.id.BtmBtnBookShelf        -> Toast.makeText(this,"BtmBtnBookShelf",Toast.LENGTH_SHORT).show()
-			R.id.BtmBtnReadHistories    -> Toast.makeText(this,"BtmBtnReadHistories",Toast.LENGTH_SHORT).show()
-			R.id.BtmBtnWishList         -> Toast.makeText(this,"BtmBtnWishList",Toast.LENGTH_SHORT).show()
-			R.id.setting                -> Toast.makeText(this,"setting",Toast.LENGTH_SHORT).show()
-			R.id.icon_add               -> Toast.makeText(this,"icon_add",Toast.LENGTH_SHORT).show()
-			R.id.icon_search            -> Toast.makeText(this,"icon_search",Toast.LENGTH_SHORT).show()
+		when (itemID) {
+			R.id.BtmBtnBookShelf -> Toast.makeText(this, "BtmBtnBookShelf", Toast.LENGTH_SHORT)
+				.show()
 
-			else                        -> return false
+			R.id.BtmBtnReadHistories -> Toast.makeText(
+				this,
+				"BtmBtnReadHistories",
+				Toast.LENGTH_SHORT
+			).show()
+
+			R.id.BtmBtnWishList -> Toast.makeText(this, "BtmBtnWishList", Toast.LENGTH_SHORT).show()
+			R.id.setting -> Toast.makeText(this, "setting", Toast.LENGTH_SHORT).show()
+			R.id.icon_add -> Toast.makeText(this, "icon_add", Toast.LENGTH_SHORT).show()
+			R.id.icon_search -> Toast.makeText(this, "icon_search", Toast.LENGTH_SHORT).show()
+
+			else -> return false
 		}
 
 		return true
 	}
 
-	private fun replaceFragment(fragment: Fragment)
-	{
+	private fun replaceFragment(fragment: Fragment) {
 		val fragmentManager = supportFragmentManager
 		val fragmentTransaction = fragmentManager.beginTransaction()
-		fragmentTransaction.replace(R.id.frame_layout,fragment)
+		fragmentTransaction.replace(R.id.frame_layout, fragment)
 		fragmentTransaction.commit()
 	}
 }
