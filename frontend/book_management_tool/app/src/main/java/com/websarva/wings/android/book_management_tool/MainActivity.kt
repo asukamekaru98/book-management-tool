@@ -30,6 +30,7 @@ import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPI
 import com.websarva.wings.android.book_management_tool.constants.BookInfo
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData as BMTApiData
 import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
+import com.websarva.wings.android.book_management_tool.downloader.ImageDownloader
 import com.websarva.wings.android.book_management_tool.flagment.fragmentBookshelf
 import com.websarva.wings.android.book_management_tool.flagment.fragmentReadHistories
 import com.websarva.wings.android.book_management_tool.flagment.fragmentWishlist
@@ -55,8 +56,6 @@ class MainActivity : AppCompatActivity() {
 
 
 	private val names: ArrayList<String> = arrayListOf()
-	private val photos: ArrayList<Int> = arrayListOf()
-
 	private val bitmaps: ArrayList<Bitmap> = arrayListOf()
 
 	private var bookData: BMTApiData = BMTApiData()
@@ -79,38 +78,7 @@ class MainActivity : AppCompatActivity() {
 
 			bookData.bookList.forEach {
 				names.add(it.bookTitle)
-
-				Log.d("BookMgmtTool", it.bookImageUrl)
-
-				if (it.bookImageUrl.startsWith("http")) {
-					val imageUrl = URL(it.bookImageUrl)
-
-					withContext(Dispatchers.IO) {
-						bitmaps.add(
-							Glide.with(this@MainActivity)
-								.asBitmap()
-								.load(imageUrl.toString())
-								.submit()
-								.get()
-						)
-					}
-
-				} else {
-					bitmaps.add(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_foreground))
-				}
-
-				//val bitmap = runCatching {
-				//	BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream())
-				//}.getOrNull()
-//
-				//if (bitmap != null) {
-				//	bitmaps.add(bitmap)
-				//}else{
-				//	bitmaps.add(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_foreground))
-				//}
-
-
-				photos.add(bitmaps.hashCode())
+				bitmaps.add(ImageDownloader(this@MainActivity).downloadImage(it.bookImageUrl))
 			}
 		}
 
