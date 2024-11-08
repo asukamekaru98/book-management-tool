@@ -4,6 +4,7 @@ import com.websarva.wings.android.book_management_tool.abstruct.AbstractAPIHandl
 import com.websarva.wings.android.book_management_tool.apiResponseParser.BookManagementToolApiResponseParser
 import com.websarva.wings.android.book_management_tool.constants.BookInfo
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
+import com.websarva.wings.android.book_management_tool.http.HTTPGetRequestHandler
 import com.websarva.wings.android.book_management_tool.uri.UriFetcher
 import okhttp3.Response
 
@@ -14,7 +15,7 @@ class BookManagementToolAPIManager {
 	 * 本棚に本を1冊追加する
 	 * @return AbstractAPIHandler
 	 */
-	fun AddOneBookShelf() {
+	suspend fun AddOneBookShelf() {
 
 	}
 
@@ -26,9 +27,7 @@ class BookManagementToolAPIManager {
 		val uri = UriFetcher().bmtAPIBookShelf()
 
 		// APIリクエストを送信、レスポンスを取得
-		val response = BmtApiGetAllBookShelf(uri/*,bookInfo*/).execute()
-
-
+		val response = HTTPGetRequestHandler(uri).execute()
 
 		// レスポンスを解析、返却
 		return BookManagementToolApiResponseParser().apply {
@@ -40,7 +39,7 @@ class BookManagementToolAPIManager {
 		 * 本棚の情報を1つ取得する
 		 * @return AbstractAPIHandler
 		 */
-		fun GetOneBookShelf(): AbstractAPIHandler
+		suspend fun GetOneBookShelf(): BookManagementToolApiData
 		{
 			return BmtApiGetOneBookShelf()
 		}
@@ -49,7 +48,7 @@ class BookManagementToolAPIManager {
 		 * 本棚の情報を1つ修正する
 		 * @return AbstractAPIHandler
 		 */
-		fun UpdateOneBookShelf(): AbstractAPIHandler
+		suspend fun UpdateOneBookShelf(): BookManagementToolApiData
 		{
 			return BmtApiUpdateOneBookShelf()
 		}
@@ -58,7 +57,7 @@ class BookManagementToolAPIManager {
 		 * 本棚から本を1冊削除する
 		 * @return AbstractAPIHandler
 		 */
-		fun DeleteOneBookShelf(): AbstractAPIHandler
+		suspend fun DeleteOneBookShelf(): BookManagementToolApiData
 		{
 			return BmtApiDeleteOneBookShelf()
 		}
@@ -67,25 +66,35 @@ class BookManagementToolAPIManager {
 		 * 読書履歴に本を1冊追加する
 		 * @return AbstractAPIHandler
 		 */
-		fun AddOneReadHistory(): AbstractAPIHandler
+		suspend fun AddOneReadHistory(): BookManagementToolApiData
 		{
 			return BmtApiAddOneReadHistory()
 		}
+*/
 
 		/**
 		 * 読書履歴の情報を全て取得する
 		 * @return AbstractAPIHandler
 		 */
-		fun GetAllReadHistories(): AbstractAPIHandler
+		suspend fun getAllReadHistories(): BookManagementToolApiData
 		{
-			return BmtApiGetAllReadHistories()
+			val uri = UriFetcher().bmtAPIReadHistories()
+
+			// APIリクエストを送信、レスポンスを取得
+			val response = HTTPGetRequestHandler(uri).execute()
+
+			// レスポンスを解析、返却
+			return BookManagementToolApiResponseParser().apply {
+				parseResponse(response)
+			}.getResponseResult()
 		}
 
+/*
 		/**
 		 * 読書履歴の情報を1つ取得する
 		 * @return AbstractAPIHandler
 		 */
-		fun GetOneReadHistory(): AbstractAPIHandler
+		suspend fun GetOneReadHistory(): BookManagementToolApiData
 		{
 			return BmtApiGetOneReadHistory()
 		}
@@ -94,7 +103,7 @@ class BookManagementToolAPIManager {
 		 * 読み終えた本の読書履歴を取得する
 		 * @return AbstractAPIHandler
 		 */
-		fun GetReadHistoryOfReadBooks(): AbstractAPIHandler
+		suspend fun GetReadHistoryOfReadBooks(): BookManagementToolApiData
 		{
 			return BmtApiGetReadHistoryOfReadBooks()
 		}
@@ -103,7 +112,7 @@ class BookManagementToolAPIManager {
 		 * 途中で読みかけの本の読書履歴を取得する
 		 * @return AbstractAPIHandler
 		 */
-		fun GetReadHistoryOfReadingBooks(): AbstractAPIHandler
+		suspend fun GetReadHistoryOfReadingBooks(): BookManagementToolApiData
 		{
 			return BmtApiGetReadHistoryOfReadingBooks()
 		}
@@ -112,7 +121,8 @@ class BookManagementToolAPIManager {
 		 * 読書履歴から本を1冊削除する
 		 * @return AbstractAPIHandler
 		 */
-		fun DeleteOneReadHistory(): AbstractAPIHandler{
+		suspend fun DeleteOneReadHistory(): BookManagementToolApiData
+		{
 			return BmtApiDeleteOneReadHistory()
 		}
 
@@ -120,7 +130,7 @@ class BookManagementToolAPIManager {
 		 * 読書履歴の情報を全て削除する
 		 * @return AbstractAPIHandler
 		 */
-		fun DeleteAllReadHistories(): AbstractAPIHandler{
+		suspend fun DeleteAllReadHistories(): BookManagementToolApiData{
 			return BmtApiDeleteAllReadHistories()
 		}
 
@@ -128,23 +138,32 @@ class BookManagementToolAPIManager {
 		 * ほしいものリストに本を1冊追加する
 		 * @return AbstractAPIHandler
 		 */
-		fun AddOneWishList(): AbstractAPIHandler{
+		suspend fun AddOneWishList(): BookManagementToolApiData{
 			return BmtApiAddOneWishList()
 		}
-
+*/
 		/**
 		 * ほしいものリストの情報を全て取得する
 		 * @return AbstractAPIHandler
 		 */
-		fun GetAllWishLists(): AbstractAPIHandler{
-			return BmtApiGetAllWishLists()
-		}
+		suspend fun getAllWishLists(): BookManagementToolApiData
+		{
+			val uri = UriFetcher().bmtAPIWishList()
 
+			// APIリクエストを送信、レスポンスを取得
+			val response = HTTPGetRequestHandler(uri).execute()
+
+			// レスポンスを解析、返却
+			return BookManagementToolApiResponseParser().apply {
+				parseResponse(response)
+			}.getResponseResult()
+		}
+/*
 		/**
 		 * ほしいものリストの情報を1つ取得する
 		 * @return AbstractAPIHandler
 		 */
-		fun GetOneWishList(): AbstractAPIHandler{
+		suspend fun GetOneWishList(): BookManagementToolApiData{
 			return BmtApiGetOneWishList()
 		}
 
@@ -152,7 +171,7 @@ class BookManagementToolAPIManager {
 		 * ほしいものリストの情報を1つ修正する
 		 * @return AbstractAPIHandler
 		 */
-		fun UpdateOneWishList(): AbstractAPIHandler{
+		suspend fun UpdateOneWishList(): BookManagementToolApiData{
 			return BmtApiUpdateOneWishList()
 		}
 
@@ -160,7 +179,7 @@ class BookManagementToolAPIManager {
 		 * ほしいものリストから本を1冊削除する
 		 * @return AbstractAPIHandler
 		 */
-		fun DeleteOneWishList(): AbstractAPIHandler{
+		suspend fun DeleteOneWishList(): BookManagementToolApiData{
 			return BmtApiDeleteOneWishList()
 		}
 
@@ -168,7 +187,7 @@ class BookManagementToolAPIManager {
 		 * ほしいものリストの情報を全て削除する
 		 * @return AbstractAPIHandler
 		 */
-		fun DeleteAllWishLists(): AbstractAPIHandler{
+		suspend fun DeleteAllWishLists(): BookManagementToolApiData{
 			return BmtApiDeleteAllWishLists()
 		}
 

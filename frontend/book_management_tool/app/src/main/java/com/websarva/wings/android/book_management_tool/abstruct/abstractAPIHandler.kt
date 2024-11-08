@@ -14,9 +14,10 @@ import org.json.JSONObject
 abstract class AbstractAPIHandler
 {
 	suspend fun execute():String {
-		val request = createRequestBody()
+		val body = createRequestBody()
+		val query = createRequestQuery()
 
-		return sendRequest(request)
+		return sendRequest(body,query)
 	}
 
 	/**
@@ -26,10 +27,16 @@ abstract class AbstractAPIHandler
 	protected abstract fun createRequestBody(): String
 
 	/**
+	 * リクエストクエリを生成する
+	 * @return Map<String, String>
+	 */
+	protected abstract fun createRequestQuery(): Map<String, String>
+
+	/**
 	 * リクエストを送信する
 	 * @param request i_ApiRequestCreator
 	 * @return i_ApiResponseParser
 	 */
-	protected abstract suspend fun sendRequest(request:String): String
+	protected abstract suspend fun sendRequest(body:String,query: Map<String, String>?): String
 
 }

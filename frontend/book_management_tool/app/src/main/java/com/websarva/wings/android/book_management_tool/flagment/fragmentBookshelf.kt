@@ -1,11 +1,20 @@
 package com.websarva.wings.android.book_management_tool.flagment
 
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.websarva.wings.android.book_management_tool.R
+import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
+import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
+import com.websarva.wings.android.book_management_tool.downloader.ImageDownloader
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,11 +31,35 @@ class fragmentBookshelf : Fragment() {
 	private var param1: String? = null
 	private var param2: String? = null
 
+	private val names: ArrayList<String> = arrayListOf()
+	private val bitmaps: ArrayList<Bitmap> = arrayListOf()
+	private var bookData: BookManagementToolApiData = BookManagementToolApiData()
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		arguments?.let {
 			param1 = it.getString(ARG_PARAM1)
 			param2 = it.getString(ARG_PARAM2)
+		}
+
+		Toast.makeText(requireActivity() , "本棚", Toast.LENGTH_SHORT).show()
+
+		CoroutineScope(Dispatchers.Main).launch {
+			bookData = try {
+				BookManagementToolAPIManager().getAllBookShelf()
+			} catch (e: Exception) {
+
+				Log.e(
+					"BookMgmtTool Exception",
+					e.message.toString() + "/" + e.stackTraceToString() + "/" + e.cause.toString()
+				)
+				BookManagementToolApiData()
+			}
+
+			bookData.bookList.forEach {
+				names.add(it.bookTitle)
+				bitmaps.add(ImageDownloader(requireActivity()).downloadImage(it.bookImageUrl))
+			}
 		}
 	}
 

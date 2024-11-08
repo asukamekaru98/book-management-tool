@@ -3,43 +3,20 @@ package com.websarva.wings.android.book_management_tool.api
 import com.websarva.wings.android.book_management_tool.abstruct.AbstractAPIHandler
 import com.websarva.wings.android.book_management_tool.apiBody.BmtAPIBookShelfRequestBodyCreator
 import com.websarva.wings.android.book_management_tool.constants.BookInfo
+import com.websarva.wings.android.book_management_tool.http.HTTPGetRequestHandler
 import com.websarva.wings.android.book_management_tool.http.HttpClient
 import com.websarva.wings.android.book_management_tool.http.RetryInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.io.IOException
 
-class BmtApiGetAllBookShelf(
+class BmtApiGetOneBookShelf(
 	private val uri: String,
-	//private val bookInfo:BookInfo
-	) : AbstractAPIHandler() {
+	private val isbn: String
+) : HTTPGetRequestHandler(uri) {
 
-	private val okHttpClient = OkHttpClient.Builder()
-		.addInterceptor(RetryInterceptor()) // リトライ処理
-		.build()
-
-	override fun createRequestBody(): String {
-
-		return ""
-		/*
-		return BmtAPIBookShelfRequestBodyCreator(
-			bookInfo.userInfoIndustryImportant,
-			bookInfo.userInfoWorkImportant,
-			bookInfo.userInfoUserImportant,
-			bookInfo.userInfoPriority,
-			bookInfo.userInfoPurchasedFlag,
-			bookInfo.userInfoViewedFlag,
-			bookInfo.bookInfoPurchased,
-			bookInfo.bookInfoMemo
-		).get()
-		*/
-	}
-
-	override suspend fun sendRequest(request: String): String {
-		return try {
-			HttpClient(uri, okHttpClient).runGetRequest()
-		} catch (e: IOException) {
-			throw e
-		}
+	override fun createRequestQuery(): Map<String, String> {
+		// クエリパラメータ無し
+		return mapOf("isbn" to isbn)
 	}
 }

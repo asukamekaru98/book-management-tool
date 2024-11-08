@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity() {
 
 	private val names: ArrayList<String> = arrayListOf()
 	private val bitmaps: ArrayList<Bitmap> = arrayListOf()
-
 	private var bookData: BMTApiData = BMTApiData()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,12 +95,9 @@ class MainActivity : AppCompatActivity() {
 		listView.layoutManager = rLayoutManager
 		listView.adapter = RecyclerViewAdapter(bitmaps, names)
 
-		//setContentView(R.layout.activity_main)
 		setContentView(binding.root)
 		replaceFragment(fragmentBookshelf())
 
-
-		//val reqCreator = bmtApiRequestCreatorFactory::APIRequestCreator_AddOneBookShelf
 
 
 		binding.navView.setOnItemSelectedListener {
