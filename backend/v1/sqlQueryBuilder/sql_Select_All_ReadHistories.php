@@ -27,8 +27,8 @@ class SqlSelectAllBookShelf extends SqlQueryBuilder_BookManagementTool
 						books.priority,
 						books.purchased_flag,
 						books.viewed_flag,
-						read_histories.view-start,
-						read_histories.view-end,
+						read_histories.view_start,
+						read_histories.view_end,
 						read_histories.impression,
 						read_histories.memo,
 						read_histories.understanding

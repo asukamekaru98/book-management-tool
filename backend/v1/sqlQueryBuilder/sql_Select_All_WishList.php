@@ -28,9 +28,9 @@ final class Sql_Select_All_WishList extends SqlQueryBuilder_BookManagementTool
 			books.purchased_flag,
 			books.viewed_flag,
 			wish_list.memo
-			FROM books_shelf
+			FROM wish_list
 			LEFT JOIN books
-			ON books.isbn = books_shelf.isbn
+			ON books.isbn = wish_list.isbn
 		EOD;
 	}
 }

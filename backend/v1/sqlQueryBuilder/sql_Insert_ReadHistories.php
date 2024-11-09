@@ -25,7 +25,7 @@ class SqlInsertReadHistories extends SqlQueryBuilder_BookManagementTool
 		$understanding = $this->data['understanding'] ?? 0;
 
 		$this->sqlQuery = <<< "EOD"
-                    INSERT INTO books_shelf (isbn, view-start, 	view-end, impression, memo, understanding)
+                    INSERT INTO books_shelf (isbn, view_start, 	view_end, impression, memo, understanding)
                     VALUES ('{$this->isbn}','{$view_start}','{$view_end}','{$impression}','{$memo}','{$understanding}')
                     EOD;
 	}
