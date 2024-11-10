@@ -8,9 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.book_management_tool.R
+import com.websarva.wings.android.book_management_tool.adapter.RecyclerViewAdapter
 import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
+import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
 import com.websarva.wings.android.book_management_tool.downloader.ImageDownloader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +35,10 @@ class fragmentWishlist : Fragment() {
 	private var param1: String? = null
 	private var param2: String? = null
 
+	private lateinit var binding: ActivityMainBinding
+	private lateinit var listView: RecyclerView
+	private lateinit var adapter: RecyclerViewAdapter
+
 	private val names: ArrayList<String> = arrayListOf()
 	private val bitmaps: ArrayList<Bitmap> = arrayListOf()
 	private var bookData: BookManagementToolApiData = BookManagementToolApiData()
@@ -41,6 +49,16 @@ class fragmentWishlist : Fragment() {
 			param1 = it.getString(ARG_PARAM1)
 			param2 = it.getString(ARG_PARAM2)
 		}
+
+		binding = ActivityMainBinding.inflate(layoutInflater)
+
+		listView = binding.bookListView
+		listView.setHasFixedSize(true)
+		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
+		listView.layoutManager = rLayoutManager
+
+		adapter = RecyclerViewAdapter(bitmaps, names)
+		listView.adapter = adapter
 
 		Toast.makeText(requireActivity() , "干芋", Toast.LENGTH_SHORT).show()
 
@@ -60,6 +78,9 @@ class fragmentWishlist : Fragment() {
 				names.add(it.bookTitle)
 				bitmaps.add(ImageDownloader(requireActivity()).downloadImage(it.bookImageUrl))
 			}
+
+			// データがロードされた後にアダプターに通知
+			adapter.notifyDataSetChanged()
 		}
 	}
 

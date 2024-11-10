@@ -8,9 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.book_management_tool.R
+import com.websarva.wings.android.book_management_tool.adapter.RecyclerViewAdapter
 import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
+import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
+import com.websarva.wings.android.book_management_tool.databinding.FragmentBookshelfBinding
 import com.websarva.wings.android.book_management_tool.downloader.ImageDownloader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,9 +32,12 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class fragmentBookshelf : Fragment() {
-	// TODO: Rename and change types of parameters
 	private var param1: String? = null
 	private var param2: String? = null
+
+	private lateinit var binding: FragmentBookshelfBinding
+	private lateinit var listView: RecyclerView
+	private lateinit var adapter: RecyclerViewAdapter
 
 	private val names: ArrayList<String> = arrayListOf()
 	private val bitmaps: ArrayList<Bitmap> = arrayListOf()
@@ -42,13 +50,22 @@ class fragmentBookshelf : Fragment() {
 			param2 = it.getString(ARG_PARAM2)
 		}
 
-		Toast.makeText(requireActivity() , "本棚", Toast.LENGTH_SHORT).show()
+		binding = FragmentBookshelfBinding.inflate(layoutInflater)
+
+		listView = binding.bookListView
+		listView.setHasFixedSize(true)
+		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
+		listView.layoutManager = rLayoutManager
+
+		adapter = RecyclerViewAdapter(bitmaps, names)
+		listView.adapter = adapter
+
+		Toast.makeText(requireActivity(), "本棚", Toast.LENGTH_SHORT).show()
 
 		CoroutineScope(Dispatchers.Main).launch {
 			bookData = try {
 				BookManagementToolAPIManager().getAllBookShelf()
 			} catch (e: Exception) {
-
 				Log.e(
 					"BookMgmtTool Exception",
 					e.message.toString() + "/" + e.stackTraceToString() + "/" + e.cause.toString()
@@ -60,6 +77,8 @@ class fragmentBookshelf : Fragment() {
 				names.add(it.bookTitle)
 				bitmaps.add(ImageDownloader(requireActivity()).downloadImage(it.bookImageUrl))
 			}
+
+			adapter.notifyDataSetChanged()
 		}
 	}
 
@@ -67,8 +86,8 @@ class fragmentBookshelf : Fragment() {
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
-		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_bookshelf, container, false)
+		binding = FragmentBookshelfBinding.inflate(inflater, container, false)
+		return binding.root
 	}
 
 	companion object {
