@@ -54,11 +54,11 @@ class fragmentBookshelf : Fragment() {
 
 		listView = binding.bookListView
 		listView.setHasFixedSize(true)
-		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
-		listView.layoutManager = rLayoutManager
+//		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
+//		listView.layoutManager = rLayoutManager
 
-		adapter = RecyclerViewAdapter(bitmaps, names)
-		listView.adapter = adapter
+//		adapter = RecyclerViewAdapter(bitmaps, names)
+//		listView.adapter = adapter
 
 		Toast.makeText(requireActivity(), "本棚", Toast.LENGTH_SHORT).show()
 
@@ -73,12 +73,13 @@ class fragmentBookshelf : Fragment() {
 				BookManagementToolApiData()
 			}
 
+			//
 			bookData.bookList.forEach {
 				names.add(it.bookTitle)
 				bitmaps.add(ImageDownloader(requireActivity()).downloadImage(it.bookImageUrl))
 			}
 
-			adapter.notifyDataSetChanged()
+//			adapter.notifyDataSetChanged()
 		}
 	}
 
