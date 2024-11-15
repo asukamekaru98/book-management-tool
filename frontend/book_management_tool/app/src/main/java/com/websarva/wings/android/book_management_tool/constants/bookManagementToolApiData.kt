@@ -82,7 +82,7 @@ object BookManagementToolApiParameterName
 
 // API BookManagementTookのURI
 object BookManagementToolApiUri {
-	const val API_URI                   = "http://192.168.10.7"
+	const val API_URI                   = "http://192.168.1.64"
 	const val API_VERSION               = "v1"
 	const val API_FUNC_BOOK_SHELF       = "book-shelf"
 	const val API_FUNC_READ_HISTORIES   = "read-histories"

@@ -35,10 +35,6 @@ class fragmentReadHistories : Fragment() {
 	private var param1: String? = null
 	private var param2: String? = null
 
-	private lateinit var binding: ActivityMainBinding
-	private lateinit var listView: RecyclerView
-	private lateinit var adapter: RecyclerViewAdapter
-
 	private val names: ArrayList<String> = arrayListOf()
 	private val bitmaps: ArrayList<Bitmap> = arrayListOf()
 	private var bookData: BookManagementToolApiData = BookManagementToolApiData()
@@ -49,16 +45,6 @@ class fragmentReadHistories : Fragment() {
 			param1 = it.getString(ARG_PARAM1)
 			param2 = it.getString(ARG_PARAM2)
 		}
-
-		binding = ActivityMainBinding.inflate(layoutInflater)
-
-		listView = binding.bookListView
-		listView.setHasFixedSize(true)
-		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
-		listView.layoutManager = rLayoutManager
-
-		adapter = RecyclerViewAdapter(bitmaps, names)
-		listView.adapter = adapter
 
 		Toast.makeText(requireActivity() , "履歴", Toast.LENGTH_SHORT).show()
 
@@ -79,8 +65,17 @@ class fragmentReadHistories : Fragment() {
 				bitmaps.add(ImageDownloader(requireActivity()).downloadImage(it.bookImageUrl))
 			}
 
-			// データがロードされた後にアダプターに通知
-			adapter.notifyDataSetChanged()
+			// RecyclerViewの設定
+
+			val binding = ActivityMainBinding.inflate(layoutInflater)
+
+			val listView = binding.bookListView
+			listView.setHasFixedSize(true)
+
+			val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireActivity())
+			listView.layoutManager = rLayoutManager
+			listView.adapter = RecyclerViewAdapter(bitmaps, names)
+			activity?.invalidateOptionsMenu()
 		}
 	}
 
@@ -90,6 +85,7 @@ class fragmentReadHistories : Fragment() {
 	): View? {
 		// Inflate the layout for this fragment
 		return inflater.inflate(R.layout.fragment_read_histories, container, false)
+
 	}
 
 	companion object {

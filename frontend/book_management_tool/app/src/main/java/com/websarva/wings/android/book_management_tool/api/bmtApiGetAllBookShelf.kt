@@ -16,6 +16,7 @@ class BmtApiGetOneBookShelf(
 ) : HTTPGetRequestHandler(uri) {
 
 	override fun createRequestQuery(): Map<String, String> {
+		// クエリパラメータ無し
 		return mapOf("isbn" to isbn)
 	}
 }

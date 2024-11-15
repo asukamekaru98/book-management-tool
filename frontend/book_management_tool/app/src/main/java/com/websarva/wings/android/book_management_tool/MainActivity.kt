@@ -61,26 +61,26 @@ class MainActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-
+/*
 		// APIリクエストの送信
-	//	CoroutineScope(Dispatchers.Main).launch {
-	//		bookData = try {
-	//			BookManagementToolAPIManager().getAllBookShelf()
-	//		} catch (e: Exception) {
-//
-	//			Log.e(
-	//				"BookMgmtTool Exception",
-	//				e.message.toString() + "/" + e.stackTraceToString() + "/" + e.cause.toString()
-	//			)
-	//			BMTApiData()
-	//		}
-//
-	//		bookData.bookList.forEach {
-	//			names.add(it.bookTitle)
-	//			bitmaps.add(ImageDownloader(this@MainActivity).downloadImage(it.bookImageUrl))
-	//		}
-	//	}
+		CoroutineScope(Dispatchers.Main).launch {
+			bookData = try {
+				BookManagementToolAPIManager().getAllBookShelf()
+			} catch (e: Exception) {
 
+				Log.e(
+					"BookMgmtTool Exception",
+					e.message.toString() + "/" + e.stackTraceToString() + "/" + e.cause.toString()
+				)
+				BMTApiData()
+			}
+
+			bookData.bookList.forEach {
+				names.add(it.bookTitle)
+				bitmaps.add(ImageDownloader(this@MainActivity).downloadImage(it.bookImageUrl))
+			}
+		}
+*/
 		// ここでActionBarを無効化
 		supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
 
@@ -89,11 +89,12 @@ class MainActivity : AppCompatActivity() {
 		toolBar = binding.toolbar
 		setSupportActionBar(toolBar)
 
-	//	listView = binding.bookListView
-	//	listView.setHasFixedSize(true)
-	//	val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
-	//	listView.layoutManager = rLayoutManager
-	//	listView.adapter = RecyclerViewAdapter(bitmaps, names)
+		listView = binding.bookListView
+		listView.setHasFixedSize(true)
+
+		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
+		listView.layoutManager = rLayoutManager
+		listView.adapter = RecyclerViewAdapter(bitmaps, names)
 
 		setContentView(binding.root)
 		replaceFragment(fragmentBookshelf())
