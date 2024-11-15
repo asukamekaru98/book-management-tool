@@ -89,12 +89,12 @@ class MainActivity : AppCompatActivity() {
 		toolBar = binding.toolbar
 		setSupportActionBar(toolBar)
 
-		listView = binding.bookListView
-		listView.setHasFixedSize(true)
+		//listView = binding.bookListView
+		//listView.setHasFixedSize(true)
 
-		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
-		listView.layoutManager = rLayoutManager
-		listView.adapter = RecyclerViewAdapter(bitmaps, names)
+		//val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
+		//listView.layoutManager = rLayoutManager
+		//listView.adapter = RecyclerViewAdapter(bitmaps, names)
 
 		setContentView(binding.root)
 		replaceFragment(fragmentBookshelf())
@@ -213,6 +213,17 @@ class MainActivity : AppCompatActivity() {
 		*/
 	}
 
+	// 画面遷移
+	private fun replaceFragment(fragment: Fragment) {
+		// FragmentManagerのインスタンスを取得
+		val fragmentManager = supportFragmentManager
+		val fragmentTransaction = fragmentManager.beginTransaction()
+		// レイアウトのフレーム部分にフラグメントを表示
+		fragmentTransaction.replace(R.id.frame_layout, fragment)
+		// フラグメントの変更を反映
+		fragmentTransaction.commit()
+	}
+
 	private suspend fun getAPI() {
 		//	val apiManager = BookManagementToolAPIManager()
 
@@ -258,10 +269,5 @@ class MainActivity : AppCompatActivity() {
 		return true
 	}
 
-	private fun replaceFragment(fragment: Fragment) {
-		val fragmentManager = supportFragmentManager
-		val fragmentTransaction = fragmentManager.beginTransaction()
-		fragmentTransaction.replace(R.id.frame_layout, fragment)
-		fragmentTransaction.commit()
-	}
+
 }

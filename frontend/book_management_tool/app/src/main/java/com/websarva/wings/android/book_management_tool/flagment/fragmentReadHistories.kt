@@ -15,6 +15,7 @@ import com.websarva.wings.android.book_management_tool.adapter.RecyclerViewAdapt
 import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
 import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
+import com.websarva.wings.android.book_management_tool.databinding.FragmentReadHistoriesBinding
 import com.websarva.wings.android.book_management_tool.downloader.ImageDownloader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,12 +40,19 @@ class fragmentReadHistories : Fragment() {
 	private val bitmaps: ArrayList<Bitmap> = arrayListOf()
 	private var bookData: BookManagementToolApiData = BookManagementToolApiData()
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		arguments?.let {
-			param1 = it.getString(ARG_PARAM1)
-			param2 = it.getString(ARG_PARAM2)
-		}
+
+	override fun onCreateView(
+		inflater: LayoutInflater, container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View {
+		// Inflate the layout for this fragment
+		val listView = inflater.inflate(R.layout.fragment_read_histories, container, false)
+		//val binding = ActivityMainBinding.inflate(layoutInflater)
+
+		//val listView = binding.bookListView
+		//listView.setHasFixedSize(true)
+
+		//return listView
 
 		Toast.makeText(requireActivity() , "履歴", Toast.LENGTH_SHORT).show()
 
@@ -67,44 +75,20 @@ class fragmentReadHistories : Fragment() {
 
 			// RecyclerViewの設定
 
-			val binding = ActivityMainBinding.inflate(layoutInflater)
-
-			val listView = binding.bookListView
-			listView.setHasFixedSize(true)
+			val recyclerView = listView.findViewById<RecyclerView>(R.id.bookListView)
 
 			val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireActivity())
 			listView.layoutManager = rLayoutManager
+
 			listView.adapter = RecyclerViewAdapter(bitmaps, names)
-			activity?.invalidateOptionsMenu()
+			//activity?.invalidateOptionsMenu()
 		}
-	}
-
-	override fun onCreateView(
-		inflater: LayoutInflater, container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View? {
-		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_read_histories, container, false)
-
+		return listView
 	}
 
 	companion object {
-		/**
-		 * Use this factory method to create a new instance of
-		 * this fragment using the provided parameters.
-		 *
-		 * @param param1 Parameter 1.
-		 * @param param2 Parameter 2.
-		 * @return A new instance of fragment fragmentReadHistories.
-		 */
-		// TODO: Rename and change types and number of parameters
+
 		@JvmStatic
-		fun newInstance(param1: String, param2: String) =
-			fragmentReadHistories().apply {
-				arguments = Bundle().apply {
-					putString(ARG_PARAM1, param1)
-					putString(ARG_PARAM2, param2)
-				}
-			}
+		fun newInstance(param1: String, param2: String) = fragmentReadHistories()
 	}
 }

@@ -14,12 +14,7 @@
         android:textSize="26dp"
         android:layout_gravity="center"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/bookListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:layout_below="@id/toolbar"/>
+
 
 
 </FrameLayout>
