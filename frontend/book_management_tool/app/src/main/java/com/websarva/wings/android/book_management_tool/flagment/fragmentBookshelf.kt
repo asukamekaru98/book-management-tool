@@ -32,16 +32,15 @@ class fragmentBookshelf : Fragment() {
 		savedInstanceState: Bundle?
 	): View {
 		// Inflate the layout for this fragment
-		val listView = inflater.inflate(R.layout.fragment_bookshelf, container, false)
+		//val listView = inflater.inflate(R.layout.fragment_bookshelf, container, false)
 
 		Toast.makeText(requireActivity() , "本棚", Toast.LENGTH_SHORT).show()
 
 		// RecyclerViewの設定
-		//val binding = ActivityMainBinding.inflate(layoutInflater)
-		//val listView = binding.bookListView
-		//listView.setHasFixedSize(true)
+		val binding = ActivityMainBinding.inflate(layoutInflater)
+		val listView = binding.bookListView
+		listView.setHasFixedSize(true)
 
-		//return listView
 
 		CoroutineScope(Dispatchers.Main).launch {
 			bookData = try {
@@ -65,7 +64,7 @@ class fragmentBookshelf : Fragment() {
 			listView.adapter = RecyclerViewAdapter(bitmaps, names)
 
 		}
-		return listView
+		return inflater.inflate(R.layout.fragment_bookshelf, container, false)
 	}
 
 	companion object {

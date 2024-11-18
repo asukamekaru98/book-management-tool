@@ -43,7 +43,6 @@ class fragmentWishlist : Fragment() {
 		val listView = binding.bookListView
 		listView.setHasFixedSize(true)
 
-		return listView
 
 		CoroutineScope(Dispatchers.Main).launch {
 			bookData = try {
@@ -70,7 +69,7 @@ class fragmentWishlist : Fragment() {
 			//activity?.invalidateOptionsMenu()
 		}
 
-		return listView
+		return inflater.inflate(R.layout.fragment_wishlist, container, false)
 
 	}
 

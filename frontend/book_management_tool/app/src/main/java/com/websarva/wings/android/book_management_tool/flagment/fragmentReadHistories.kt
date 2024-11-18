@@ -46,13 +46,10 @@ class fragmentReadHistories : Fragment() {
 		savedInstanceState: Bundle?
 	): View {
 		// Inflate the layout for this fragment
-		val listView = inflater.inflate(R.layout.fragment_read_histories, container, false)
-		//val binding = ActivityMainBinding.inflate(layoutInflater)
-
-		//val listView = binding.bookListView
-		//listView.setHasFixedSize(true)
-
-		//return listView
+		//val createView = inflater.inflate(R.layout.fragment_read_histories, container, false)
+		val binding = ActivityMainBinding.inflate(layoutInflater)
+		val listView = binding.bookListView
+		listView.setHasFixedSize(true)
 
 		Toast.makeText(requireActivity() , "履歴", Toast.LENGTH_SHORT).show()
 
@@ -82,8 +79,10 @@ class fragmentReadHistories : Fragment() {
 
 			listView.adapter = RecyclerViewAdapter(bitmaps, names)
 			//activity?.invalidateOptionsMenu()
+			Log.d("BookMgmtTool", "ReadHistories Get Data")
 		}
-		return listView
+		Log.d("BookMgmtTool", "ReadHistories")
+		return inflater.inflate(R.layout.fragment_read_histories, container, false)
 	}
 
 	companion object {
