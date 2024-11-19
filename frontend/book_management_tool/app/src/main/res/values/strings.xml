@@ -1,5 +1,21 @@
 <resources>
     <string name="app_name">book-management-tool</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="set_isbn_code">13桁のISBNコードを入力</string>
+    <string name="set_priority">優先度を設定</string>
+
+    <!--テキスト-->
+    <string name="text_important_explain">それぞれの優先度を設定してください。</string>
+    <string name="text_industry_important">業界の優先度はどれぐらいですか？</string>
+    <string name="text_work_important">仕事の優先度はどれぐらいですか？</string>
+    <string name="text_user_important">個人的な優先度はどれぐらいですか？</string>
+
+    <!--ボタンのテキスト-->
+    <string name="button_register">登録</string>
+    <string name="button_cancel">キャンセル</string>
+
+    <!--初期値 -->
+    <!--ISBNコードの初期値-->
+    <string name="et_init_text_isbn">978</string>
+
 </resources>

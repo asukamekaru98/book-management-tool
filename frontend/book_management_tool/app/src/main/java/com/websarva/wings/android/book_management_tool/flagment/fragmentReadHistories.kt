@@ -15,26 +15,15 @@ import com.websarva.wings.android.book_management_tool.adapter.RecyclerViewAdapt
 import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
 import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
+import com.websarva.wings.android.book_management_tool.databinding.FragmentBookshelfBinding
 import com.websarva.wings.android.book_management_tool.databinding.FragmentReadHistoriesBinding
+import com.websarva.wings.android.book_management_tool.databinding.FragmentWishlistBinding
 import com.websarva.wings.android.book_management_tool.downloader.ImageDownloader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [fragmentReadHistories.newInstance] factory method to
- * create an instance of this fragment.
- */
 class fragmentReadHistories : Fragment() {
-	// TODO: Rename and change types of parameters
-	private var param1: String? = null
-	private var param2: String? = null
 
 	private val names: ArrayList<String> = arrayListOf()
 	private val bitmaps: ArrayList<Bitmap> = arrayListOf()
@@ -45,44 +34,33 @@ class fragmentReadHistories : Fragment() {
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-		// Inflate the layout for this fragment
-		//val createView = inflater.inflate(R.layout.fragment_read_histories, container, false)
-		val binding = ActivityMainBinding.inflate(layoutInflater)
+		val binding = FragmentReadHistoriesBinding.inflate(inflater, container, false)
 		val listView = binding.bookListView
 		listView.setHasFixedSize(true)
 
-		Toast.makeText(requireActivity() , "履歴", Toast.LENGTH_SHORT).show()
+		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
 
 		CoroutineScope(Dispatchers.Main).launch {
 			bookData = try {
 				BookManagementToolAPIManager().getAllReadHistories()
 			} catch (e: Exception) {
-
 				Log.e(
 					"BookMgmtTool Exception",
 					e.message.toString() + "/" + e.stackTraceToString() + "/" + e.cause.toString()
 				)
-				BookManagementToolApiData()
+				BookManagementToolApiData() // 初期値を設定
 			}
 
 			bookData.bookList.forEach {
 				names.add(it.bookTitle)
-				bitmaps.add(ImageDownloader(requireActivity()).downloadImage(it.bookImageUrl))
+				bitmaps.add(ImageDownloader(requireContext()).downloadImage(it.bookImageUrl))
 			}
 
-			// RecyclerViewの設定
-
-			val recyclerView = listView.findViewById<RecyclerView>(R.id.bookListView)
-
-			val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireActivity())
 			listView.layoutManager = rLayoutManager
-
 			listView.adapter = RecyclerViewAdapter(bitmaps, names)
-			//activity?.invalidateOptionsMenu()
-			Log.d("BookMgmtTool", "ReadHistories Get Data")
 		}
-		Log.d("BookMgmtTool", "ReadHistories")
-		return inflater.inflate(R.layout.fragment_read_histories, container, false)
+
+		return binding.root
 	}
 
 	companion object {

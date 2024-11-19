@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".flagment.fragmentAddBookShelf">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <!-- ISBN入力 -->
+        <include layout="@layout/isbn_input_layout" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:importantForAccessibility="no"
+            android:layout_gravity="center"
+            android:src="@android:drawable/ic_menu_report_image" />
+
+        <!-- 登録ボタン -->
+        <Button
+            android:id="@+id/register_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/border_shinsei_blue"
+            android:text="@string/button_register"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+</FrameLayout>
