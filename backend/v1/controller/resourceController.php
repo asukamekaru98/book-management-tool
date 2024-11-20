@@ -3,13 +3,14 @@ require_once(__DIR__ . '/../database/database.php');
 require_once(__DIR__ . '/../constant/const_statusCode.php');
 require_once(__DIR__ . '/../sql/SqlManager.php');
 require_once __DIR__ . '/../returnResponse/returnResponse.php';
+require_once(__DIR__ . '/../validator/isbnValidator.php');
 
 use SqlQueryBuilder\SqlQueryBuilderFactory;
 use SqlManager\SqlManager;
 use DataBase\DataBaseMySQL;
 use Interfaces\I_ResponseCreator;
 use ReturnResponse\ReturnResponse;
-
+use validator\IsbnValidator;
 
 abstract class resourceController
 {
@@ -19,16 +20,9 @@ abstract class resourceController
     protected $format;
     protected $viewed_flag;
     protected array $data;
-    /*
-    protected $industry_important;
-    protected $work_important;
-    protected $user_important;
-    protected $priority;
-    protected $purchased_flag;
-    protected $viewed_flag;
-*/
+
     protected SqlManager    $sqlManager;
-    protected bool          $bIsISBNDuplicate;
+    protected bool $bIsISBNDuplicate;
 
     public function __construct(
         protected DataBaseMySQL $db
@@ -112,11 +106,23 @@ abstract class resourceController
             return;
         }
 
-        if ($this->IsIsbnCodeDuplicate()) {
+        $isbnValidator = new IsbnValidator($this->sqlManager);
+
+        $isDuplicate = $isbnValidator->IsIsbnCodeDuplicate(
+            SqlQueryBuilderFactory::IsIsbnCodeDuplicate(
+                $this->isbn,
+                $this->data
+            )
+        );
+
+        // ISBNコードが重複している場合は何もしない
+        if (!$isDuplicate) {
             $bookInfoSQLQuery = SqlQueryBuilderFactory::InsertBookInfo(
                 $this->isbn,
                 $this->data
             );
+
+            print_r($bookInfoSQLQuery->GetSQLQuery());
 
             try {
                 $this->sqlManager->ExecuteSqlQuery($bookInfoSQLQuery->GetSQLQuery());
@@ -129,7 +135,7 @@ abstract class resourceController
     /**
      * ISBNコードが重複しているか確認する
      */
-    private function IsIsbnCodeDuplicate(): bool
+    /*   private function IsIsbnCodeDuplicate(): bool
     {
 
         $isbnCountSQLQuery = SqlQueryBuilderFactory::IsIsbnCodeDuplicate(
@@ -147,6 +153,7 @@ abstract class resourceController
 
         return ($result > 0) ? $this->bIsISBNDuplicate = true : $this->bIsISBNDuplicate = false;
     }
+*/
 
     /**
      * ISBNコードが設定されているか確認する

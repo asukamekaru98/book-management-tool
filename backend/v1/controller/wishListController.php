@@ -1,11 +1,13 @@
 <?php
 
 require_once(__DIR__ . '/resourceController.php');
+require_once(__DIR__ . '/../validator/isbnValidator.php');
 
 use SqlQueryBuilder\SqlQueryBuilderFactory;
 use ResponseCreator\ResponseCreator;
 use ResponseBodyCreator\ResponseBodyCreatorFactory;
 use ResponseCodeCreator\ResponseCodeCreator;
+use validator\IsbnValidator;
 
 class wishListController extends resourceController
 {
@@ -44,14 +46,37 @@ class wishListController extends resourceController
 			throw new Exception("ISBN code is not set", PRECONDITION_REQUIRED_428);
 		}
 
-		// SQLクエリの生成
-		$sqlQueryBuilder = SqlQueryBuilderFactory::InsertWishList(
-			$this->isbn,
-			$this->data
+		$isbnValidator = new IsbnValidator($this->sqlManager);
+
+		$isDuplicate = $isbnValidator->IsIsbnCodeDuplicate(
+			SqlQueryBuilderFactory::IsIsbnCodeDuplicateInWishList(
+				$this->isbn,
+				$this->data
+			)
 		);
 
+
+		if (!$isDuplicate) {
+			// 重複している場合、エラーを返す
+			throw new Exception("ISBN code is duplicate", CONFLICT_409);
+		}
+
+
 		// SQLクエリの実行
-		$this->ExecuteSqlQuery($sqlQueryBuilder->GetSQLQuery());
+		$this->ExecuteSqlQuery(
+			sqlQuery: SqlQueryBuilderFactory::InsertWishList(
+				$this->isbn,
+				$this->data
+			)->GetSQLQuery()
+		);
+
+		$this->ExecuteSqlQuery(
+			sqlQuery: SqlQueryBuilderFactory::UpdateWishList(
+				$this->isbn,
+				$this->data
+			)->GetSQLQuery()
+		);
+
 
 		$this->CreateResponse(
 			new ResponseCreator(
@@ -99,6 +124,8 @@ class wishListController extends resourceController
 			$this->isbn,
 			$this->data
 		);
+
+		echo $this->data;
 
 		// SQLクエリの実行
 		$this->ExecuteSqlQuery($sqlQueryBuilder->GetSQLQuery());

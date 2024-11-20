@@ -142,4 +142,11 @@ class SqlQueryBuilderFactory
 
         return new Sql_IsIsbnCodeDuplicate($isbn, $data);
     }
+
+    public static function IsIsbnCodeDuplicateInWishList(string $isbn, array $data): Sql_IsIsbnCodeDuplicateInWishList
+    {
+        require_once('sql_IsIsbnCodeDuplicateInWishList.php');
+
+        return new Sql_IsIsbnCodeDuplicateInWishList($isbn, $data);
+    }
 }

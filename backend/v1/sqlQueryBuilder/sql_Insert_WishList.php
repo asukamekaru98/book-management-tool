@@ -18,11 +18,12 @@ class SqlInsertWishList extends SqlQueryBuilder_BookManagementTool
 			return;
 		}
 
-		$memo = $this->data['memo'] ?? 0;
+		$memo = $this->data[DB_WISH_LISTS_MEMO] ?? 0;
 
 		$this->sqlQuery = <<< "EOD"
-                    INSERT INTO books_shelf (isbn, memo)
+                    INSERT INTO wish_list (isbn, memo)
                     VALUES ('{$this->isbn}','{$memo}')
+
                     EOD;
 	}
 }

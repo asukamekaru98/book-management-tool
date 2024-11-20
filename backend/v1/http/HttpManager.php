@@ -23,6 +23,7 @@ class httpManager
     {
 
         $this->httpMethod = $_SERVER['REQUEST_METHOD'];
+        //$this->httpMethod = "POST";
 
         $httpUriScriptParser = new HttpURIPerser(uri: $_SERVER['REQUEST_URI']);
         $this->aUriResource = $httpUriScriptParser->getUriResource();

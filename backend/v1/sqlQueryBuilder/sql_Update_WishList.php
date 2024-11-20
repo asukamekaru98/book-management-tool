@@ -28,7 +28,7 @@ class SqlUpdateWishList extends SqlQueryBuilder_BookManagementTool
 		$this->sqlQuery = <<< "EOD"
 					UPDATE books,wish_list
 					SET books.industry_important = '{$industry_important}', books.work_important = '{$work_important}', books.user_important = '{$user_important}', books.priority = '{$priority}', wish_list.memo = '{$memo}'
-					WHERE isbn = '{$this->isbn}'
+					WHERE books.isbn = '{$this->isbn}'
 					EOD;
 	}
 }
