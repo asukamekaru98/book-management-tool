@@ -13,13 +13,13 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
 import com.websarva.wings.android.book_management_tool.R
-import com.websarva.wings.android.book_management_tool.adapter.RecyclerViewAdapter
 import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
+import com.websarva.wings.android.book_management_tool.apiBody.BmtAPIWishListRequestBodyCreator
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
-import com.websarva.wings.android.book_management_tool.downloader.ImageDownloader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.websarva.wings.android.book_management_tool.databinding.FragmentAddWishListBinding as Binding
 
 class fragmentAddWishList : Fragment() {
@@ -52,8 +52,6 @@ class fragmentAddWishList : Fragment() {
 	 * 登録ボタンが押された時の処理
 	 */
 	private fun onClickRegisterButton() {
-		val names: ArrayList<String> = arrayListOf()
-		val bitmaps: ArrayList<Bitmap> = arrayListOf()
 
 		val isbnCode = binding.root.findViewById<EditText>(R.id.isbn_code_edit_text).text.toString()
 
@@ -62,10 +60,31 @@ class fragmentAddWishList : Fragment() {
 			return
 		}
 
+		val body = BmtAPIWishListRequestBodyCreator(
+			binding.spinnerIndustryImportant.selectedItem.toString(),
+			binding.spinnerWorkImportant.selectedItem.toString(),
+			binding.spinnerUserImportant.selectedItem.toString(),
+			getPriority(),
+			"0",
+			"0",
+			"0"
+		)
+
 		CoroutineScope(Dispatchers.Main).launch {
 			val bookData = try {
-				BookManagementToolAPIManager().AddOneWishList(isbnCode)
+				withContext(Dispatchers.IO) {
+					BookManagementToolAPIManager().addOneWishList(isbnCode, body.get())
+				}
 			} catch (e: Exception) {
+
+				// 409エラーの場合は、すでに登録されている旨のメッセージを表示
+				if (e.message.toString().contains("409")) {
+					Toast.makeText(requireContext(), "すでに登録されています", Toast.LENGTH_SHORT).show()
+				} else {
+					Toast.makeText(requireContext(), "エラーが発生しました", Toast.LENGTH_SHORT).show()
+				}
+
+
 				Log.e(
 					"BookMgmtTool Exception",
 					e.message.toString() + "/" + e.stackTraceToString() + "/" + e.cause.toString()
@@ -77,6 +96,34 @@ class fragmentAddWishList : Fragment() {
 
 		}
 	}
+
+	// 各重要度から優先度を計算する
+	private fun getPriority(): String {
+		val industry = binding.spinnerIndustryImportant.selectedItem.toString()
+		val work = binding.spinnerWorkImportant.selectedItem.toString()
+		val user = binding.spinnerUserImportant.selectedItem.toString()
+
+		val industryNum = when (industry) {
+			"高" -> 3
+			"中" -> 2
+			else -> 1
+		}*1.5
+
+		val workNum = when (work) {
+			"高" -> 3
+			"中" -> 2
+			else -> 1
+		}*1.2
+
+		val userNum = when (user) {
+			"高" -> 3
+			"中" -> 2
+			else -> 1
+		}
+
+		return (industryNum + workNum + userNum).toString()
+	}
+
 
 	// 登録ボタンの設定
 	private fun setupRegisterButton() {

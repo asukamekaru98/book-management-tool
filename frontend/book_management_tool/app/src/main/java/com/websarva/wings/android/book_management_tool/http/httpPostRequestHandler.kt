@@ -4,12 +4,10 @@ import com.websarva.wings.android.book_management_tool.abstruct.AbstractAPIHandl
 import okhttp3.OkHttpClient
 import java.io.IOException
 
-/**
- * このクラスは、HTTP GETリクエストを送信するためのクラスです。
- * GETは、リソースの取得を行うためのメソッドです。
- */
-open class HTTPGetRequestHandler(
-	private val uri: String
+class HTTPPostRequestHandler(
+	private val uri: String,
+	private val body: String,
+	private val query: Map<String, String>
 ) : AbstractAPIHandler() {
 
 	private val okHttpClient = OkHttpClient.Builder()
@@ -19,17 +17,17 @@ open class HTTPGetRequestHandler(
 	override fun createRequestBody(): String {
 
 		// リクエストボディ無し
-		return ""
+		return body
 	}
 
 	override fun createRequestQuery(): Map<String, String> {
 		// クエリパラメータ無し
-		return mapOf()
+		return query
 	}
 
-	override suspend fun sendRequest(body:String,query: Map<String, String>?): String {
+	override suspend fun sendRequest(body: String, query: Map<String, String>?): String {
 		return try {
-			HttpClient(uri, okHttpClient).runGetRequest(query)
+			HttpClient(uri, okHttpClient).runPostRequest(body, query)
 		} catch (e: IOException) {
 			throw e
 		}

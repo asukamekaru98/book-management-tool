@@ -16,7 +16,7 @@
 
             android:maxLength="13"
             android:textSize="40sp"
-            android:text="9781234567890"
+            android:text="9784814400331"
             android:hint="@string/set_isbn_code"
             android:importantForAutofill="no"
             android:inputType="number" />
