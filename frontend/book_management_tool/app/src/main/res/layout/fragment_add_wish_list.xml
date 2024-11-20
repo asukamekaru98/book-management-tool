@@ -55,7 +55,7 @@
                     android:text="@string/text_industry_important" />
 
                 <Spinner
-                    android:id="@+id/spinner"
+                    android:id="@+id/spinnerIndustryImportant"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -73,7 +73,7 @@
                     android:text="@string/text_work_important" />
 
                 <Spinner
-                    android:id="@+id/spinner2"
+                    android:id="@+id/spinnerWorkImportant"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -91,7 +91,7 @@
                     android:text="@string/text_user_important" />
 
                 <Spinner
-                    android:id="@+id/spinner3"
+                    android:id="@+id/spinnerUserImportant"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>

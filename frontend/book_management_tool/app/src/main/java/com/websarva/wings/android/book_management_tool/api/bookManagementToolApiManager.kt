@@ -3,7 +3,7 @@ package com.websarva.wings.android.book_management_tool.api
 import com.websarva.wings.android.book_management_tool.abstruct.AbstractAPIHandler
 import com.websarva.wings.android.book_management_tool.apiResponseParser.BookManagementToolApiResponseParser
 import com.websarva.wings.android.book_management_tool.constants.BookInfo
-import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
+import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData as BMTApiData
 import com.websarva.wings.android.book_management_tool.http.HTTPGetRequestHandler
 import com.websarva.wings.android.book_management_tool.uri.UriFetcher
 import okhttp3.Response
@@ -23,7 +23,7 @@ class BookManagementToolAPIManager {
 	 * 本棚の情報を全て取得する
 	 * @return AbstractAPIHandler
 	 */
-	suspend fun getAllBookShelf(/*bookInfo: BookInfo*/): BookManagementToolApiData {
+	suspend fun getAllBookShelf(/*bookInfo: BookInfo*/): BMTApiData {
 		val uri = UriFetcher().bmtAPIBookShelf()
 
 		// APIリクエストを送信、レスポンスを取得
@@ -76,7 +76,7 @@ class BookManagementToolAPIManager {
 		 * 読書履歴の情報を全て取得する
 		 * @return AbstractAPIHandler
 		 */
-		suspend fun getAllReadHistories(): BookManagementToolApiData
+		suspend fun getAllReadHistories(): BMTApiData
 		{
 			val uri = UriFetcher().bmtAPIReadHistories()
 
@@ -133,20 +133,31 @@ class BookManagementToolAPIManager {
 		suspend fun DeleteAllReadHistories(): BookManagementToolApiData{
 			return BmtApiDeleteAllReadHistories()
 		}
-
+*/
 		/**
 		 * ほしいものリストに本を1冊追加する
 		 * @return AbstractAPIHandler
 		 */
-		suspend fun AddOneWishList(): BookManagementToolApiData{
-			return BmtApiAddOneWishList()
+		suspend fun AddOneWishList(isbn:String): BMTApiData{
+			val uri = UriFetcher().bmtAPIWishList()
+
+			val response = object:HTTPGetRequestHandler(uri){
+				override fun createRequestQuery(): Map<String, String> {
+					return mapOf("isbn" to isbn)
+				}
+			}.execute()
+
+			// レスポンスを解析、返却
+			return BookManagementToolApiResponseParser().apply {
+				parseResponse(response)
+			}.getResponseResult()
 		}
-*/
+
 		/**
 		 * ほしいものリストの情報を全て取得する
 		 * @return AbstractAPIHandler
 		 */
-		suspend fun getAllWishLists(): BookManagementToolApiData
+		suspend fun getAllWishLists(): BMTApiData
 		{
 			val uri = UriFetcher().bmtAPIWishList()
 

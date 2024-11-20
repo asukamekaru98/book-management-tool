@@ -12,8 +12,18 @@
         android:layout_marginTop="10dp"
         android:orientation="vertical">
 
-        <!-- ISBN入力 -->
-        <include layout="@layout/isbn_input_layout" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <!-- ISBN入力 -->
+            <include layout="@layout/isbn_input_layout"/>
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/imageView2"
