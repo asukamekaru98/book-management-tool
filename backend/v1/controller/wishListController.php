@@ -56,7 +56,7 @@ class wishListController extends resourceController
 		);
 
 
-		if (!$isDuplicate) {
+		if ($isDuplicate) {
 			// 重複している場合、エラーを返す
 			throw new Exception("ISBN code is duplicate", CONFLICT_409);
 		}
