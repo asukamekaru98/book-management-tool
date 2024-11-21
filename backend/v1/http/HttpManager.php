@@ -37,11 +37,6 @@ class httpManager
         $httpQueryParser = new HttpQueryParser($_SERVER['QUERY_STRING']);
         $this->aQueries = $httpQueryParser->getQueries();
 
-        print_r(file_get_contents(filename: 'php://input'));
-        echo "a \n";
-        print_r(json_decode(json: file_get_contents(filename: 'php://input'), associative: true, depth: 512, flags: JSON_OBJECT_AS_ARRAY));
-        echo "b \n";
-
         switch ($this->aQueries[URI_QUERY_DATA_FORMAT]) {
             case URI_QUERY_DATA_FORMAT_JSON:
                 $this->data = json_decode(json: file_get_contents(filename: 'php://input'), associative: true, depth: 512, flags: JSON_OBJECT_AS_ARRAY) ?? [];
@@ -56,7 +51,7 @@ class httpManager
         $this->log->info('リクエストを受け付けました。');
         $this->log->info('HTTPメソッド:' . $this->httpMethod);
         $this->log->info('リクエストURI:' . $_SERVER['REQUEST_URI']);
-        $this->log->info('データ' . print_r($this->data) ?: "空");
+        //$this->log->info('データ' . print_r($this->data) ?: "空");
     }
 
     /**
