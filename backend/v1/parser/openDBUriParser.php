@@ -20,9 +20,6 @@ class openDBUriParser extends URIParser
 	{
 		$responsejson = json_decode($this->apiResponse, true);
 
-
-		print_r($responsejson);
-
 		$this->dataISBN = $responsejson['onix']['DescriptiveDetail']['ProductIdentifier']['IDValue'];
 		$this->dataTitle = $responsejson['onix']['DescriptiveDetail']['TitleDetail']['TitleElement']['TitleText'];
 		$this->dataSubTitle = $responsejson['onix']['DescriptiveDetail']['TitleDetail']['TitleElement']['Subtitle'];

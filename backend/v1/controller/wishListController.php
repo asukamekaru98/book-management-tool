@@ -125,8 +125,6 @@ class wishListController extends resourceController
 			$this->data
 		);
 
-		echo $this->data;
-
 		// SQLクエリの実行
 		$this->ExecuteSqlQuery($sqlQueryBuilder->GetSQLQuery());
 

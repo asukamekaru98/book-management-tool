@@ -122,8 +122,6 @@ abstract class resourceController
                 $this->data
             );
 
-            print_r($bookInfoSQLQuery->GetSQLQuery());
-
             try {
                 $this->sqlManager->ExecuteSqlQuery($bookInfoSQLQuery->GetSQLQuery());
             } catch (Exception $e) {
