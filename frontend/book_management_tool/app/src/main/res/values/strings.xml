@@ -10,6 +10,9 @@
     <string name="text_work_important">仕事の優先度はどれぐらいですか？</string>
     <string name="text_user_important">個人的な優先度はどれぐらいですか？</string>
 
+    <!--ヒント-->
+    <string name="hint_memo">メモを入力してください</string>
+
     <!--ボタンのテキスト-->
     <string name="button_register">登録</string>
     <string name="button_cancel">キャンセル</string>

@@ -97,13 +97,26 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- メモ -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/memo_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="@string/hint_memo" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <!-- 登録ボタン -->
         <Button
             android:id="@+id/register_button"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
             android:background="@drawable/border_shinsei_blue"
             android:text="@string/button_register"
             android:textColor="@color/white"

@@ -16,6 +16,7 @@ import com.websarva.wings.android.book_management_tool.R
 import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
 import com.websarva.wings.android.book_management_tool.apiBody.BmtAPIWishListRequestBodyCreator
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
+import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiMaxLength as MaxLength
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,9 +55,17 @@ class fragmentAddWishList : Fragment() {
 	private fun onClickRegisterButton() {
 
 		val isbnCode = binding.root.findViewById<EditText>(R.id.isbn_code_edit_text).text.toString()
+		val memo = binding.root.findViewById<EditText>(R.id.memo_edit_text).text.toString()
 
 		if(isbnCode.length != 13) {
 			Toast.makeText(requireContext(), "13文字入力してください", Toast.LENGTH_SHORT).show()
+			return
+		}
+
+		if(memo.length > MaxLength.MAX_LENGTH_WISH_LIST_MEMO) {
+			val message = "メモは${MaxLength.MAX_LENGTH_WISH_LIST_MEMO}文字以内で入力してください"
+
+			Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 			return
 		}
 
@@ -67,14 +76,16 @@ class fragmentAddWishList : Fragment() {
 			getPriority(),
 			"0",
 			"0",
-			"0"
+			memo
 		)
 
 		CoroutineScope(Dispatchers.Main).launch {
-			val bookData = try {
+			try {
 				withContext(Dispatchers.IO) {
 					BookManagementToolAPIManager().addOneWishList(isbnCode, body.get())
 				}
+				Toast.makeText(requireContext(), "登録しました", Toast.LENGTH_SHORT).show()
+
 			} catch (e: Exception) {
 
 				// 409エラーの場合は、すでに登録されている旨のメッセージを表示
@@ -89,10 +100,9 @@ class fragmentAddWishList : Fragment() {
 					"BookMgmtTool Exception",
 					e.message.toString() + "/" + e.stackTraceToString() + "/" + e.cause.toString()
 				)
-				BookManagementToolApiData() // 初期値を設定
 			}
 
-			Log.d("BookMgmtTool Button Click Result", bookData.message)
+			//Log.d("BookMgmtTool Button Click Result", bookData.message)
 
 		}
 	}

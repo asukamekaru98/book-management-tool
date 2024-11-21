@@ -88,3 +88,7 @@ object BookManagementToolApiUri {
 	const val API_FUNC_READ_HISTORIES   = "read-histories"
 	const val API_FUNC_WISH_LIST        = "wish-list"
 }
+
+object BookManagementToolApiMaxLength {
+	const val MAX_LENGTH_WISH_LIST_MEMO = 1000
+}
