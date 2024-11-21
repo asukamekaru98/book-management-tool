@@ -28,8 +28,6 @@ class SQLManager implements I_SQLManager
 
 	public function ExecuteSqlQuery(string $sqlQuery, array $params = [])
 	{
-
-
 		if (empty($sqlQuery)) {
 			$this->httpResponseCode = VARIANT_ALSO_NEGOTIATES_506;
 			$this->log->error('SQLクエリが空です。');
