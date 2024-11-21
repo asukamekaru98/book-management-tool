@@ -1,10 +1,16 @@
 <?php
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 require_once('httpURIPerser.php');
 require_once('HttpResourceParser.php');
 require_once('HttpQueryParser.php');
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 class httpManager
 {
+    protected Logger $log;
     private $httpMethod;    // リクエストメソッド
 
     private array $aQueries = [];
@@ -17,10 +23,10 @@ class httpManager
     //private $resource;  // リソース
     private array $data = [];      // データ
 
-
-
     function __construct()
     {
+        $this->log = new Logger(__CLASS__);
+        $this->log->pushHandler(new StreamHandler(__DIR__ . '/../../log/log.log', Logger::INFO));
 
         $this->httpMethod = $_SERVER['REQUEST_METHOD'];
         //$this->httpMethod = "POST";
@@ -31,6 +37,11 @@ class httpManager
         $httpQueryParser = new HttpQueryParser($_SERVER['QUERY_STRING']);
         $this->aQueries = $httpQueryParser->getQueries();
 
+        print_r(file_get_contents(filename: 'php://input'));
+        echo "a \n";
+        print_r(json_decode(json: file_get_contents(filename: 'php://input'), associative: true, depth: 512, flags: JSON_OBJECT_AS_ARRAY));
+        echo "b \n";
+
         switch ($this->aQueries[URI_QUERY_DATA_FORMAT]) {
             case URI_QUERY_DATA_FORMAT_JSON:
                 $this->data = json_decode(json: file_get_contents(filename: 'php://input'), associative: true, depth: 512, flags: JSON_OBJECT_AS_ARRAY) ?? [];
@@ -39,9 +50,13 @@ class httpManager
                 $this->data = xmlrpc_decode(file_get_contents(filename: 'php://input'), true);
                 break;
             default:
-
                 break;
         }
+
+        $this->log->info('リクエストを受け付けました。');
+        $this->log->info('HTTPメソッド:' . $this->httpMethod);
+        $this->log->info('リクエストURI:' . $_SERVER['REQUEST_URI']);
+        $this->log->info('データ' . print_r($this->data) ?: "空");
     }
 
     /**

@@ -6,11 +6,16 @@ use PDO;
 use RuntimeException;
 use Exception;
 use Loader\ConfigLoader;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
+require_once __DIR__ . '/../interfaces/i_sqlManager.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../loader/configLoader.php';
 
 class DataBaseMySQL extends PDO
 {
+    private Logger $log;
     private $dbConfig;
     private $configFile;
     private static $instance = null;
@@ -19,6 +24,8 @@ class DataBaseMySQL extends PDO
     // コンストラクタ
     function __construct($config = 'database.ini')
     {
+        $this->log = new Logger(__CLASS__);
+        $this->log->pushHandler(new StreamHandler(__DIR__ . '/../../log/log.log', Logger::INFO));
         $this->configFile = $config;
         $this->initConnection();
     }
@@ -55,11 +62,14 @@ class DataBaseMySQL extends PDO
         $dsn = "{$driver}:host={$host}{$port};dbname={$schema}";
 
         try {
+            $this->log->info('データベースに接続します。');
             parent::__construct($dsn, $username, $password);
             $this->isDBConnValid();
         } catch (Exception $e) {
+            $this->log->error('データベースに接続できませんでした。');
             throw new RuntimeException("Database Connection Error: " . $e->getMessage(), INTERNAL_SERVER_ERROR_500, $e);
         }
+        $this->log->info('データベースに接続しました。');
     }
 
     # DB接続の確認

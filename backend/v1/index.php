@@ -5,6 +5,8 @@ use ReturnResponse\ReturnResponse;
 use ResponseCreator\ResponseCreator;
 use ResponseBodyCreator\ResponseBodyCreatorFactory;
 use ResponseCodeCreator\ResponseCodeCreator;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 require_once __DIR__ . '/database/database.php';
 require_once __DIR__ . '/controller/bookShelfController.php';
@@ -16,18 +18,26 @@ require_once __DIR__ . '/responseBodyCreator/responseBodyCreatorFactory.php';
 require_once __DIR__ . '/responseCodeCreator/responseCodeCreator.php';
 require_once __DIR__ . '/returnResponse/returnResponse.php';
 require_once __DIR__ . '/responseCreator/responseCreator.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 $bookManagementTool = new BookManagementTool();
 $bookManagementTool->run();
 
 class BookManagementTool
 {
+    private Logger $log;
     private DataBaseMySQL $dbSQL;
-    private int $httpResponseCode;
-    private array $responseBody;
+
+    function __construct()
+    {
+        $this->log = new Logger(__CLASS__);
+        $this->log->pushHandler(new StreamHandler(__DIR__ . '/../log/log.log', Logger::INFO));
+    }
 
     public function run()
     {
+        $this->log->info('処理を開始します。');
+
         try {
             $this->dbSQL = DataBaseMySQL::connect2Database();
         } catch (Exception $e) {
@@ -42,14 +52,16 @@ class BookManagementTool
 
         //ToDo: httpManagetという名前と実際の動作が乖離しているので、リネームする
         try {
+
             $httpMngr = new httpManager();
             $router->dispatch($httpMngr);
         } catch (Exception $e) {
+            $this->log->error('リクエスト処理中にエラーが発生しました。');
             $this->CreateErrorResponseBody($e);
         }
+
+        $this->log->info('処理を終了します。');
     }
-
-
 
     /**
      * エラー終了
@@ -67,11 +79,14 @@ class BookManagementTool
         );
 
         ReturnResponse::returnHttpResponse($responseCreator);
+
+        $this->log->info('処理を終了します。');
         exit;
     }
 
     function __destruct()
     {
         //$this->dbSQL = null; // DB接続を切断
+
     }
 }

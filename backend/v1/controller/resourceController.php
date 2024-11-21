@@ -131,29 +131,6 @@ abstract class resourceController
     }
 
     /**
-     * ISBNコードが重複しているか確認する
-     */
-    /*   private function IsIsbnCodeDuplicate(): bool
-    {
-
-        $isbnCountSQLQuery = SqlQueryBuilderFactory::IsIsbnCodeDuplicate(
-            $this->isbn,
-            $this->data
-        );
-
-        try {
-            $this->sqlManager->ExecuteSqlQuery($isbnCountSQLQuery->GetSQLQuery());
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage(), (int)$e->getCode());
-        }
-
-        $result = $this->sqlManager->GetResponseBody()[0]['count'];
-
-        return ($result > 0) ? $this->bIsISBNDuplicate = true : $this->bIsISBNDuplicate = false;
-    }
-*/
-
-    /**
      * ISBNコードが設定されているか確認する
      */
     protected function IsISBNCodeNotSet(): bool
@@ -163,6 +140,7 @@ abstract class resourceController
 
     protected function ExecuteSqlQuery(string $sqlQuery): void
     {
+
         try {
             $this->sqlManager->ExecuteSqlQuery($sqlQuery);
             $this->CheckResponseCode();
