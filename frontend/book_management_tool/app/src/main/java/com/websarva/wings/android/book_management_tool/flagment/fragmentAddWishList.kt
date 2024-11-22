@@ -79,6 +79,8 @@ class fragmentAddWishList : Fragment() {
 			memo
 		)
 
+		Log.d("BookMgmtTool Button Click Result", body.get())
+
 		CoroutineScope(Dispatchers.Main).launch {
 			try {
 				withContext(Dispatchers.IO) {

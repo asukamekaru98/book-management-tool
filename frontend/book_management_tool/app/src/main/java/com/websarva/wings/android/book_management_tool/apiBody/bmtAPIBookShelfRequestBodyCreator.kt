@@ -29,7 +29,7 @@ class BmtAPIBookShelfRequestBodyCreator(
 			API_PARAM.API_PARAM_BOOKS_SHELF_PURCHASED      to purchased,
 			API_PARAM.API_PARAM_BOOKS_SHELF_MEMO           to memo
 		)
-		return createBody(body)
+		return createBody("json/wishListRequestBody.json",body)
 	}
 
 }

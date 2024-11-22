@@ -34,7 +34,7 @@ class BmtAPIReadHistoriesRequestBodyCreator(
 			API_PARAM.API_PARAM_BOOKS_SHELF_MEMO               to memo,
 			API_PARAM.API_PARAM_READ_HISTORIES_UNDERSTANDING   to understanding
 		)
-		return createBody(body)
+		return createBody("json/wishListRequestBody.json",body)
 	}
 
 }
