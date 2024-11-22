@@ -29,7 +29,6 @@ class httpManager
         $this->log->pushHandler(new StreamHandler(__DIR__ . '/../../log/log.log', Logger::INFO));
 
         $this->httpMethod = $_SERVER['REQUEST_METHOD'];
-        //$this->httpMethod = "POST";
 
         $httpUriScriptParser = new HttpURIPerser(uri: $_SERVER['REQUEST_URI']);
         $this->aUriResource = $httpUriScriptParser->getUriResource();
@@ -37,21 +36,42 @@ class httpManager
         $httpQueryParser = new HttpQueryParser($_SERVER['QUERY_STRING']);
         $this->aQueries = $httpQueryParser->getQueries();
 
-        switch ($this->aQueries[URI_QUERY_DATA_FORMAT]) {
-            case URI_QUERY_DATA_FORMAT_JSON:
-                $this->data = json_decode(json: file_get_contents(filename: 'php://input'), associative: true, depth: 512, flags: JSON_OBJECT_AS_ARRAY) ?? [];
-                break;
-            case URI_QUERY_DATA_FORMAT_XML:
-                $this->data = xmlrpc_decode(file_get_contents(filename: 'php://input'), true);
-                break;
-            default:
-                break;
-        }
-
         $this->log->info('リクエストを受け付けました。');
         $this->log->info('HTTPメソッド:' . $this->httpMethod);
         $this->log->info('リクエストURI:' . $_SERVER['REQUEST_URI']);
-        //$this->log->info('データ' . print_r($this->data) ?: "空");
+
+        switch ($this->aQueries[URI_QUERY_DATA_FORMAT]) {
+            case URI_QUERY_DATA_FORMAT_JSON:
+                $this->log->info('フォーマット:' . URI_QUERY_DATA_FORMAT_JSON);
+
+                $input = file_get_contents('php://input');
+
+                $this->log->info('php://input の内容: ' . $input);
+
+                $this->data = json_decode($input, true) ?: [];
+
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    $this->log->error('JSON デコードエラー: ' . json_last_error_msg());
+                }
+                break;
+            case URI_QUERY_DATA_FORMAT_XML:
+                $this->log->info('フォーマット:' . URI_QUERY_DATA_FORMAT_XML);
+
+                $input = file_get_contents('php://input');
+
+                $this->log->info('php://input の内容: ' . $input);
+
+                $this->data = xmlrpc_decode($input, true);
+                break;
+            default:
+                $this->log->info('フォーマット:' . "不明");
+
+                break;
+        }
+
+        //print_r($this->data);
+
+        $this->log->info('データ: ' . json_encode($this->data) ?: "空");
     }
 
     /**
