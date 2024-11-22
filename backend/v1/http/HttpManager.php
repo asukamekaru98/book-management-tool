@@ -68,10 +68,6 @@ class httpManager
 
                 break;
         }
-
-        //print_r($this->data);
-
-        $this->log->info('データ: ' . json_encode($this->data) ?: "空");
     }
 
     /**
