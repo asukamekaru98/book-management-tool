@@ -70,10 +70,9 @@ class fragmentAddWishList : Fragment() {
 		}
 
 		val body = BmtAPIWishListRequestBodyCreator(
-			binding.spinnerIndustryImportant.selectedItem.toString(),
-			binding.spinnerWorkImportant.selectedItem.toString(),
-			binding.spinnerUserImportant.selectedItem.toString(),
-			getPriority(),
+			importantToNumString(binding.spinnerIndustryImportant.selectedItem.toString()),
+			importantToNumString(binding.spinnerWorkImportant.selectedItem.toString()),
+			importantToNumString(binding.spinnerUserImportant.selectedItem.toString()),
 			"0",
 			"0",
 			memo
@@ -109,31 +108,12 @@ class fragmentAddWishList : Fragment() {
 		}
 	}
 
-	// 各重要度から優先度を計算する
-	private fun getPriority(): String {
-		val industry = binding.spinnerIndustryImportant.selectedItem.toString()
-		val work = binding.spinnerWorkImportant.selectedItem.toString()
-		val user = binding.spinnerUserImportant.selectedItem.toString()
-
-		val industryNum = when (industry) {
-			"高" -> 3
-			"中" -> 2
-			else -> 1
-		}*1.5
-
-		val workNum = when (work) {
-			"高" -> 3
-			"中" -> 2
-			else -> 1
-		}*1.2
-
-		val userNum = when (user) {
-			"高" -> 3
-			"中" -> 2
-			else -> 1
+	private fun importantToNumString(important: String): String {
+		return when (important) {
+			"高" -> "3"
+			"中" -> "2"
+			else -> "1"
 		}
-
-		return (industryNum + workNum + userNum).toString()
 	}
 
 
