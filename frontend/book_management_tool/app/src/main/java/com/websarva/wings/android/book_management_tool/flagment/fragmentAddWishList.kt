@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import com.websarva.wings.android.book_management_tool.R
 import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
@@ -26,6 +27,10 @@ import com.websarva.wings.android.book_management_tool.databinding.FragmentAddWi
 class fragmentAddWishList : Fragment() {
 
 	private lateinit var binding: Binding
+
+	val industryImportant = binding.root.findViewById<Spinner>(R.id.spinnerIndustryImportant).selectedItem.toString()
+	val workImportant = binding.root.findViewById<Spinner>(R.id.spinnerWorkImportant).selectedItem.toString()
+	val userImportant = binding.root.findViewById<Spinner>(R.id.spinnerUserImportant).selectedItem.toString()
 
 	/**
 	 * FragmentのViewを生成して返すメソッド
@@ -70,9 +75,9 @@ class fragmentAddWishList : Fragment() {
 		}
 
 		val body = BmtAPIWishListRequestBodyCreator(
-			importantToNumString(binding.spinnerIndustryImportant.selectedItem.toString()),
-			importantToNumString(binding.spinnerWorkImportant.selectedItem.toString()),
-			importantToNumString(binding.spinnerUserImportant.selectedItem.toString()),
+			importantToNumString(industryImportant),
+			importantToNumString(workImportant),
+			importantToNumString(userImportant),
 			"0",
 			"0",
 			memo
@@ -133,9 +138,9 @@ class fragmentAddWishList : Fragment() {
 			arrayOf("低", "中", "高")
 		)
 
-		binding.spinnerIndustryImportant.adapter = adapter
-		binding.spinnerWorkImportant.adapter = adapter
-		binding.spinnerUserImportant.adapter = adapter
+		binding.root.findViewById<Spinner>(R.id.spinnerIndustryImportant).adapter = adapter
+		binding.root.findViewById<Spinner>(R.id.spinnerWorkImportant).adapter = adapter
+		binding.root.findViewById<Spinner>(R.id.spinnerUserImportant).adapter = adapter
 	}
 
 	// 入力ボックスの設定

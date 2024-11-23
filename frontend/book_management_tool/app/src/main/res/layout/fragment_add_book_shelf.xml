@@ -33,6 +33,26 @@
             android:layout_gravity="center"
             android:src="@android:drawable/ic_menu_report_image" />
 
+        <!-- 優先度を設定 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/important_spinners" />
+        </LinearLayout>
+
+        <!-- メモ -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/memo_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="@string/hint_memo" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <!-- 登録ボタン -->
         <Button
             android:id="@+id/register_button"

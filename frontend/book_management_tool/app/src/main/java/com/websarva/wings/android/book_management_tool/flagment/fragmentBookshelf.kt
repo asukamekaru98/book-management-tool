@@ -64,41 +64,7 @@ class fragmentBookshelf : Fragment() {
 
 		return binding.root
 	}
-/*
-	override fun onCreateView(
-		inflater: LayoutInflater, container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View {
-		// Inflate the layout for this fragment
-		val binding = FragmentBookshelfBinding.inflate(inflater, container, false)
-		val listView = binding.bookListView
-		listView.setHasFixedSize(true)
 
-		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
-
-		CoroutineScope(Dispatchers.Main).launch {
-			bookData = try {
-				BookManagementToolAPIManager().getAllWishLists()
-			} catch (e: Exception) {
-				Log.e(
-					"BookMgmtTool Exception",
-					e.message.toString() + "/" + e.stackTraceToString() + "/" + e.cause.toString()
-				)
-				BookManagementToolApiData()
-			}
-
-			bookData.bookList.forEach {
-				names.add(it.bookTitle)
-				bitmaps.add(ImageDownloader(requireContext()).downloadImage(it.bookImageUrl))
-			}
-
-			listView.layoutManager = rLayoutManager
-			listView.adapter = RecyclerViewAdapter(bitmaps, names)
-		}
-
-		return binding.root
-	}
-*/
 	companion object {
 		@JvmStatic
 		fun newInstance(param1: String, param2: String) = fragmentBookshelf()
