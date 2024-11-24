@@ -97,7 +97,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- 登録ボタン -->
+        <!-- 開始ボタン -->
         <Button
             android:id="@+id/register_button"
             android:layout_width="300dp"
@@ -105,7 +105,7 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginTop="24dp"
             android:background="@drawable/border_shinsei_blue"
-            android:text="@string/button_register"
+            android:text="@string/button_start_reading"
             android:textColor="@color/white"
             android:textSize="24sp" />
     </LinearLayout>

@@ -16,6 +16,7 @@
     <!--ボタンのテキスト-->
     <string name="button_register">登録</string>
     <string name="button_cancel">キャンセル</string>
+    <string name="button_start_reading">読書を開始</string>
 
     <!--初期値 -->
     <!--ISBNコードの初期値-->
