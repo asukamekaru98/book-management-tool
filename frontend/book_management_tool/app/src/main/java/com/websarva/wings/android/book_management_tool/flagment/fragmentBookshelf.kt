@@ -16,8 +16,7 @@ import com.websarva.wings.android.book_management_tool.adapter.RecyclerViewAdapt
 import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
 import com.websarva.wings.android.book_management_tool.databinding.ActivityMainBinding
-import com.websarva.wings.android.book_management_tool.databinding.FragmentBookshelfBinding
-import com.websarva.wings.android.book_management_tool.databinding.FragmentReadHistoriesBinding
+import com.websarva.wings.android.book_management_tool.databinding.FragmentBookshelfBinding as Binding
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData as BMTApiData
 import com.websarva.wings.android.book_management_tool.downloader.ImageDownloader
 import kotlinx.coroutines.CoroutineScope
@@ -26,19 +25,21 @@ import kotlinx.coroutines.launch
 
 class fragmentBookshelf : Fragment() {
 
+	private lateinit var binding: Binding
+
 	private val names: ArrayList<String> = arrayListOf()
 	private val bitmaps: ArrayList<Bitmap> = arrayListOf()
 	private var bookData: BMTApiData = BMTApiData()
-
-
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-		val binding = FragmentBookshelfBinding.inflate(inflater, container, false)
+		binding = Binding.inflate(inflater, container, false)
 		val listView = binding.bookListView
 		listView.setHasFixedSize(true)
+
+		this.setupAddButton()
 
 		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
 
@@ -65,8 +66,11 @@ class fragmentBookshelf : Fragment() {
 		return binding.root
 	}
 
-	companion object {
-		@JvmStatic
-		fun newInstance(param1: String, param2: String) = fragmentBookshelf()
+	private fun setupAddButton() {
+		val addButton = binding.addButton
+
+		addButton.setOnClickListener {
+			(requireActivity() as MainActivity).replaceFragment(fragmentAddBookShelf())
+		}
 	}
 }

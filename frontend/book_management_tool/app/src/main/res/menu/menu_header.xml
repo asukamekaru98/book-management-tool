@@ -4,12 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
-        android:title="IconAdd"
-        android:id="@+id/icon_add"
-        android:icon="@drawable/add_24"
-        app:showAsAction="ifRoom"/>
-
-    <item
         android:title="IconSearch"
         android:id="@+id/icon_search"
         android:icon="@drawable/search_24"

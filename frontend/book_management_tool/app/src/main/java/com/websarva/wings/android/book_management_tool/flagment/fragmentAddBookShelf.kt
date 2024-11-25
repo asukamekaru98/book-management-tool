@@ -25,10 +25,9 @@ import com.websarva.wings.android.book_management_tool.databinding.FragmentAddBo
 class fragmentAddBookShelf : Fragment() {
 
 	private lateinit var binding: Binding
-
-	val industryImportant = binding.root.findViewById<Spinner>(R.id.spinnerIndustryImportant).selectedItem.toString()
-	val workImportant = binding.root.findViewById<Spinner>(R.id.spinnerWorkImportant).selectedItem.toString()
-	val userImportant = binding.root.findViewById<Spinner>(R.id.spinnerUserImportant).selectedItem.toString()
+	private lateinit var spinnerIndustory: Spinner
+	private lateinit var spinnerWork: Spinner
+	private lateinit var spinnerUser: Spinner
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
@@ -51,13 +50,14 @@ class fragmentAddBookShelf : Fragment() {
 		val isbnCode = binding.root.findViewById<EditText>(R.id.isbn_code_edit_text).text.toString()
 		val memo = binding.root.findViewById<EditText>(R.id.memo_edit_text).text.toString()
 
-		if(isbnCode.length != 13) {
+		if (isbnCode.length != 13) {
 			Toast.makeText(requireContext(), "13文字入力してください", Toast.LENGTH_SHORT).show()
 			return
 		}
 
-		if(memo.length > BookManagementToolApiMaxLength.MAX_LENGTH_WISH_LIST_MEMO) {
-			val message = "メモは${BookManagementToolApiMaxLength.MAX_LENGTH_WISH_LIST_MEMO}文字以内で入力してください"
+		if (memo.length > BookManagementToolApiMaxLength.MAX_LENGTH_WISH_LIST_MEMO) {
+			val message =
+				"メモは${BookManagementToolApiMaxLength.MAX_LENGTH_WISH_LIST_MEMO}文字以内で入力してください"
 
 			Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 			return
@@ -66,9 +66,9 @@ class fragmentAddBookShelf : Fragment() {
 		val today = System.currentTimeMillis()
 
 		val body = RequestBodyCreator(
-			importantToNumString(industryImportant),
-			importantToNumString(workImportant),
-			importantToNumString(userImportant),
+			importantToNumString(spinnerIndustory.selectedItem.toString()),
+			importantToNumString(spinnerWork.selectedItem.toString()),
+			importantToNumString(spinnerUser.selectedItem.toString()),
 			"0",
 			"0",
 			today.toString(),
@@ -88,9 +88,11 @@ class fragmentAddBookShelf : Fragment() {
 
 				// 409エラーの場合は、すでに登録されている旨のメッセージを表示
 				if (e.message.toString().contains("409")) {
-					Toast.makeText(requireContext(), "すでに登録されています", Toast.LENGTH_SHORT).show()
+					Toast.makeText(requireContext(), "すでに登録されています", Toast.LENGTH_SHORT)
+						.show()
 				} else {
-					Toast.makeText(requireContext(), "エラーが発生しました", Toast.LENGTH_SHORT).show()
+					Toast.makeText(requireContext(), "エラーが発生しました", Toast.LENGTH_SHORT)
+						.show()
 				}
 
 
@@ -116,15 +118,20 @@ class fragmentAddBookShelf : Fragment() {
 	// スピナーの設定
 	private fun setupSpinners() {
 
+		spinnerIndustory = binding.root.findViewById<Spinner>(R.id.spinnerIndustryImportant)
+		spinnerWork = binding.root.findViewById<Spinner>(R.id.spinnerWorkImportant)
+		spinnerUser = binding.root.findViewById<Spinner>(R.id.spinnerUserImportant)
+
 		val adapter = ArrayAdapter(
 			requireContext(),
 			android.R.layout.simple_spinner_item,
 			arrayOf("低", "中", "高")
 		)
 
-		binding.root.findViewById<Spinner>(R.id.spinnerIndustryImportant).adapter = adapter
-		binding.root.findViewById<Spinner>(R.id.spinnerWorkImportant).adapter = adapter
-		binding.root.findViewById<Spinner>(R.id.spinnerUserImportant).adapter = adapter
+		// スピナーの選択時の処理
+		spinnerIndustory.adapter = adapter
+		spinnerWork.adapter = adapter
+		spinnerUser.adapter = adapter
 	}
 
 	// 登録ボタンの設定

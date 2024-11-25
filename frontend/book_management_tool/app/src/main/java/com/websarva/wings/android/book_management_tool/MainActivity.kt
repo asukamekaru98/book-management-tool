@@ -1,7 +1,5 @@
 package com.websarva.wings.android.book_management_tool
 
-//import com.webserva.wings.android.sending_json_over_http_sample.ui.theme.SendingJSONOverHTTP_SampleTheme
-
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -49,6 +47,8 @@ class MainActivity : AppCompatActivity() {
 		replaceFragment(fragmentBookshelf())
 
 
+
+
 		// ボトムナビゲーションのアイテムが選択されたときの処理
 		binding.navView.setOnItemSelectedListener {
 
@@ -70,16 +70,16 @@ class MainActivity : AppCompatActivity() {
 		// ツールバーのアイテムが選択されたときの処理
 		binding.toolbar.setOnMenuItemClickListener {
 			when (it.itemId) {
-				R.id.icon_add -> {
+				/*R.id.icon_add -> {
 					Log.d("MainActivity", "icon_add")
 					val fragmentManager = supportFragmentManager
 
 					when (fragmentManager.findFragmentById(R.id.frame_layout)) {
 						is fragmentBookshelf -> replaceFragment(fragmentAddBookShelf())
-						is fragmentReadHistories -> replaceFragment(fragmentAddReadHistories())
+						/*is fragmentReadHistories -> replaceFragment(fragmentAddReadHistories())*/
 						is fragmentWishlist -> replaceFragment(fragmentAddWishList())
 					}
-				}
+				}*/
 				R.id.icon_search -> Toast.makeText(this, "icon_search", Toast.LENGTH_SHORT).show()
 				R.id.setting -> Toast.makeText(this, "setting", Toast.LENGTH_SHORT).show()
 				else -> return@setOnMenuItemClickListener false
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	// 画面遷移
-	private fun replaceFragment(fragment: Fragment) {
+	fun replaceFragment(fragment: Fragment) {
 		// FragmentManagerのインスタンスを取得
 		val fragmentManager = supportFragmentManager
 		val fragmentTransaction = fragmentManager.beginTransaction()

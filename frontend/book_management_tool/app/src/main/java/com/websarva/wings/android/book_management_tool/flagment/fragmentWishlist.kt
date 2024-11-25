@@ -7,18 +7,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.websarva.wings.android.book_management_tool.MainActivity
 import com.websarva.wings.android.book_management_tool.adapter.RecyclerViewAdapter
 import com.websarva.wings.android.book_management_tool.api.BookManagementToolAPIManager
 import com.websarva.wings.android.book_management_tool.constants.BookManagementToolApiData
-import com.websarva.wings.android.book_management_tool.databinding.FragmentWishlistBinding
+import com.websarva.wings.android.book_management_tool.databinding.FragmentWishlistBinding as Binding
 import com.websarva.wings.android.book_management_tool.downloader.ImageDownloader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class fragmentWishlist : Fragment() {
+
+	private lateinit var binding: Binding
 
 	private val names: ArrayList<String> = arrayListOf()
 	private val bitmaps: ArrayList<Bitmap> = arrayListOf()
@@ -29,9 +33,11 @@ class fragmentWishlist : Fragment() {
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-		val binding = FragmentWishlistBinding.inflate(inflater, container, false)
+		binding = Binding.inflate(inflater, container, false)
 		val listView = binding.bookListView
 		listView.setHasFixedSize(true)
+
+		this.setupAddButton()
 
 		val rLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
 
@@ -59,8 +65,14 @@ class fragmentWishlist : Fragment() {
 	}
 
 
-	companion object {
-		@JvmStatic
-		fun newInstance(param1: String, param2: String) = fragmentWishlist()
+	private fun setupAddButton() {
+		val addButton = binding.addButton
+
+		addButton.setOnClickListener {
+
+			Toast.makeText(requireContext(), "追加ボタンが押されました", Toast.LENGTH_SHORT).show()
+
+			(requireActivity() as MainActivity).replaceFragment(fragmentAddReadHistories())
+		}
 	}
 }

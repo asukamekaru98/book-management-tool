@@ -28,9 +28,9 @@ class fragmentAddWishList : Fragment() {
 
 	private lateinit var binding: Binding
 
-	val industryImportant = binding.root.findViewById<Spinner>(R.id.spinnerIndustryImportant).selectedItem.toString()
-	val workImportant = binding.root.findViewById<Spinner>(R.id.spinnerWorkImportant).selectedItem.toString()
-	val userImportant = binding.root.findViewById<Spinner>(R.id.spinnerUserImportant).selectedItem.toString()
+	private lateinit var spinnerIndustory: Spinner
+	private lateinit var spinnerWork: Spinner
+	private lateinit var spinnerUser: Spinner
 
 	/**
 	 * FragmentのViewを生成して返すメソッド
@@ -75,9 +75,9 @@ class fragmentAddWishList : Fragment() {
 		}
 
 		val body = BmtAPIWishListRequestBodyCreator(
-			importantToNumString(industryImportant),
-			importantToNumString(workImportant),
-			importantToNumString(userImportant),
+			importantToNumString(spinnerIndustory.selectedItem.toString()),
+			importantToNumString(spinnerWork.selectedItem.toString()),
+			importantToNumString(spinnerUser.selectedItem.toString()),
 			"0",
 			"0",
 			memo
@@ -132,15 +132,20 @@ class fragmentAddWishList : Fragment() {
 	// スピナーの設定
 	private fun setupSpinners() {
 
+		spinnerIndustory = binding.root.findViewById<Spinner>(R.id.spinnerIndustryImportant)
+		spinnerWork = binding.root.findViewById<Spinner>(R.id.spinnerWorkImportant)
+		spinnerUser = binding.root.findViewById<Spinner>(R.id.spinnerUserImportant)
+
 		val adapter = ArrayAdapter(
 			requireContext(),
 			android.R.layout.simple_spinner_item,
 			arrayOf("低", "中", "高")
 		)
 
-		binding.root.findViewById<Spinner>(R.id.spinnerIndustryImportant).adapter = adapter
-		binding.root.findViewById<Spinner>(R.id.spinnerWorkImportant).adapter = adapter
-		binding.root.findViewById<Spinner>(R.id.spinnerUserImportant).adapter = adapter
+		// スピナーの選択時の処理
+		spinnerIndustory.adapter = adapter
+		spinnerWork.adapter = adapter
+		spinnerUser.adapter = adapter
 	}
 
 	// 入力ボックスの設定
