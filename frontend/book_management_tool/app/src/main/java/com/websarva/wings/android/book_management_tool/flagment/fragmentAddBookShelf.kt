@@ -29,6 +29,14 @@ class fragmentAddBookShelf : Fragment() {
 	private lateinit var spinnerWork: Spinner
 	private lateinit var spinnerUser: Spinner
 
+	/**
+	 * FragmentのViewを生成して返すメソッド
+	 *
+	 * @param inflater LayoutInflater
+	 * @param container ViewGroup?
+	 * @param savedInstanceState Bundle?
+	 * @return View?
+	 */
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?

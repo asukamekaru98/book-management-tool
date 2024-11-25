@@ -24,12 +24,7 @@ import com.websarva.wings.android.book_management_tool.flagment.fragmentWishlist
 class MainActivity : AppCompatActivity() {
 	private lateinit var binding: ActivityMainBinding
 	private lateinit var toolBar: androidx.appcompat.widget.Toolbar
-	private lateinit var listView: RecyclerView
 
-
-	private val names: ArrayList<String> = arrayListOf()
-	private val bitmaps: ArrayList<Bitmap> = arrayListOf()
-	private var bookData: BMTApiData = BMTApiData()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -40,52 +35,12 @@ class MainActivity : AppCompatActivity() {
 
 		binding = ActivityMainBinding.inflate(layoutInflater)
 
-		toolBar = binding.toolbar
-		setSupportActionBar(toolBar)
+		this.setupToolbar()
+		this.setupNaviView()
 
 		setContentView(binding.root)
+
 		replaceFragment(fragmentBookshelf())
-
-
-
-
-		// ボトムナビゲーションのアイテムが選択されたときの処理
-		binding.navView.setOnItemSelectedListener {
-
-			when (it.itemId) {
-				R.id.BtmBtnBookShelf -> {
-					Log.d("MainActivity", "icon_add")
-					replaceFragment(fragmentBookshelf())
-				}
-				R.id.BtmBtnReadHistories -> replaceFragment(fragmentReadHistories())
-				R.id.BtmBtnWishList -> replaceFragment(fragmentWishlist())
-
-				else -> {
-				}
-			}
-
-			true
-		}
-
-		// ツールバーのアイテムが選択されたときの処理
-		binding.toolbar.setOnMenuItemClickListener {
-			when (it.itemId) {
-				/*R.id.icon_add -> {
-					Log.d("MainActivity", "icon_add")
-					val fragmentManager = supportFragmentManager
-
-					when (fragmentManager.findFragmentById(R.id.frame_layout)) {
-						is fragmentBookshelf -> replaceFragment(fragmentAddBookShelf())
-						/*is fragmentReadHistories -> replaceFragment(fragmentAddReadHistories())*/
-						is fragmentWishlist -> replaceFragment(fragmentAddWishList())
-					}
-				}*/
-				R.id.icon_search -> Toast.makeText(this, "icon_search", Toast.LENGTH_SHORT).show()
-				R.id.setting -> Toast.makeText(this, "setting", Toast.LENGTH_SHORT).show()
-				else -> return@setOnMenuItemClickListener false
-			}
-			true
-		}
 	}
 
 	// 画面遷移
@@ -116,11 +71,65 @@ class MainActivity : AppCompatActivity() {
 				"BtmBtnReadHistories",
 				Toast.LENGTH_SHORT
 			).show()
+
 			else -> return false
 		}
 
 		return true
 	}
 
+
+	/**
+	 * ツールバーのセットアップ
+	 */
+	private fun setupToolbar() {
+		toolBar = binding.toolbar
+		setSupportActionBar(toolBar)
+
+
+		// ツールバーのアイテムが選択されたときの処理
+		binding.toolbar.setOnMenuItemClickListener {
+			when (it.itemId) {
+				/*R.id.icon_add -> {
+					Log.d("MainActivity", "icon_add")
+					val fragmentManager = supportFragmentManager
+
+					when (fragmentManager.findFragmentById(R.id.frame_layout)) {
+						is fragmentBookshelf -> replaceFragment(fragmentAddBookShelf())
+						/*is fragmentReadHistories -> replaceFragment(fragmentAddReadHistories())*/
+						is fragmentWishlist -> replaceFragment(fragmentAddWishList())
+					}
+				}*/
+				R.id.icon_search -> Toast.makeText(this, "icon_search", Toast.LENGTH_SHORT).show()
+				R.id.setting -> Toast.makeText(this, "setting", Toast.LENGTH_SHORT).show()
+				else -> return@setOnMenuItemClickListener false
+			}
+			true
+		}
+	}
+
+	/**
+	 * ナビゲーションビューのセットアップ
+	 */
+	private fun setupNaviView() {
+		// ボトムナビゲーションのアイテムが選択されたときの処理
+		binding.navView.setOnItemSelectedListener {
+
+			when (it.itemId) {
+				R.id.BtmBtnBookShelf -> {
+					Log.d("MainActivity", "icon_add")
+					replaceFragment(fragmentBookshelf())
+				}
+
+				R.id.BtmBtnReadHistories -> replaceFragment(fragmentReadHistories())
+				R.id.BtmBtnWishList -> replaceFragment(fragmentWishlist())
+
+				else -> {
+				}
+			}
+
+			true
+		}
+	}
 
 }

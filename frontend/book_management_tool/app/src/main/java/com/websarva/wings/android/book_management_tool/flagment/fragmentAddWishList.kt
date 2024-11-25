@@ -50,7 +50,6 @@ class fragmentAddWishList : Fragment() {
 		this.setupRegisterButton() // 登録ボタンの設定
 		this.setupEditText() // 入力ボックスの設定
 
-
 		return binding.root
 	}
 
