@@ -72,7 +72,7 @@ class fragmentWishlist : Fragment() {
 
 			Toast.makeText(requireContext(), "追加ボタンが押されました", Toast.LENGTH_SHORT).show()
 
-			(requireActivity() as MainActivity).replaceFragment(fragmentAddReadHistories())
+			(requireActivity() as MainActivity).replaceFragment(fragmentAddWishList())
 		}
 	}
 }

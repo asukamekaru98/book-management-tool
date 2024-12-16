@@ -13,8 +13,20 @@ class BookManagementToolAPIManager {
 	 * 本棚に本を1冊追加する
 	 * @return AbstractAPIHandler
 	 */
-	suspend fun AddOneBookShelf() {
+	suspend fun AddOneBookShelf(
+		isbn: String,
+		body: String
+	): BMTApiData {
+		val uri = UriFetcher().bmtAPIBookShelf()
 
+		val response = HTTPPostRequestHandler(
+			uri, body, mapOf("isbn" to isbn)
+		).execute()
+
+		// レスポンスを解析、返却
+		return BookManagementToolApiResponseParser().apply {
+			parseResponse(response)
+		}.getResponseResult()
 	}
 
 	/**

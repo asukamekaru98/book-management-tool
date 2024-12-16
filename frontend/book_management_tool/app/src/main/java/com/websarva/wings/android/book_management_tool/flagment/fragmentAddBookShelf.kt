@@ -88,7 +88,7 @@ class fragmentAddBookShelf : Fragment() {
 		CoroutineScope(Dispatchers.Main).launch {
 			try {
 				withContext(Dispatchers.IO) {
-					BookManagementToolAPIManager().addOneWishList(isbnCode, body.get())
+					BookManagementToolAPIManager().AddOneBookShelf(isbnCode, body.get())
 				}
 				Toast.makeText(requireContext(), "登録しました", Toast.LENGTH_SHORT).show()
 
